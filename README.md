@@ -7,6 +7,16 @@ Sie läuft als installierbare Web-App (PWA) auf dem iPhone, auf Android und am C
 - **Kein Konto:** Alle Daten bleiben auf deinem Gerät. Fotos eingeschlossen.
 - **Backup:** Unter *Ich → Daten & Backup* sicherst du alles als Datei, am besten in iCloud Drive. Die App erinnert dich daran.
 - **Ernährung mit Barcode und Suche:** Strichcode mit der Kamera scannen, als Foto laden oder die Zahlen eintippen. Lebensmittel nach Namen suchen. Daten kommen von [Open Food Facts](https://world.openfoodfacts.org) (Lizenz ODbL). Fehlt ein Produkt, legst du es einmal selbst an. Gefundene und eigene Produkte merkt sich die App, sie funktionieren danach auch offline.
+- **Rezepte:** Eigene Gerichte aus Zutaten anlegen und danach portionsweise oder nach Gewicht ins Ernährungstagebuch eintragen.
+
+## Rezepte
+
+- **Anlegen:** *Ernährung → Rezepte → Neues Rezept* oder *Mahlzeit eintragen → Rezepte → Neues Rezept*. Name eingeben und festlegen, wie viele Portionen das Rezept ergibt.
+- **Zutaten:** *Zutat hinzufügen* sucht wie beim Eintragen einer Mahlzeit, das Strichcode-Symbol daneben scannt direkt. Für Dinge ohne Packung gibt es *Eigene Werte*. Mengen lassen sich in der Zutatenliste direkt ändern, die Nährwerte pro Portion rechnen sofort mit.
+- **Gewicht fertig gekocht (optional):** Wer das fertige Essen wiegt, kann später auch in Gramm eintragen, etwa 350 g aus dem Topf.
+- **Eintragen:** Rezept antippen, Portionen oder Gramm wählen, *Eintragen*. Im Tagebuch lassen sich die Portionen später ändern, die Werte rechnen sich neu. Spätere Änderungen am Rezept verändern frühere Einträge nicht.
+- **Entwurf:** Ein Rezept, das noch nicht gespeichert ist, geht nicht verloren, auch wenn du zurückgehst oder die App zwischendurch schließt. Unter *Rezepte* kannst du weitermachen oder den Entwurf verwerfen.
+- Rezepte sind im Backup enthalten.
 
 ## Barcode und Lebensmittelsuche
 
