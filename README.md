@@ -10,6 +10,14 @@ Sie läuft als installierbare Web-App (PWA) auf dem iPhone, auf Android und am C
 - **Ernährung mit Barcode und Suche:** Strichcode mit der Kamera scannen, als Foto laden oder die Zahlen eintippen. Lebensmittel nach Namen suchen. Daten kommen von [Open Food Facts](https://world.openfoodfacts.org) (Lizenz ODbL). Fehlt ein Produkt, legst du es einmal selbst an. Gefundene und eigene Produkte merkt sich die App, sie funktionieren danach auch offline.
 - **Rezepte:** Eigene Gerichte aus Zutaten anlegen und danach portionsweise oder nach Gewicht ins Ernährungstagebuch eintragen.
 
+## Training
+
+- **Starten:** *Training starten* oder ein angehefteter Plan unter *Mit Plan starten*. Plan und Körpergewicht wählst du per Antippen, Gewicht und Wiederholungen tippst du direkt ein oder änderst sie mit − und +.
+- **Übungen:** Liste nach Kategorien, ab acht Übungen mit Suche. Eine Übung antippen, um sie umzubenennen, die Kategorie zu ändern oder sie zu löschen. Was pro Satz eingetragen wird, lässt sich ändern, solange es noch keine Einträge gibt.
+- **Übung hinzufügen:** Im Training die zuletzt benutzten Übungen antippen oder über *Alle Übungen …* suchen. Fehlt eine Übung, legst du sie dort an und sie landet direkt im Training. Genauso in Trainingsplänen.
+- **Verlauf:** Alle Trainings, nach Monaten, mit Bearbeiten über den Stift.
+- Die App kommt ohne Auswahllisten (Dropdowns) aus: Auswahl per Kacheln, Chips oder Zahlenfeld.
+
 ## Rezepte
 
 - **Anlegen:** *Ernährung → Rezepte → Neues Rezept* oder *Mahlzeit eintragen → Rezepte → Neues Rezept*. Name eingeben und festlegen, wie viele Portionen das Rezept ergibt.
