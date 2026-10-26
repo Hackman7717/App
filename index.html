@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-title" content="Trainingsbuch">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="format-detection" content="telephone=no">
-<meta name="app-version" content="1.1.0">
+<meta name="app-version" content="1.1.1">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icons/icon-180.png">
 <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
@@ -964,7 +964,7 @@ if(!Array.isArray(S.plans))S.plans=S.demo&&S.exercises.some(e=>e.id==='e1')?demo
 /* ---------- Speicher auf dem Gerät ----------
    IndexedDB ist der Hauptspeicher (Daten und Fotos). Eine Kopie der Daten liegt zusätzlich im localStorage,
    damit die App sofort startet. Beim Start gewinnt der neuere Stand. Es gibt keinen Server und kein Konto. */
-const APPV='1.1.0',SCHEMA=3;
+const APPV='1.1.1',SCHEMA=3;
 const cloud={state:'local',deferred:false};
 const store={open:null,timer:null,ok:false,err:false,warned:false,persist:false};
 function idb(){if(store.open)return store.open;
@@ -2535,13 +2535,18 @@ async function offProduct(code){if(navigator.onLine===false)return {ok:false,why
       return {ok:true,p}}
     return {ok:false,why:'notfound'}}
   catch(e){return {ok:false,why:navigator.onLine===false?'offline':'error'}}}
-/* Textsuche: zuerst Search-a-licious (schnell, verzeiht Tippfehler), sonst die klassische Suche */
-async function offSearch(q){const enc=encodeURIComponent(q);let L=[];
-  try{const r=await offGet('https://search.openfoodfacts.org/search?q='+enc+'&langs=de,en&page_size=24&fields='+OFF_FIELDS,8000);
-    if(r.ok){const j=await r.json();L=(j&&Array.isArray(j.hits)?j.hits:[]).map(offNorm)}}catch(e){}
-  L=L.filter(p=>p&&p.n&&p.code);
-  if(!L.length){const r=await offGet(OFF+'/cgi/search.pl?search_terms='+enc+'&search_simple=1&action=process&json=1&page_size=24&fields='+OFF_FIELDS,14000);
-    if(!r.ok)throw new Error('http '+r.status);const j=await r.json();L=(j&&Array.isArray(j.products)?j.products:[]).map(offNorm).filter(p=>p&&p.n&&p.code)}
+/* Textsuche. Search-a-licious (search.openfoodfacts.org) sendet keine CORS-Kopfzeilen und ist aus dem Browser nicht nutzbar.
+   Deshalb: klassische Suche, bei Störung (503, Zeitüberschreitung, HTML-Seite statt JSON) ein zweiter Versuch, danach die v2-Suche. */
+async function offTry(url,key,ms){const r=await offGet(url,ms);if(!r.ok)throw new Error('http '+r.status);
+  const t=await r.text();let j;try{j=JSON.parse(t)}catch(e){throw new Error('kein json')}
+  return (j&&Array.isArray(j[key])?j[key]:[]).map(offNorm).filter(p=>p&&p.n&&p.code)}
+async function offSearch(q){const enc=encodeURIComponent(q),F='&fields='+OFF_FIELDS,wait=ms=>new Promise(r=>setTimeout(r,ms));
+  const tries=[()=>offTry(OFF+'/cgi/search.pl?search_terms='+enc+'&search_simple=1&action=process&json=1&page_size=24&sort_by=unique_scans_n'+F,'products',12000),
+    ()=>wait(1500).then(()=>offTry(OFF+'/cgi/search.pl?search_terms='+enc+'&search_simple=1&action=process&json=1&page_size=24'+F,'products',12000)),
+    ()=>offTry(OFF+'/api/v2/search?search_terms='+enc+'&page_size=24&sort_by=unique_scans_n'+F,'products',12000)];
+  let L=null,err=null;
+  for(const t of tries){try{L=await t();if(L.length)break}catch(e){err=e}}
+  if(!L){throw err||new Error('fehler')}
   const seen=new Set();L=L.filter(p=>!seen.has(p.code)&&seen.add(p.code));
   return L.map((p,i)=>({p,s:i+(p.de?0:6)})).sort((a,b)=>a.s-b.s).map(o=>o.p)}
 
@@ -2560,7 +2565,7 @@ function foodResHtml(){const m=meal;if(!m)return '';const q=m.q.trim();
   if(!same||o.status==='idle')on=`<button class="btn block" data-act="offSearch">„${esc(q)}“ bei Open Food Facts suchen</button>`;
   else if(o.status==='loading')on=`<div class="busy" role="status"><i aria-hidden="true"></i><span>Suche bei Open Food Facts …</span></div>`;
   else if(o.status==='offline')on='<div class="small muted">Keine Internetverbindung. Gefunden wird gerade nur, was auf diesem Gerät gespeichert ist.</div>';
-  else if(o.status==='error')on=`<div class="err">Open Food Facts antwortet gerade nicht.</div><button class="btn small" data-act="offSearch">Nochmal versuchen</button>`;
+  else if(o.status==='error')on=`<div class="err">Die Suche von Open Food Facts ist gerade gestört. Das liegt am Dienst, nicht an deinem Handy.</div><div class="small muted">Scannen klappt trotzdem, weil es einen anderen Zugang nutzt. Oder versuch die Suche in ein paar Minuten noch einmal.</div><button class="btn small" data-act="offSearch">Nochmal versuchen</button>`;
   else if(!o.items.length)on='<div class="small muted">Keine Treffer. Versuch ein anderes Wort oder scanne den Barcode.</div>';
   else on=`<div class="flist">${o.items.map((p,i)=>prodRow(p,'offPick',`data-i="${i}"`)).join('')}</div>`;
   return `${loc.length?`<div class="card pane"><div class="pane-h"><span class="eyebrow">Auf diesem Gerät</span></div><div class="flist">${loc.map(p=>prodRow(p,'prodOpen',`data-id="${p.id}"`)).join('')}</div></div>`:''}
@@ -2587,7 +2592,7 @@ function offSearchRun(){const m=meal;if(!m)return;const q=m.q.trim();
   if(q.length<2){toast('Gib mindestens zwei Buchstaben ein');return}
   if(navigator.onLine===false){m.off={q,status:'offline',items:[]};resUpdate();return}
   const now=Date.now();while(offTimes.length&&now-offTimes[0]>60000)offTimes.shift();
-  if(offTimes.length>=8){toast('Kurz warten: Open Food Facts erlaubt nur wenige Suchen pro Minute');return}
+  if(offTimes.length>=5){toast('Kurz warten: Open Food Facts erlaubt nur wenige Suchen pro Minute');return}
   offTimes.push(now);m.off={q,status:'loading',items:[]};resUpdate();
   const a=document.activeElement;if(a&&a.id==='foodQ')a.blur();
   offSearch(q).then(items=>{if(meal===m&&m.off.q===q){m.off={q,status:'done',items};resUpdate()}},
