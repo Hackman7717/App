@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-title" content="Trainingsbuch">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="format-detection" content="telephone=no">
-<meta name="app-version" content="1.2.0">
+<meta name="app-version" content="1.3.0">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icons/icon-180.png">
 <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
@@ -891,6 +891,20 @@ input.hin.ingv{width:76px;min-height:42px;font-size:19px}
 .rtot-all{margin-top:12px}
 /* Hinweise ohne Knopf dürfen kein Antippen darunter schlucken */
 .toast:not(.act){pointer-events:none}
+/* ---------- Daten löschen ---------- */
+:root{--bad-ink:#FFFFFF}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bad-ink:#1A0A06}}
+:root[data-theme="dark"]{--bad-ink:#1A0A06}
+.btn.danger.solid{background:var(--bad);border-color:var(--bad);color:var(--bad-ink)}
+.btn.danger.solid:active{filter:brightness(.88)}
+.btn.danger.solid.big{clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,14px 100%,0 calc(100% - 14px))}
+.wipecard{border-top:3px solid var(--bad)}
+.wipecard > .btn.small{align-self:flex-start}
+.wl{display:flex;flex-direction:column;gap:6px}
+.wlist{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:4px}
+.wlist li{display:flex;gap:8px;align-items:baseline;font-size:15px}
+.wlist li::before{content:"";flex:none;width:7px;height:7px;background:var(--bad);transform:translateY(-2px)}
+.wlist b{font-family:var(--f-display);font-size:18px;font-weight:800}
 .sugg.amts.pors{display:grid;grid-template-columns:repeat(5,minmax(0,1fr))}
 .sugg.amts.pors button{padding:0;font-size:17px}
 
@@ -992,7 +1006,7 @@ if(!Array.isArray(S.plans))S.plans=S.demo&&S.exercises.some(e=>e.id==='e1')?demo
 /* ---------- Speicher auf dem Gerät ----------
    IndexedDB ist der Hauptspeicher (Daten und Fotos). Eine Kopie der Daten liegt zusätzlich im localStorage,
    damit die App sofort startet. Beim Start gewinnt der neuere Stand. Es gibt keinen Server und kein Konto. */
-const APPV='1.2.0',SCHEMA=3;
+const APPV='1.3.0',SCHEMA=3;
 const cloud={state:'local',deferred:false};
 const store={open:null,timer:null,ok:false,err:false,warned:false,persist:false};
 function idb(){if(store.open)return store.open;
@@ -1028,7 +1042,7 @@ async function storeInit(){
     if(p&&Array.isArray(p.exercises)&&Array.isArray(p.sessions)&&(!bootLocal||(Number(p._ts)||0)>(S._ts||0)))adoptStored(p,bk);
     store.ok=true;await storeFlush()}
   catch(e){store.err=true}
-  photosInit();
+  await photosInit();wipeInit();
   try{if(navigator.storage&&navigator.storage.persisted){store.persist=await navigator.storage.persisted();if(!store.persist&&navigator.storage.persist)store.persist=await navigator.storage.persist()}}catch(e){}
   setStoreNote()}
 /* ---------- Demo-Modus: eigene Daten werden beiseitegelegt und beim Beenden zurückgeholt ---------- */
@@ -2357,7 +2371,7 @@ function bodyCardToday(k){const tr=trendTxt();
 function noteCard(k){const D=dayGet(k);return `<div class="card pane"><div class="pane-h"><span class="eyebrow">Notiz zum Tag</span><button class="lnk" data-act="tab" data-v="journal">Journal</button></div>
   <textarea class="in jnote" id="dayNote" data-note="${k}" maxlength="4000" rows="3" placeholder="Was lief gut? Was beschäftigt dich?">${esc(D.note||'')}</textarea></div>`}
 function breathRow(k){const m=num(dayGet(k).breath);return `<div class="navlist"><button class="navrow" data-act="tab" data-v="atem">${ICONS.atem}<span class="nr-t"><b>Atemübung</b><span>${m?'An diesem Tag '+m+' Min geübt':'Box-Atmung, 4-7-8 oder ruhig atmen'}</span></span>${CHR}</button></div>`}
-function viewHeute(){const k=hDate(),P=[banner(),updCard(),installCard(),bkCard()];
+function viewHeute(){const k=hDate(),P=[banner(),wipeCard(),updCard(),installCard(),bkCard()];
   if(mod('mind'))P.push(checkinCard(k));
   P.push(trainCardToday(k),habitsCard(k));
   if(mod('food'))P.push(foodCardToday(k));
@@ -3214,6 +3228,7 @@ const PH=new Map();
 function phUrls(r){return {full:URL.createObjectURL(new Blob([r.full],{type:r.type||'image/jpeg'})),thumb:URL.createObjectURL(new Blob([r.thumb||r.full],{type:r.type||'image/jpeg'}))}}
 async function photosInit(){try{const all=await tx('photos','readonly',st=>st.getAll());
     const ids=new Set(S.photos.map(p=>p.id));if(realBak&&Array.isArray(realBak.photos))for(const p of realBak.photos)ids.add(p.id);
+    for(const W of [S.wiped,realBak&&realBak.wiped])if(W&&Array.isArray(W.photoIds))for(const id of W.photoIds)ids.add(id);
     for(const r of all||[]){if(!ids.has(r.id)){tx('photos','readwrite',st=>st.delete(r.id)).catch(()=>{});continue}if(!PH.has(r.id))PH.set(r.id,phUrls(r))}
     if(S.photos.length)softRender()}catch(e){}}
 async function putPhoto(id,date,blob){const thumb=await shrink(blob,480,.8);
@@ -3307,7 +3322,7 @@ function viewDaten(){const p=bk.pending;
     <div class="small muted">Deine jetzigen Daten auf diesem Gerät werden ersetzt. Vorher legt die App eine Sicherheitskopie an.</div>
     <button class="btn primary block big" data-act="bkApply">Wiederherstellen</button><button class="btn ghost block" data-act="bkCancel">Abbrechen</button></div>`;
   const np=S.photos.length;
-  return `${banner()}<div class="card pane"><div class="pane-h"><span class="eyebrow">Backup</span><span class="small muted">${S.lastBackup?'zuletzt '+bkAge():'noch keins'}</span></div>
+  return `${banner()}${wipeCard(true)}<div class="card pane"><div class="pane-h"><span class="eyebrow">Backup</span><span class="small muted">${S.lastBackup?'zuletzt '+bkAge():'noch keins'}</span></div>
    <div class="small">Deine Daten liegen nur auf diesem Gerät. Sichere sie regelmäßig als Datei, am besten in iCloud Drive.${np===1?' Dein Foto ist mit drin.':np?' Deine '+np+' Fotos sind mit drin.':''}</div>
    ${bk.file?`<button class="btn primary block big" data-act="bkShare">Backup sichern</button><div class="small muted num">${esc(bk.file.name)} · ${bk.info}. Wähl im nächsten Schritt „In Dateien sichern“ und dann iCloud Drive.</div>`
      :`<button class="btn primary block big" data-act="bkMake"${bk.busy?' disabled':''}>${bk.busy?'Backup wird erstellt …':'Backup erstellen'}</button>`}
@@ -3324,14 +3339,161 @@ function viewDaten(){const p=bk.pending;
    <button class="btn ghost block" data-act="export">Daten als Text kopieren</button>
    ${exportText?`<textarea class="in" id="exportBox" readonly>${esc(exportText)}</textarea>`:''}
    <button class="btn ghost block" data-act="demoToggle">${S.demo?'Beispieldaten beenden':'Beispieldaten ansehen'}</button></div>
+  ${wipeSection()}
   <div class="small muted" style="text-align:center">Trainingsbuch ${APPV} · Alle Daten bleiben auf deinem Gerät</div>`}
+/* ======================= Daten löschen mit Rückgängig =======================
+   Vor dem Löschen kommt der komplette Stand als Schnappschuss in IndexedDB (kv 'geloescht').
+   S.wiped {at, day, scope:'all'|'entries', until, hide, photoIds, tpl} merkt sich, dass es etwas zum Zurückholen gibt.
+   Gelöschte Fotos bleiben bis zum endgültigen Löschen auf dem Gerät. Nach 30 Tagen wird automatisch endgültig gelöscht.
+   Rückgängig führt zusammen: Der alte Stand kommt zurück, was seitdem neu eingetragen wurde, bleibt. */
+const WIPE_DAYS=30;
+let wipeScope='all',wipeBusy=false;
+const kvDel=k=>tx('kv','readwrite',st=>st.delete(k));
+function wipeUntil(W){return dmy(ymd(new Date(num(W.until))))}
+function dmyDot(k){const d=dmy(k);return /\.$/.test(d)?d:d+'.'}
+/* Karte auf „Heute“ (ausblendbar) und oben in „Daten & Backup“ */
+function wipeCard(onData){const W=S.wiped;if(!W||S.demo||(!onData&&W.hide))return '';
+  return `<div class="card pane wipecard"><div class="pane-h"><span class="eyebrow">${W.scope==='all'?'Alle Daten gelöscht':'Einträge gelöscht'}</span>${onData?'':'<button class="lnk" data-act="wipeHide">Ausblenden</button>'}</div>
+   <div class="small">Gelöscht am ${dmyDot(W.day)} Bis ${wipeUntil(W)} kannst du das rückgängig machen${onData?'. Danach ist es endgültig.':', auch später unter Ich → Daten & Backup.'}</div>
+   <button class="btn primary block" data-act="wipeUndo"${wipeBusy?' disabled':''}>Rückgängig machen</button>
+   ${onData?`<button class="btn small danger" data-act="wipeFinal" data-id="x">${confirmKey==='wipeFinal:x'?'Wirklich endgültig löschen?':'Jetzt endgültig löschen'}</button>`:''}</div>`}
+/* Abschnitt ganz unten in „Daten & Backup“ */
+function wipeSection(){return `<div class="card pane"><div class="pane-h"><span class="eyebrow">Daten löschen</span></div>
+   <div class="small muted">Löscht deine Einträge oder alle Daten auf diesem Gerät. ${WIPE_DAYS} Tage lang kannst du das rückgängig machen.</div>
+   <button class="btn danger block" data-act="wipeOpen">Daten löschen …</button></div>`}
+function wipeList(scope){const n=(v,one,many)=>v?[v,v===1?one:many]:null,L=[],dr=S.draft&&!S.draft.id&&(S.draft.started||(S.draft.entries||[]).length);
+  L.push(n(S.sessions.length,'Training','Trainings'));if(dr)L.push(['','laufendes Training']);
+  L.push(n(Object.keys(S.days).length,'Tag mit Einträgen','Tage mit Einträgen'));L.push(n(S.photos.length,'Foto','Fotos'));
+  if(scope==='all'){L.push(n(S.recipes.length,'Rezept','Rezepte'),n(S.products.length,'gespeichertes Lebensmittel','gespeicherte Lebensmittel'),n(S.favs.length,'Favorit','Favoriten'),
+      n(S.goals.length,'Ziel','Ziele'),n(S.exercises.length,'Übung','Übungen'),n(S.plans.length,'Trainingsplan','Trainingspläne'),n(S.habits.length,'Gewohnheit','Gewohnheiten'));
+    if(S.nutri&&Object.keys(S.nutri).length)L.push(['','Angaben zum Tagesbedarf']);L.push(['','Einstellungen'])}
+  return L.filter(Boolean)}
+function viewWipe(){
+  if(S.demo)return `<div class="card section"><b>Gerade siehst du Beispieldaten</b><div class="small">Deine eigenen Daten sind sicher beiseitegelegt. Beende zuerst die Beispieldaten, dann kannst du hier deine Daten löschen.</div>
+    <button class="btn block" data-act="demoToggle">Beispieldaten beenden</button></div>`;
+  const all=wipeScope==='all',sc=all?'all':'entries',L=wipeList(sc),W=S.wiped,ck=confirmKey==='wipeGo:'+sc;
+  return `<div class="card section">
+   <div class="seg" role="group" aria-label="Was gelöscht wird"><button data-act="wipeScope" data-v="all" aria-pressed="${all}">Alles</button><button data-act="wipeScope" data-v="entries" aria-pressed="${!all}">Nur Einträge</button></div>
+   <div class="wl"><span class="eyebrow">Wird gelöscht</span>${L.length?`<ul class="wlist">${L.map(([v,l])=>`<li>${v!==''?`<b class="num">${fmt(v,0)}</b> `:''}${esc(l)}</li>`).join('')}</ul>`:'<div class="small muted">Es gibt noch nichts zu löschen.</div>'}
+    ${Object.keys(S.days).length?'<div class="small muted">Tage mit Einträgen: abgehakte Gewohnheiten, Schlaf, Stimmung, Journal, Ernährung, Gewicht, Maße und Atemübungen.</div>':''}</div>
+   <div class="wl"><span class="eyebrow">Bleibt</span><div class="small">${all?'Deine Backup-Dateien. Die App startet wie neu und bringt ihre Standard-Übungen, -Pläne und -Gewohnheiten als Vorlage mit.':'Übungen, Trainingspläne, Gewohnheiten, Ziele, Rezepte, gespeicherte Lebensmittel, Favoriten, Tagesbedarf und Einstellungen.'}</div></div></div>
+  <div class="infobox">Du kannst das Löschen ${WIPE_DAYS} Tage lang rückgängig machen, über die Karte auf „Heute“ oder unter Daten &amp; Backup. Danach ist es endgültig.${W?` Die am ${dmy(W.day)} gelöschten Daten werden dabei endgültig entfernt.`:''}</div>
+  <button class="btn danger solid block big" data-act="wipeGo" data-id="${sc}"${wipeBusy?' disabled':''}>${ck?(all?'Wirklich alles löschen?':'Wirklich alle Einträge löschen?'):(all?'Alles löschen':'Einträge löschen')}</button>`}
+
+/* ---------- Löschen ---------- */
+function wipeUiReset(){planEdit=null;editEx=null;timeEdit=null;habEdit=null;goalEdit=null;foodEdit=null;mealReset();WL=null;
+  prod=null;pick=null;rv=null;recResumed=false;if(scan){scan=null;scanStop()}photoOpen=null;bk.pending=null;bk.file=null;lastDel=null;
+  foodDay=0;dayOff=0;calOff=0;durOpen=false;exportText='';showImport=false;importText='';flash='';confirmKey=null;
+  for(const r in rootStacks)rootStacks[r]=[];S.ui.root='heute';S.ui.stack=[]}
+/* Fotos und Sicherheitskopien eines früheren Löschens endgültig entfernen */
+async function wipeDropPhotos(W){const keep=new Set(S.photos.map(p=>p.id));if(realBak&&Array.isArray(realBak.photos))for(const p of realBak.photos)keep.add(p.id);
+  for(const id of (W&&W.photoIds)||[])if(!keep.has(id)){try{await AST.delete(id)}catch(e){}}}
+async function wipeRun(scope){if(wipeBusy||S.demo)return;wipeBusy=true;render();
+  /* Erst die neue Sicherung schreiben, dann Reste eines früheren Löschens entfernen */
+  const old=S.wiped;delete S.wiped;
+  try{const {ui,...rest}=S;await kvSet('geloescht',JSON.stringify(rest))}
+  catch(e){if(old)S.wiped=old;wipeBusy=false;toast('Löschen hat nicht geklappt. Der Speicher auf dem Gerät antwortet gerade nicht.');render();return}
+  if(old)await wipeDropPhotos(old);
+  const t=today(),photoIds=S.photos.map(p=>p.id),W={at:Date.now(),day:t,scope,until:Date.now()+WIPE_DAYS*864e5,hide:false,photoIds};
+  if(scope==='all'){const d=demo(),keep={lastBackup:S.lastBackup||null,schema:S.schema,_ts:S._ts};
+    S={exercises:d.exercises,sessions:[],plans:d.plans,habits:d.habits,days:{},goals:[],photos:[],favs:[],products:[],recipes:[],recDraft:null,nutri:{},
+      mods:{food:true,mind:true,body:true},demo:false,draft:null,mode:'basic',ui:{root:'heute',stack:[],progEx:'e1'},...keep};
+    W.tpl={ex:d.exercises.map(x=>x.id),pl:d.plans.map(x=>x.id),hb:d.habits.map(x=>x.id)}}
+  else{S.sessions=[];S.days={};S.photos=[];S.draft=null}
+  for(const h of S.habits){h.created=t;if(h.kind==='quit'){h.since=t;h.start=t;delete h.prevSince}}
+  S.since=Date.now();S.wiped=W;migrate();wipeUiReset();userActed=true;wipeBusy=false;
+  render();storeFlush();
+  const h=document.getElementById('toastHost');h.innerHTML=`<div class="toast act" role="status"><span>${scope==='all'?'Alle Daten gelöscht':'Alle Einträge gelöscht'}</span><button data-act="wipeUndo">Rückgängig</button></div>`;
+  clearTimeout(toastTimer);toastTimer=setTimeout(()=>{h.innerHTML=''},10000)}
+
+/* ---------- Rückgängig: alten Stand zurückholen und mit allem Neuen zusammenführen ---------- */
+function wipeDays(Od,Cd,hmap){const R={};
+  for(const k of Object.keys(Cd||{})){const c=JSON.parse(JSON.stringify(Cd[k]));if(c.h&&hmap){const h={};for(const id in c.h)h[hmap[id]||id]=c.h[id];c.h=h}R[k]=c}
+  for(const k of Object.keys(Od||{})){const o=Od[k],c=R[k];if(!c){R[k]=o;continue}
+    for(const f of Object.keys(o)){const ov=o[f],cv=c[f];
+      if(cv==null||cv===''){c[f]=ov;continue}
+      if(Array.isArray(ov)&&Array.isArray(cv)){const ids=new Set(cv.map(x=>x&&x.id));c[f]=ov.filter(x=>!(x&&ids.has(x.id))).concat(cv);continue}
+      if(f==='breath'){c.breath=num(ov)+num(cv);continue}
+      if(f==='note'){const a=String(ov).trim(),b=String(cv).trim();if(a&&a!==b)c.note=(a+'\n\n'+b).slice(0,4000);continue}
+      if(ov&&typeof ov==='object'&&cv&&typeof cv==='object'){c[f]={...ov,...cv};continue}}}
+  return R}
+/* Liste zusammenführen: der alte Stand gewinnt; Neues mit gleichem Namen wird dem Alten zugeordnet */
+function wipeById(O,C,key){const ids=new Set(O.map(x=>x.id)),nm=new Map(),map={},out=O.slice();
+  if(key)for(const x of O){const k=String(x[key]||'').trim().toLowerCase();if(k&&!nm.has(k))nm.set(k,x.id)}
+  for(const x of C){if(ids.has(x.id))continue;const k=key?String(x[key]||'').trim().toLowerCase():'',hit=k&&nm.get(k);if(hit){map[x.id]=hit;continue}out.push(x)}
+  return {out,map}}
+function wipeMerge(O,C,W){const R=JSON.parse(JSON.stringify(C)),A=a=>Array.isArray(a)?a:[];let hmap={};
+  if(W.scope==='all'){const T=W.tpl||{},has=(L,id)=>A(L).some(x=>x.id===id),tpl=(k,id)=>A(T[k]).includes(id);
+    /* Vorlagen, die nur das Löschen mitgebracht hat und die seitdem nicht benutzt wurden, fallen weg */
+    const usedPl=new Set([...A(R.sessions).map(s=>s.planId),R.draft&&R.draft.planId].filter(Boolean));
+    const plans=A(R.plans).filter(p=>!tpl('pl',p.id)||has(O.plans,p.id)||usedPl.has(p.id));
+    const usedEx=new Set();for(const s of A(R.sessions))for(const e of A(s.entries))usedEx.add(e.exId);
+    if(R.draft)for(const e of A(R.draft.entries))usedEx.add(e.exId);for(const g of A(R.goals))if(g.exId)usedEx.add(g.exId);
+    for(const p of plans)for(const it of A(p.items))usedEx.add(it.exId);
+    const exs=A(R.exercises).filter(x=>!tpl('ex',x.id)||has(O.exercises,x.id)||usedEx.has(x.id));
+    const usedHb=new Set();for(const k in R.days||{}){const h=R.days[k].h;if(h)for(const id in h)usedHb.add(id)}for(const g of A(R.goals))if(g.habitId)usedHb.add(g.habitId);
+    const hbs=A(R.habits).filter(x=>!tpl('hb',x.id)||has(O.habits,x.id)||usedHb.has(x.id));
+    const ex=wipeById(A(O.exercises),exs,'name'),pl=wipeById(A(O.plans),plans,'name'),hb=wipeById(A(O.habits),hbs,'name');hmap=hb.map;
+    const rx=id=>ex.map[id]||id,rp=id=>pl.map[id]||id;
+    for(const s of A(R.sessions)){for(const e of A(s.entries))e.exId=rx(e.exId);if(s.planId)s.planId=rp(s.planId)}
+    if(R.draft){for(const e of A(R.draft.entries))e.exId=rx(e.exId);if(R.draft.planId)R.draft.planId=rp(R.draft.planId)}
+    for(const p of pl.out)if(!has(O.plans,p.id))for(const it of A(p.items))it.exId=rx(it.exId);
+    for(const g of A(R.goals)){if(g.exId)g.exId=rx(g.exId);if(g.habitId)g.habitId=hmap[g.habitId]||g.habitId}
+    if(R.ui)for(const f of ['progEx','anaEx'])if(R.ui[f]&&ex.map[R.ui[f]])R.ui[f]=ex.map[R.ui[f]];
+    R.exercises=ex.out;R.plans=pl.out;R.habits=hb.out;
+    R.goals=wipeById(A(O.goals),A(R.goals)).out;
+    const fn=new Set(A(O.favs).map(f=>String(f.n||'').trim().toLowerCase()));R.favs=A(O.favs).concat(A(R.favs).filter(f=>!fn.has(String(f.n||'').trim().toLowerCase()))).slice(0,30);
+    const pc=new Set(A(O.products).map(p=>p.code).filter(Boolean));R.products=wipeById(A(O.products),A(R.products).filter(p=>!p.code||!pc.has(p.code))).out;
+    R.recipes=wipeById(A(O.recipes),A(R.recipes)).out;
+    if(!R.recDraft&&O.recDraft)R.recDraft=O.recDraft;
+    /* Tagesbedarf: die App füllt leere Angaben selbst mit Standardwerten, deshalb gelten die alten Angaben */
+    R.nutri={...(R.nutri||{}),...(O.nutri||{})};
+    for(const f of ['mods','goal','restSec','restOn','mode','bkEvery'])if(O[f]!==undefined)R[f]=O[f];
+    for(const k in O)if(R[k]===undefined&&k!=='wiped'&&k!=='ui')R[k]=O[k]}
+  else{/* nur Einträge: die beim Löschen zurückgesetzten Startdaten der Gewohnheiten zurückholen */
+    for(const h of A(R.habits)){const o=A(O.habits).find(x=>x.id===h.id);if(!o)continue;
+      if(h.created===W.day&&o.created)h.created=o.created;
+      if(h.kind==='quit'&&o.kind==='quit'&&h.since===W.day&&h.start===W.day){h.since=o.since;h.start=o.start;if(o.prevSince)h.prevSince=o.prevSince;else delete h.prevSince}}}
+  R.sessions=wipeById(A(O.sessions),A(R.sessions)).out;
+  R.days=wipeDays(O.days,R.days,hmap);
+  R.photos=wipeById(A(O.photos),A(R.photos)).out;
+  if(!R.draft&&O.draft&&!O.draft.id)R.draft=O.draft;
+  if(num(O.since))R.since=Math.min(num(O.since),num(R.since)||Infinity);
+  const lb=Math.max(num(O.lastBackup),num(R.lastBackup));R.lastBackup=lb||null;
+  R.demo=false;delete R.wiped;return R}
+async function wipeUndo(){const W=S.wiped;if(!W||wipeBusy)return;wipeBusy=true;render();let O=null;
+  try{const t=await kvGet('geloescht');O=t?JSON.parse(t):null}catch(e){}
+  if(!O||!Array.isArray(O.sessions)){wipeBusy=false;delete S.wiped;userActed=true;toast('Die gelöschten Daten sind leider nicht mehr auf dem Gerät.');render();return}
+  try{await kvSet('vor-rueckgaengig',JSON.stringify(S))}catch(e){}
+  let R;try{R=wipeMerge(O,S,W)}catch(e){wipeBusy=false;toast('Zurückholen hat nicht geklappt. Deine gelöschten Daten bleiben gesichert.');render();return}
+  S=R;migrate();wipeUiReset();userActed=true;wipeBusy=false;
+  try{await kvDel('geloescht')}catch(e){}
+  render();storeFlush();toast('Deine Daten sind wieder da')}
+/* Endgültig löschen: Schnappschuss, Fotos und alte Sicherheitskopien entfernen */
+async function wipePurge(silent){const W=S.wiped;if(!W||wipeBusy)return;wipeBusy=true;
+  await wipeDropPhotos(W);
+  try{await kvDel('geloescht')}catch(e){}
+  try{const keys=await tx('kv','readonly',st=>st.getAllKeys());for(const k of keys||[])if(/^vor-/.test(String(k)))await kvDel(k)}catch(e){}
+  delete S.wiped;if(realBak&&realBak.wiped)delete realBak.wiped;wipeBusy=false;userActed=true;
+  if(!silent)toast('Endgültig gelöscht');render()}
+/* Beim Start: abgelaufenes Löschen endgültig machen, verwaisten Schnappschuss aufräumen */
+async function wipeInit(){try{if(S.wiped){if(Date.now()>num(S.wiped.until))await wipePurge(true)}
+    else if(!(realBak&&realBak.wiped)&&await kvGet('geloescht')!==undefined)await kvDel('geloescht')}catch(e){}}
+function wipeAct(a,el){const ds=el&&el.dataset||{};switch(a){
+  case 'wipeOpen':wipeScope='all';push('loeschen');render();return true;
+  case 'wipeScope':wipeScope=ds.v==='entries'?'entries':'all';render();return true;
+  case 'wipeGo':wipeRun(ds.id==='entries'?'entries':'all');return true;
+  case 'wipeUndo':wipeUndo();return true;
+  case 'wipeFinal':wipePurge(false);return true;
+  case 'wipeHide':if(S.wiped)S.wiped.hide=true;render();return true}
+  return false}
 /* ---------- Navigation: Tab-Leiste, Unterseiten-Stapel je Tab, Übergänge, Zurück-Geste ---------- */
 const ROOTS_ALL=['heute','training','ernaehrung','fortschritt','ich'];
 const RLBL={heute:'Heute',training:'Training',ernaehrung:'Ernährung',fortschritt:'Fortschritt',ich:'Ich'};
-const VTITLE={session:'Training',plaene:'Trainingspläne',uebungen:'Übungen',mahlzeit:'Mahlzeit',scan:'Barcode scannen',produkt:'Lebensmittel',rezepte:'Rezepte',rezept:'Rezept',rezeptEdit:'Rezept',zutat:'Zutat hinzufügen',bedarf:'Tagesbedarf',gewohnheiten:'Gewohnheiten',ziele:'Ziele',koerper:'Körper',journal:'Journal',atem:'Atemübung',daten:'Daten & Backup'};
+const VTITLE={session:'Training',plaene:'Trainingspläne',uebungen:'Übungen',mahlzeit:'Mahlzeit',scan:'Barcode scannen',produkt:'Lebensmittel',rezepte:'Rezepte',rezept:'Rezept',rezeptEdit:'Rezept',zutat:'Zutat hinzufügen',bedarf:'Tagesbedarf',gewohnheiten:'Gewohnheiten',ziele:'Ziele',koerper:'Körper',journal:'Journal',atem:'Atemübung',daten:'Daten & Backup',loeschen:'Daten löschen'};
 const VLBL={...VTITLE,plaene:'Pläne'};
 const VIEWS={heute:viewHeute,training:viewTrainHub,ernaehrung:viewFood,fortschritt:viewProgress,ich:viewIch,
-  session:viewTraining,plaene:viewPlaene,uebungen:viewUebungen,mahlzeit:viewMeal,scan:viewScan,produkt:viewProduct,rezepte:viewRecipes,rezept:viewRecipe,rezeptEdit:viewRecipeEdit,zutat:viewPick,bedarf:viewBedarf,gewohnheiten:viewHabits,ziele:viewGoals,koerper:viewBody,journal:viewJournal,atem:viewBreath,daten:viewDaten};
+  session:viewTraining,plaene:viewPlaene,uebungen:viewUebungen,mahlzeit:viewMeal,scan:viewScan,produkt:viewProduct,rezepte:viewRecipes,rezept:viewRecipe,rezeptEdit:viewRecipeEdit,zutat:viewPick,bedarf:viewBedarf,gewohnheiten:viewHabits,ziele:viewGoals,koerper:viewBody,journal:viewJournal,atem:viewBreath,daten:viewDaten,loeschen:viewWipe};
 function roots(){return ROOTS_ALL.filter(r=>r!=='ernaehrung'||mod('food'))}
 function rootLabel(r){return RLBL[r]||''}
 function modOkView(v){return !(['mahlzeit','bedarf','scan','produkt','rezepte','rezept','rezeptEdit','zutat'].includes(v)&&!mod('food'))&&!((v==='journal'||v==='atem')&&!mod('mind'))&&!(v==='koerper'&&!mod('body'))}
@@ -3533,11 +3695,11 @@ function act(a,el){
   if(a==='calToggle'&&el.classList.contains('goalbox')){openFold.cal=!openFold.cal;render();return}
   if(a==='nView'){nView=el.dataset.v||(nView==='heute'?'ziel':'heute');const o=document.getElementById('nutriOut');if(o)o.innerHTML=nutriOut();return}
   if(a==='info'){const b=document.getElementById(el.dataset.id);if(b){b.hidden=!b.hidden;try{el.setAttribute('aria-expanded',String(!b.hidden));el.classList.toggle('on',!b.hidden)}catch(e){}}return}
-  const IDC=['delEx','delPlan','delHab','delGoal','photoDel','foodDel','habRelapse','prodDel','recDel','recIngDel','recDiscard'];
+  const IDC=['delEx','delPlan','delHab','delGoal','photoDel','foodDel','habRelapse','prodDel','recDel','recIngDel','recDiscard','wipeGo','wipeFinal'];
   const key=IDC.includes(a)?a+':'+el.dataset.id:a==='delEntry'?'delEntry:'+el.dataset.e:a;
   if((NEEDS_CONFIRM.has(a)||IDC.includes(a)||a==='delEntry')&&confirmKey!==key){confirmKey=key;flash='';render();return}
   const prevCK=confirmKey;confirmKey=null;if(a!=='saveSession'&&a!=='addEx'&&a!=='prodSave')flash='';
-  if(foodAct(a,el,prevCK))return;
+  if(foodAct(a,el,prevCK)||wipeAct(a,el))return;
   const d=S.draft;
   if(['nudge','tStart','tStop','tReset','tEdit'].includes(a)&&d){const en=d.entries[+el.dataset.e];const st=en&&en.sets[+el.dataset.s];if(st&&st.done)return}
   switch(a){

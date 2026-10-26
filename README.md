@@ -6,6 +6,7 @@ Sie läuft als installierbare Web-App (PWA) auf dem iPhone, auf Android und am C
 - **Offline:** Nach dem ersten Öffnen funktioniert die App ohne Internet.
 - **Kein Konto:** Alle Daten bleiben auf deinem Gerät. Fotos eingeschlossen.
 - **Backup:** Unter *Ich → Daten & Backup* sicherst du alles als Datei, am besten in iCloud Drive. Die App erinnert dich daran.
+- **Löschen mit Rückgängig:** Alle Daten oder nur die Einträge löschen und 30 Tage lang zurückholen.
 - **Ernährung mit Barcode und Suche:** Strichcode mit der Kamera scannen, als Foto laden oder die Zahlen eintippen. Lebensmittel nach Namen suchen. Daten kommen von [Open Food Facts](https://world.openfoodfacts.org) (Lizenz ODbL). Fehlt ein Produkt, legst du es einmal selbst an. Gefundene und eigene Produkte merkt sich die App, sie funktionieren danach auch offline.
 - **Rezepte:** Eigene Gerichte aus Zutaten anlegen und danach portionsweise oder nach Gewicht ins Ernährungstagebuch eintragen.
 
@@ -17,6 +18,14 @@ Sie läuft als installierbare Web-App (PWA) auf dem iPhone, auf Android und am C
 - **Eintragen:** Rezept antippen, Portionen oder Gramm wählen, *Eintragen*. Im Tagebuch lassen sich die Portionen später ändern, die Werte rechnen sich neu. Spätere Änderungen am Rezept verändern frühere Einträge nicht.
 - **Entwurf:** Ein Rezept, das noch nicht gespeichert ist, geht nicht verloren, auch wenn du zurückgehst oder die App zwischendurch schließt. Unter *Rezepte* kannst du weitermachen oder den Entwurf verwerfen.
 - Rezepte sind im Backup enthalten.
+
+## Daten löschen
+
+- **Wo:** *Ich → Daten & Backup → Daten löschen …*. Die Seite zeigt vorher genau, was gelöscht wird.
+- **Alles:** Trainings, Tagebuch, Fotos, Rezepte, gespeicherte Lebensmittel, Favoriten, Ziele, eigene Übungen, Pläne und Gewohnheiten, Tagesbedarf und Einstellungen. Die App startet danach wie neu, mit den Standard-Übungen, -Plänen und -Gewohnheiten als Vorlage.
+- **Nur Einträge:** Trainings, Tagebuch (Gewohnheiten, Schlaf, Stimmung, Journal, Ernährung, Gewicht, Maße, Atemübungen) und Fotos. Übungen, Pläne, Gewohnheiten, Ziele, Rezepte, Lebensmittel, Favoriten und Einstellungen bleiben.
+- **Rückgängig:** direkt im Hinweis nach dem Löschen, über die Karte auf *Heute* oder unter *Daten & Backup*, 30 Tage lang. Was du seitdem neu eingetragen hast, bleibt dabei erhalten.
+- **Endgültig:** Nach 30 Tagen oder mit *Jetzt endgültig löschen* sind die Daten samt Fotos und Sicherheitskopien vom Gerät entfernt. Backup-Dateien, die du gespeichert hast, bleiben unberührt.
 
 ## Barcode und Lebensmittelsuche
 
