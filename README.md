@@ -13,10 +13,17 @@ Sie läuft als installierbare Web-App (PWA) auf dem iPhone, auf Android und am C
 ## Training
 
 - **Starten:** *Training starten* oder ein angehefteter Plan unter *Mit Plan starten*. Plan und Körpergewicht wählst du per Antippen, Gewicht und Wiederholungen tippst du direkt ein oder änderst sie mit − und +.
-- **Übungen:** Liste nach Kategorien, ab acht Übungen mit Suche. Eine Übung antippen, um sie umzubenennen, die Kategorie zu ändern oder sie zu löschen. Was pro Satz eingetragen wird, lässt sich ändern, solange es noch keine Einträge gibt.
-- **Übung hinzufügen:** Im Training die zuletzt benutzten Übungen antippen oder über *Alle Übungen …* suchen. Fehlt eine Übung, legst du sie dort an und sie landet direkt im Training. Genauso in Trainingsplänen.
+- **Übungen:** Liste nach Kategorien mit Filter und Suche (auch nach Muskel oder englischem Namen, z. B. „Trizeps“ oder „Lat Pulldown“). Eine Übung antippen, um sie umzubenennen, die Kategorie zu ändern oder sie zu löschen. Was pro Satz eingetragen wird, lässt sich ändern, solange es noch keine Einträge gibt.
+- **Übung hinzufügen:** Im Training die zuletzt benutzten Übungen antippen oder über *Alle Übungen …* suchen. Fehlt eine Übung, legst du sie dort an und sie landet direkt im Training. Genauso in Trainingsplänen und bei Zielen.
 - **Verlauf:** Alle Trainings, nach Monaten, mit Bearbeiten über den Stift.
 - Die App kommt ohne Auswahllisten (Dropdowns) aus: Auswahl per Kacheln, Chips oder Zahlenfeld.
+
+## Standardübungen und MET-Werte
+
+- **Katalog:** 77 übliche Übungen in den Kategorien Beine, Brust, Rücken, Schultern, Arme, Bauch & Core und Ausdauer sind von Anfang an da. Was du nicht brauchst, löschst du. Gelöschte Standardübungen holst du unten in der Übungsliste zurück.
+- **Varianten:** Jede Geräte-Variante ist eine eigene Übung mit eigenem Verlauf, etwa *Bizeps-Curl (Kurzhantel)* und *Bizeps-Curl (Kabelzug)*, weil sich die Gewichte nicht vergleichen lassen. In der Liste stehen die Varianten einer Übung in einer Zeile, das Gerät wählst du per Knopf. Einarmig oder beidarmig ist keine eigene Übung: Gewicht pro Hantel eintragen.
+- **MET-Werte:** aus dem *2024 Adult Compendium of Physical Activities* (Herrmann et al., Journal of Sport and Health Science 13(1), 2024, [pacompendium.com](https://pacompendium.com)), mit Code unter dem Feld. Laufen, Gehen und Radfahren rechnen über das Tempo, ebenfalls mit den Werten von 2024. Kalorien sind Schätzungen: MET × Körpergewicht × Stunden.
+- **Update von 1.4.0:** Eigene Übungen, die einer Standardübung entsprechen (z. B. „Bizeps Curls“ oder „Latziehen“), werden nicht doppelt angelegt. Sie behalten Name, Einträge und einen selbst gesetzten MET-Wert und bekommen nur eine fehlende Kategorie und einen fehlenden MET-Wert.
 
 ## Rezepte
 

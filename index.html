@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-title" content="Trainingsbuch">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="format-detection" content="telephone=no">
-<meta name="app-version" content="1.4.0">
+<meta name="app-version" content="1.5.0">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icons/icon-180.png">
 <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
@@ -966,6 +966,20 @@ input.wh:focus{outline:none;border-color:var(--accent-fg);box-shadow:inset 0 0 0
 .palrow[aria-pressed="true"]{border-color:var(--accent-fg);background:var(--accent-soft);box-shadow:inset 4px 0 0 var(--accent-fg)}
 .sugg.amts.pors{display:grid;grid-template-columns:repeat(5,minmax(0,1fr))}
 .sugg.amts.pors button{padding:0;font-size:17px}
+/* ---------- Übungskatalog (1.5.0) ---------- */
+.excats{margin-top:-4px}
+.libnote{border-top:3px solid var(--accent)}
+.metsrc{display:block;line-height:1.45}
+.navrow.exfam{align-items:flex-start;cursor:default}
+.navrow.exfam:active{background:none}
+.navrow.exfam > svg{width:22px;height:22px;margin-top:2px;color:var(--accent-fg)}
+.exfam .nr-t .vchips{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px;white-space:normal;overflow:visible;color:var(--ink)}
+.vchip{display:inline-flex;align-items:center;gap:5px;min-height:38px;padding:0 11px;border:1px solid var(--line-2);background:var(--field);color:var(--ink);
+  font-family:var(--f-body);font-size:14.5px;font-weight:600;letter-spacing:0;text-transform:none}
+.vchip small{font-size:12px;font-weight:600;color:var(--muted)}
+.vchip:active{background:var(--press)}
+.vchip svg{width:15px;height:15px;flex:none}
+.vchip.on{border-color:var(--accent-fg);color:var(--accent-fg);box-shadow:inset 0 0 0 1px var(--accent-fg)}
 
 @media (prefers-reduced-motion: no-preference){
   .toast{animation:pop .2s ease-out}
@@ -1010,14 +1024,174 @@ const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'
 function monday(d){const x=new Date(d);x.setHours(0,0,0,0);x.setDate(x.getDate()-((x.getDay()+6)%7));return x}
 function isoWeek(d){const t=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));const day=t.getUTCDay()||7;t.setUTCDate(t.getUTCDate()+4-day);const y0=new Date(Date.UTC(t.getUTCFullYear(),0,1));return Math.ceil(((t-y0)/864e5+1)/7)}
 
+/* ======================= Übungskatalog =======================
+   Standardübungen nach Kategorien. Jede Geräte-Variante ist eine eigene Übung, weil sich die Gewichte nicht vergleichen lassen
+   (40 kg an der Langhantel sind nicht 40 kg am Kabelzug). Einarmig oder beidarmig ist keine eigene Übung: Gewicht pro Hantel, Wiederholungen pro Arm.
+   MET-Werte: 2024 Adult Compendium of Physical Activities (Herrmann et al., Journal of Sport and Health Science 13(1), 2024), jeweils mit Code.
+   Kalorien = MET × Körpergewicht (kg) × Stunden. Laufen, Gehen und Radfahren rechnen über das Tempo (Tabellen T_RUN, T_WALK, T_BIKE). */
+const EX_LIB_V=1;
+const MET_REF={
+  '01200':[6.8,'Radfahren auf dem Ergometer, allgemein'],
+  '02020':[7.5,'Gymnastikübungen, intensiv (z. B. Liegestütze, Sit-ups, Klimmzüge, Hampelmann, Burpees, Battle Ropes)'],
+  '02022':[3.8,'Gymnastikübungen, moderat (z. B. Liegestütze, Sit-ups, Klimmzüge, Ausfallschritte)'],
+  '02024':[2.8,'Gymnastikübungen, leicht (z. B. Curl-ups, Crunches, Plank)'],
+  '02030':[3.5,'Gymnastikübungen, leicht bis moderat (z. B. Rückenübungen)'],
+  '02048':[5.0,'Crosstrainer, moderat'],
+  '02052':[5.0,'Krafttraining: Kniebeugen, Kreuzheben'],
+  '02054':[3.5,'Krafttraining, mehrere Übungen, 8 bis 15 Wiederholungen'],
+  '02056':[3.0,'Übungen mit Körpergewicht (z. B. Kniebeuge, Ausfallschritt, Liegestütz, Crunch), allgemein'],
+  '02058':[9.8,'Kettlebell-Swings'],
+  '02065':[9.3,'Treppensteiger (Stair-Ergometer), allgemein'],
+  '02068':[11.0,'Seilspringen, allgemein'],
+  '02070':[7.3,'Rudergerät, allgemein, intensiv'],
+  '02214':[11.0,'Hochintensives Intervalltraining (z. B. Burpees, Mountain Climbers, Squat Jumps, Tabata)'],
+  '18240':[5.8,'Schwimmen, Bahnen, Kraul, langsam, Freizeit']};
+/* [id, Name, Werte pro Satz, Kategorie, Compendium-Code, Sportart, Suchwörter]. Die erste Variante einer Übung ist die übliche. */
+const EX_LIB=[
+  ['e1','Kniebeuge (Langhantel)','kraft','Beine','02052','','squat back squat'],
+  ['k-fkb','Frontkniebeuge (Langhantel)','kraft','Beine','02052','','front squat'],
+  ['k-kbkg','Kniebeuge (Körpergewicht)','wdh','Beine','02056','','squat air squat bodyweight'],
+  ['k-gob','Goblet Squat (Kurzhantel)','kraft','Beine','02052','','kniebeuge'],
+  ['k-bss','Bulgarian Split Squat (Kurzhantel)','kraft','Beine','02052','','bulgarische kniebeuge ausfallschritt'],
+  ['k-rdl','Rumänisches Kreuzheben (Langhantel)','kraft','Beine','02052','','rdl romanian deadlift beinbeuger'],
+  ['k-afkh','Ausfallschritte (Kurzhantel)','kraft','Beine','02054','','lunges'],
+  ['k-afkg','Ausfallschritte (Körpergewicht)','wdh','Beine','02022','','lunges bodyweight'],
+  ['k-hip','Hip Thrust (Langhantel)','kraft','Beine','02054','','gesäß glutes po'],
+  ['k-bp','Beinpresse','kraft','Beine','02054','','leg press maschine'],
+  ['k-bst','Beinstrecker','kraft','Beine','02054','','leg extension quadrizeps maschine'],
+  ['k-bbg','Beinbeuger','kraft','Beine','02054','','leg curl hamstrings maschine'],
+  ['k-wad','Wadenheben (Maschine)','kraft','Beine','02054','','calf raise waden'],
+  ['k-abd','Abduktoren (Maschine)','kraft','Beine','02054','','abduktion gesäß'],
+  ['k-add','Adduktoren (Maschine)','kraft','Beine','02054','','adduktion oberschenkel innen'],
+  ['k-kbs','Kettlebell Swings','kraft','Beine','02058','','kb swing'],
+  ['e2','Bankdrücken (Langhantel)','kraft','Brust','02054','','bench press'],
+  ['k-bdkh','Bankdrücken (Kurzhantel)','kraft','Brust','02054','','bench press dumbbell'],
+  ['k-sblh','Schrägbankdrücken (Langhantel)','kraft','Brust','02054','','incline bench press'],
+  ['k-sbkh','Schrägbankdrücken (Kurzhantel)','kraft','Brust','02054','','incline bench press dumbbell'],
+  ['k-brp','Brustpresse','kraft','Brust','02054','','chest press maschine'],
+  ['k-bfly','Butterfly','kraft','Brust','02054','','pec deck flys maschine'],
+  ['k-flkh','Fliegende (Kurzhantel)','kraft','Brust','02054','','flys'],
+  ['k-flkz','Fliegende (Kabelzug)','kraft','Brust','02054','','cable crossover flys'],
+  ['k-ls','Liegestütze','wdh','Brust','02022','','push-ups pushups'],
+  ['k-dips','Dips','wdh','Brust','02022','','barren trizeps'],
+  ['e3','Klimmzüge','wdh','Rücken','02022','','pull-ups pullups'],
+  ['k-kzug','Klimmzüge (Untergriff)','wdh','Rücken','02022','','chin-ups chinups bizeps'],
+  ['k-lat','Latzug','kraft','Rücken','02054','','lat pulldown latziehen'],
+  ['k-rulh','Rudern (Langhantel)','kraft','Rücken','02054','','row rows vorgebeugt'],
+  ['k-rukh','Rudern (Kurzhantel)','kraft','Rücken','02054','','row rows einarmig'],
+  ['k-rukz','Rudern (Kabelzug)','kraft','Rücken','02054','','row rows sitzend cable'],
+  ['k-rum','Rudern (Maschine)','kraft','Rücken','02054','','row rows'],
+  ['k-kh','Kreuzheben (Langhantel)','kraft','Rücken','02052','','deadlift'],
+  ['k-rst','Rückenstrecker','wdh','Rücken','02030','','hyperextension unterer rücken'],
+  ['k-sdkh','Schulterdrücken (Kurzhantel)','kraft','Schultern','02054','','shoulder press overhead press'],
+  ['k-sdlh','Schulterdrücken (Langhantel)','kraft','Schultern','02054','','shoulder press overhead press military press ohp'],
+  ['k-sdm','Schulterdrücken (Maschine)','kraft','Schultern','02054','','shoulder press'],
+  ['k-sh','Seitheben (Kurzhantel)','kraft','Schultern','02054','','lateral raise'],
+  ['k-fh','Frontheben (Kurzhantel)','kraft','Schultern','02054','','front raise'],
+  ['k-vsh','Vorgebeugtes Seitheben (Kurzhantel)','kraft','Schultern','02054','','reverse flys hintere schulter rear delt'],
+  ['k-rbf','Reverse Butterfly','kraft','Schultern','02054','','reverse flys hintere schulter rear delt maschine'],
+  ['k-fp','Face Pulls','kraft','Schultern','02054','','kabelzug hintere schulter'],
+  ['k-shr','Shrugs (Kurzhantel)','kraft','Schultern','02054','','schulterheben nacken trapez'],
+  ['k-bckh','Bizeps-Curl (Kurzhantel)','kraft','Arme','02054','','bizepscurl curls'],
+  ['k-bclh','Bizeps-Curl (Langhantel)','kraft','Arme','02054','','bizepscurl curls'],
+  ['k-bcsz','Bizeps-Curl (SZ-Stange)','kraft','Arme','02054','','bizepscurl curls'],
+  ['k-bckz','Bizeps-Curl (Kabelzug)','kraft','Arme','02054','','bizepscurl curls cable'],
+  ['k-hc','Hammer-Curl (Kurzhantel)','kraft','Arme','02054','','bizeps curls'],
+  ['k-kc','Konzentrationscurl (Kurzhantel)','kraft','Arme','02054','','bizeps curls'],
+  ['k-tdk','Trizepsdrücken (Kabelzug)','kraft','Arme','02054','','pushdown trizeps'],
+  ['k-fps','French Press (SZ-Stange)','kraft','Arme','02054','','stirndrücken skull crusher trizeps'],
+  ['k-tuk','Trizepsstrecken über Kopf (Kurzhantel)','kraft','Arme','02054','','overhead extension trizeps'],
+  ['k-ebd','Enges Bankdrücken (Langhantel)','kraft','Arme','02054','','close grip bench trizeps'],
+  ['k-bdip','Bankdips','wdh','Arme','02022','','bench dips trizeps'],
+  ['e5','Unterarmstütz','zeit','Bauch & Core','02024','','plank planke'],
+  ['k-ss','Seitstütz','zeit','Bauch & Core','02024','','side plank'],
+  ['k-cr','Crunches','wdh','Bauch & Core','02024','','bauch'],
+  ['k-crk','Crunches (Kabelzug)','kraft','Bauch & Core','02054','','bauch cable crunch'],
+  ['k-su','Sit-ups','wdh','Bauch & Core','02022','','bauch situps'],
+  ['k-hbh','Hängendes Beinheben','wdh','Bauch & Core','02022','','bauch hanging leg raise'],
+  ['k-rt','Russian Twist','wdh','Bauch & Core','02024','','bauch'],
+  ['k-br','Bauchroller','wdh','Bauch & Core','02022','','ab wheel rollout'],
+  ['e4','Laufen','distanz','Ausdauer','','laufen','joggen running'],
+  ['k-geh','Gehen','distanz','Ausdauer','','laufen','spazieren walking wandern'],
+  ['k-lb','Laufband','distanz','Ausdauer','','laufen','treadmill joggen laufen'],
+  ['k-rad','Radfahren','distanz','Ausdauer','','rad','fahrrad rennrad cycling'],
+  ['k-erg','Fahrradergometer','zeit','Ausdauer','01200','','heimtrainer spinning indoor cycling bike rad'],
+  ['k-ct','Crosstrainer','zeit','Ausdauer','02048','','elliptical'],
+  ['k-ts','Treppensteiger','zeit','Ausdauer','02065','','stepper stairmaster'],
+  ['k-rg','Rudergerät','distanz','Ausdauer','02070','andere','rudern rowing'],
+  ['k-sw','Schwimmen','distanz','Ausdauer','18240','andere','kraulen bahnen'],
+  ['k-sp','Seilspringen','zeit','Ausdauer','02068','','springseil jump rope'],
+  ['k-bur','Burpees','wdh','Ausdauer','02020','',''],
+  ['k-hm','Hampelmann','zeit','Ausdauer','02020','','jumping jacks'],
+  ['k-mc','Mountain Climbers','zeit','Ausdauer','02214','','bergsteiger'],
+  ['k-bro','Battle Ropes','zeit','Ausdauer','02020','','seile']];
+const LIB_ID=new Set(EX_LIB.map(r=>r[0])),LIB_ALIAS=new Map(EX_LIB.map(r=>[r[0],r[6]||'']));
+/* Reihenfolge für die Schnellauswahl, solange noch nichts trainiert wurde */
+const EX_POP=['e1','e2','k-kh','e3','k-sdkh','k-lat','k-rukz','k-bp','k-ls','k-bckh','k-tdk','k-sh','e5','e4','k-rdl','k-dips','k-cr','k-ct'];
+/* Andere Namen, unter denen eine eigene Übung einer Standardübung entspricht (nur für die Zuordnung beim Update) */
+const LIB_SYN={e1:'Squat,Squats,Back Squat',e2:'Bench Press',e3:'Klimmzug,Pull-ups,Pullups',e4:'Joggen,Jogging,Running',e5:'Plank,Planke',
+  'k-lat':'Latziehen,Lat Pulldown,Latissimuszug','k-ss':'Side Plank','k-tdk':'Trizeps Pushdown,Pushdown,Trizeps am Kabel,Trizepsdrücken am Kabel',
+  'k-erg':'Ergometer,Heimtrainer,Spinning,Indoor Cycling','k-ct':'Ellipsentrainer,Elliptical','k-hbh':'Beinheben hängend,Hanging Leg Raise',
+  'k-br':'Ab Wheel,Ab Roller,Bauchrad','k-ls':'Push-ups,Pushups','k-kh':'Deadlift','k-rg':'Rudern,Rudermaschine,Ruderergometer,Rowing','k-sp':'Springseil,Jump Rope',
+  'k-ts':'Stepper,Stairmaster','k-lb':'Treadmill','k-geh':'Spazieren,Spaziergang,Walking','k-rad':'Fahrrad,Fahrradfahren,Rennrad','k-sw':'Kraulen',
+  'k-bp':'Leg Press','k-bst':'Leg Extension','k-bbg':'Leg Curl','k-brp':'Chest Press','k-bfly':'Pec Deck','k-fp':'Face Pull','k-shr':'Schulterheben,Shrug',
+  'k-kbs':'Kettlebell Swing,KB Swings','k-bdip':'Bench Dips,Dips an der Bank','k-mc':'Bergsteiger','k-hm':'Jumping Jacks','k-hip':'Hip Thrusts',
+  'k-rdl':'RDL,Romanian Deadlift','k-fps':'Stirndrücken,Skull Crusher','k-gob':'Goblet Squats','k-kbkg':'Air Squats,Kniebeugen ohne Gewicht'};
+/* Frühere Namen und MET-Werte der fünf Vorlage-Übungen */
+const LIB_OLD={e1:'Kniebeuge',e2:'Bankdrücken',e3:'Klimmzüge',e4:'Laufen',e5:'Unterarmstütz'},LIB_OLDMET={e3:8,e5:3.8};
+const libId=id=>String(id||'').replace(/^k-(?=e\d$)/,'');
+function isLib(id){return LIB_ID.has(libId(id))}
+function libEx(r){const [id,name,kind,cat,ref,sport]=r,e={id,name,kind,cat};if(ref&&MET_REF[ref]){e.met=MET_REF[ref][0];e.metRef=ref}if(sport)e.sport=sport;return e}
+function libAll(){return EX_LIB.map(libEx)}
+function metSrcTxt(ref){const r=MET_REF[ref];return r?'Compendium 2024, Code '+ref+': '+r[1]:''}
+
+/* Namen vergleichen: Kleinbuchstaben, ohne Umlaute, Satzzeichen und Endungen (Klimmzug = Klimmzüge, Curl = Curls) */
+function exNorm(s){return String(s||'').toLowerCase().replace(/ä/g,'a').replace(/ö/g,'o').replace(/ü/g,'u').replace(/ß/g,'ss').replace(/[^a-z]/g,'').replace(/(en|es|e|n|s)$/,'')}
+function exParts(n){const m=String(n||'').match(/^(.*?)\(([^)]*)\)\s*$/);return m?[exNorm(m[1]),exNorm(m[2])]:[exNorm(n),'']}
+const VAR_SYN={lh:'langhantel',kh:'kurzhantel',sz:'szstang',kz:'kabelzug',kabel:'kabelzug',seilzug:'kabelzug',cable:'kabelzug',kg:'korpergewicht',bw:'korpergewicht',machine:'maschin',gerat:'maschin'};
+function varOk(p,q){if(!p||!q)return false;p=VAR_SYN[p]||p;return p===q||(p.length>=3&&q.startsWith(p))}
+/* Welche Standardübung meint eine eigene Übung? Gleiche Art der Werte vorausgesetzt.
+   „Bizeps Curls“ ohne Gerät = die übliche Variante, „Bizeps Curls (Kabel)“ = die Kabelzug-Variante. */
+function libMatch(x,lib,cover){const ok=lib.filter(c=>!cover.has(c.id)&&c.kind===x.kind);if(!ok.length)return null;
+  const full=exNorm(x.name),hit=ok.find(c=>exNorm(c.name)===full);if(hit)return hit;
+  const [xb,xv]=exParts(x.name),fam=ok.filter(c=>exParts(c.name)[0]===xb);
+  if(fam.length){if(!xv)return fam.find(c=>!exParts(c.name)[1])||fam[0];
+    const v=fam.find(c=>varOk(xv,exParts(c.name)[1]));if(v)return v;
+    return fam.length===1&&!exParts(fam[0].name)[1]&&lib.filter(c=>exParts(c.name)[0]===xb).length===1?fam[0]:null}
+  /* Anderer Name („Latziehen“ = Latzug, „Plank“ = Unterarmstütz): nur wenn genau eine Standardübung passt */
+  const syn=ok.filter(c=>(LIB_SYN[libId(c.id)]||'').split(',').some(w=>w&&exNorm(w)===full));
+  return syn.length===1?syn[0]:null}
+/* Einmal pro Katalog-Version: fehlende Standardübungen ergänzen. Gelöschte kommen danach nicht wieder.
+   Eigene Übungen und alle Einträge bleiben, wie sie sind. Nur ein fehlender MET-Wert wird ergänzt. */
+function exLibUp(){if(num(S.libV)>=EX_LIB_V)return;if(!Array.isArray(S.exercises))S.exercises=[];
+  const L=S.exercises,lib=libAll(),cover=new Set(),done=new Set(),lc=s=>String(s||'').trim().toLowerCase(),hasName=(n,not)=>L.some(e=>e&&e!==not&&lc(e.name)===lc(n));
+  /* Vorlagen e1–e5, solange sie noch so heißen wie früher: Name mit Gerät, MET-Wert mit Quelle */
+  for(const c of lib){const old=LIB_OLD[c.id];if(!old)continue;const x=L.find(e=>e&&e.id===c.id);
+    if(!x||x.kind!==c.kind||(x.name!==old&&x.name!==c.name))continue;
+    if(x.name===old&&!hasName(c.name,x))x.name=c.name;
+    if(c.met&&(x.met===undefined||x.met===LIB_OLDMET[c.id]||num(x.met)===c.met)){x.met=c.met;x.metRef=c.metRef}
+    if(!x.cat)x.cat=c.cat;cover.add(c.id);done.add(x.id)}
+  /* Eigene Übungen, die einer Standardübung entsprechen: keine zweite anlegen */
+  let m=0;for(const x of L){if(!x||done.has(x.id))continue;const c=libMatch(x,lib,cover);if(!c)continue;cover.add(c.id);done.add(x.id);m++;
+    if(c.met&&x.met===undefined&&(x.kind!=='distanz'||x.sport==='andere')){x.met=c.met;x.metRef=c.metRef}
+    if(!x.cat)x.cat=c.cat}
+  const ids=new Set(L.map(e=>e&&e.id)),gone=new Set(Array.isArray(S.libGone)?S.libGone:[]);let n=0;
+  for(const c of lib){if(cover.has(c.id)||gone.has(c.id)||hasName(c.name))continue;if(ids.has(c.id))c.id='k-'+c.id;if(ids.has(c.id))continue;L.push(c);ids.add(c.id);n++}
+  if(n&&!S.demo&&(S.sessions||[]).length)S.libNote={n,m};
+  S.libV=EX_LIB_V}
+/* Gelöschte Standardübungen merken: Sie kommen bei einem späteren Katalog-Update nicht wieder, lassen sich aber zurückholen */
+function libGoneAdd(id){if(!isLib(id))return;const k=libId(id);if(!Array.isArray(S.libGone))S.libGone=[];if(!S.libGone.includes(k))S.libGone.push(k)}
+function libRestore(){const G=Array.isArray(S.libGone)?S.libGone:[],lc=s=>String(s||'').trim().toLowerCase(),ids=new Set(S.exercises.map(e=>e.id));let n=0;
+  for(const c of libAll()){if(!G.includes(c.id)||S.exercises.some(e=>lc(e.name)===lc(c.name)))continue;if(ids.has(c.id))c.id='k-'+c.id;if(ids.has(c.id))continue;
+    S.exercises.push(c);ids.add(c.id);n++}
+  S.libGone=[];return n}
+
 /* ---------- Beispieldaten ---------- */
 function demoPlans(){return [
   {id:'p1',name:'Ganzkörper A',pinned:true,items:[{exId:'e1',sets:3},{exId:'e2',sets:3},{exId:'e5',sets:2}]},
   {id:'p2',name:'Ausdauer & Zug',items:[{exId:'e4',sets:1},{exId:'e3',sets:3}]}]}
 function demo(){
-  const exercises=[
-    {id:'e1',name:'Kniebeuge',kind:'kraft',cat:'Beine'},{id:'e2',name:'Bankdrücken',kind:'kraft',cat:'Brust'},
-    {id:'e3',name:'Klimmzüge',kind:'wdh',met:8,cat:'Rücken'},{id:'e4',name:'Laufen',kind:'distanz',sport:'laufen',cat:'Ausdauer'},{id:'e5',name:'Unterarmstütz',kind:'zeit',met:3.8,cat:'Bauch & Core'}];
+  const exercises=libAll();
   const sessions=[];const now=new Date();now.setHours(0,0,0,0);const m0=monday(now);
   let k=0;const feels=[3,4,3,4,5,4,3,4];
   for(let w=6;w>=0;w--){
@@ -1041,7 +1215,7 @@ function demo(){
       sessions.push(s);k++;
     }
   }
-  return {exercises,sessions,plans:demoPlans(),...demoLife(sessions),demo:true,draft:null,ui:{root:'heute',stack:[],progEx:'e1'}};
+  return {exercises,sessions,plans:demoPlans(),...demoLife(sessions),demo:true,draft:null,libV:EX_LIB_V,ui:{root:'heute',stack:[],progEx:'e1'}};
 }
 
 let S,bootLocal=false;
@@ -1057,15 +1231,13 @@ if(S.draft&&S.draft.id)S.draft=null;
 if(!Array.isArray(S.plans))S.plans=S.demo&&S.exercises.some(e=>e.id==='e1')?demoPlans():[];
 (function(){for(const e of S.exercises){
   if(e.kind==='distanz'&&!e.sport)e.sport=/rad|bike|cycl|velo/i.test(e.name)?'rad':'laufen';
-  if(e.met===undefined&&e.id==='e3'&&e.name==='Klimmzüge')e.met=8;
-  if(e.met===undefined&&e.id==='e5'&&e.name==='Unterarmstütz')e.met=3.8;
   if(e.cat===undefined){const dc={e1:['Kniebeuge','Beine'],e2:['Bankdrücken','Brust'],e3:['Klimmzüge','Rücken'],e4:['Laufen','Ausdauer'],e5:['Unterarmstütz','Bauch & Core']}[e.id];if(dc&&dc[0]===e.name)e.cat=dc[1]}
   delete e.kcal;delete e.kcalPer}})();
 
 /* ---------- Speicher auf dem Gerät ----------
    IndexedDB ist der Hauptspeicher (Daten und Fotos). Eine Kopie der Daten liegt zusätzlich im localStorage,
    damit die App sofort startet. Beim Start gewinnt der neuere Stand. Es gibt keinen Server und kein Konto. */
-const APPV='1.4.0',SCHEMA=3;
+const APPV='1.5.0',SCHEMA=3;
 const cloud={state:'local',deferred:false};
 const store={open:null,timer:null,ok:false,err:false,warned:false,persist:false};
 function idb(){if(store.open)return store.open;
@@ -1146,12 +1318,13 @@ function volume(entry,kind){return kind==='kraft'?(entry.sets||[]).reduce((t,s)=
 function sessVolume(s){return s.entries.reduce((t,e)=>{const ex=exById(e.exId);return t+(ex?volume(e,ex.kind):0)},0)}
 const timeKinds=['zeit','distanz'];
 function setMin(ex,st){if(ex.kind==='zeit'||ex.kind==='distanz'){const k=ex.kind==='zeit'?'a':'b';const t=st.sec!=null&&st.sec!==''?num(st.sec):num(st[k])*60;return (t+(st.t0?(Date.now()-st.t0)/1000:0))/60}return 0}
-/* Kalorien: MET × Körpergewicht (kg) × Stunden. Tabellen nach dem Compendium of Physical Activities (km/h → MET) */
-const MET_DEF={kraft:5,wdh:3.8,zeit:3.8,andere:6};
+/* Kalorien: MET × Körpergewicht (kg) × Stunden. Werte aus dem Compendium of Physical Activities 2024.
+   Standard ohne eigenen Wert: Kraft 3,5 (Code 02054), Wiederholungen 3,8 (02022). Tempo-Tabellen: km/h → MET, mph umgerechnet, Mitte des Bereichs */
+const MET_DEF={kraft:3.5,wdh:3.8,zeit:3.8,andere:6};
 const SPORTS={laufen:'Laufen / Gehen',rad:'Radfahren',andere:'Andere Sportart'};
-const T_RUN=[[6.4,6],[8,8.3],[8.4,9],[9.7,9.8],[10.8,10.5],[11.3,11],[12.1,11.5],[12.9,11.8],[13.8,12.3],[14.5,12.8],[16.1,14.5],[17.7,16],[19.3,19],[20.9,19.8],[22.5,23]];
-const T_WALK=[[3.2,2.8],[4,3],[4.8,3.5],[5.6,4.3],[6.4,5],[7.2,7]];
-const T_BIKE=[[10,3.5],[16,4],[17.5,6.8],[20.5,8],[24,10],[28,12],[32,15.8]];
+const T_RUN=[[6.6,6.5],[7.3,7.8],[8.2,8.5],[9.1,9],[9.9,9.3],[10.8,10.5],[11.3,11],[12.1,11.8],[12.9,12],[13.8,12.5],[14.5,13],[15.2,14.8],[16.1,14.8],[17.7,16.8],[19.3,18.5],[20.9,19.8],[22.5,23]];
+const T_WALK=[[2.4,2.3],[3.5,2.8],[4,3],[5,3.8],[6,4.8],[6.8,5.5],[7.6,7]];
+const T_BIKE=[[8.9,3.5],[15.1,5.8],[17.6,6.8],[20.8,8],[24.1,10],[28.2,12],[33,16.8]];
 function interp(t,v){if(v<=t[0][0])return t[0][1];for(let i=1;i<t.length;i++){if(v<=t[i][0]){const [x0,y0]=t[i-1],[x1,y1]=t[i];return y0+(y1-y0)*(v-x0)/(x1-x0)}}return t[t.length-1][1]}
 function metOf(ex){return num(ex.met)||MET_DEF[ex.kind==='distanz'?'andere':ex.kind]||5}
 function distKcal(ex,km,min,kg){
@@ -1951,10 +2124,14 @@ const KIND_INFO=`<p>Legt fest, was du im Training pro Satz einträgst.</p><ul>
   <li><b>Zeit:</b> mit Timer, z. B. Plank, Seilspringen</li>
   <li><b>Distanz und Zeit:</b> Kilometer plus Timer, z. B. Laufen, Radfahren</li></ul>`;
 function metInfo(kind,sport){
-  const ex=kind==='distanz'?'Z. B. Schwimmen ≈ 6, Rudern ≈ 7. Gerechnet wird mit der gemessenen Zeit.':({kraft:'Krafttraining liegt meist zwischen 3,5 (locker) und 6 (intensiv).',wdh:'Z. B. Liegestütze ≈ 3,8, Klimmzüge kräftig ≈ 8.',zeit:'Z. B. Plank ≈ 3,8, Seilspringen ≈ 11, Yoga ≈ 2,5.'}[kind]||'');
-  return `<p>MET gibt an, wie anstrengend eine Übung ist. 1 MET entspricht ruhigem Sitzen. Die App schätzt damit deine Kalorien: MET × Körpergewicht × Dauer.</p><p>${ex}</p><p>Suche im Internet nach „MET“ und dem Namen der Übung. Lässt du das Feld leer, gilt der Standardwert ${fmt(MET_DEF[kind==='distanz'?'andere':kind]||5)}.</p>`;
+  const SETS=' Die App zählt pro Satz 2 bis 6 Minuten, Pausen eingeschlossen.';
+  const ex=kind==='distanz'?'Rudergerät 7,3 (Code 02070), Schwimmen, Kraul locker 5,8 (18240). Gerechnet wird mit der gemessenen Zeit.'
+    :({kraft:'Krafttraining mit mehreren Übungen und 8 bis 15 Wiederholungen 3,5 (Code 02054), Kniebeugen und Kreuzheben 5,0 (02052), intensives Bodybuilding oder Powerlifting 6,0 (02050).'+SETS,
+       wdh:'Liegestütze, Klimmzüge oder Sit-ups moderat 3,8 (Code 02022), intensiv wie Burpees 7,5 (02020), leicht wie Crunches 2,8 (02024).'+SETS,
+       zeit:'Plank 2,8 (Code 02024), Crosstrainer moderat 5,0 (02048), Seilspringen 11,0 (02068), Yoga 2,3 (02175). Gerechnet wird mit der gemessenen Zeit.'}[kind]||'');
+  return `<p>MET gibt an, wie anstrengend eine Tätigkeit ist. 1 MET entspricht ruhigem Sitzen. Die App schätzt damit deine Kalorien: MET × Körpergewicht in kg × Dauer in Stunden.</p><p>Die Werte der Standardübungen stammen aus dem Compendium of Physical Activities 2024, für das Forschende Messwerte aus 701 Studien ausgewertet haben. Den Code findest du unter dem Feld.</p><p>Beispiele: ${ex}</p><p>Lässt du das Feld leer, gilt der Standardwert ${fmt(MET_DEF[kind==='distanz'?'andere':kind]||5)}.</p>`;
 }
-const SPORT_INFO=`<p>Bei <b>Laufen / Gehen</b> und <b>Radfahren</b> berechnet die App die Kalorien automatisch aus Tempo, Strecke und Körpergewicht. Du musst nichts eintragen.</p><p>Für andere Sportarten wie Schwimmen oder Rudern wählst du <b>Andere Sportart</b> und trägst einen MET-Wert ein.</p>`;
+const SPORT_INFO=`<p>Bei <b>Laufen / Gehen</b> und <b>Radfahren</b> berechnet die App die Kalorien automatisch aus Tempo, Strecke und Körpergewicht, mit den Werten für das jeweilige Tempo aus dem Compendium of Physical Activities 2024. Du musst nichts eintragen.</p><p>Für andere Sportarten wie Schwimmen oder Rudern wählst du <b>Andere Sportart</b> und trägst einen MET-Wert ein.</p>`;
 function updMetFields(pre,kind){
   const sp=document.getElementById(pre+'Sport');if(!sp)return;const sport=sp.value;
   document.getElementById(pre+'SportWrap').hidden=kind!=='distanz';
@@ -2188,6 +2365,7 @@ function migrate(){
   if(!Array.isArray(S.products))S.products=[];
   if(!Array.isArray(S.recipes))S.recipes=[];
   if(S.recDraft&&(typeof S.recDraft!=='object'||!Array.isArray(S.recDraft.items)))S.recDraft=null;
+  exLibUp();
 }
 function mod(k){return !!(S.mods&&S.mods[k])}
 function dayGet(k){return (S.days&&S.days[k])||{}}
@@ -2309,10 +2487,10 @@ function viewGoals(){
      '<div class="card empty"><b>Noch keine Ziele</b>Setz dir ein Ziel für dein Gewicht, eine Übung, eine Gewohnheit oder einen eigenen Wert. Den Fortschritt rechnet die App aus deinen Einträgen aus.</div>'}
    ${done.length?`<div class="card pane"><div class="pane-h"><span class="eyebrow">Erreicht</span></div><div class="glist">${done.map(o=>goalRow(o.g,o.s)).join('')}</div></div>`:''}`}
 function goalForm(){const g=goalEdit,ty=g.type||'weight',lw=lastWeight();
-  const exs=S.exercises.filter(e=>e.kind==='kraft'||e.kind==='wdh'),hs=S.habits.filter(h=>!h.arch);let f='';
+  const exs=ty==='lift'?goalExChoices(g.exId):[],hs=S.habits.filter(h=>!h.arch);let f='';
   if(ty==='weight')f=`<label class="field"><span class="eyebrow">Zielgewicht (kg)</span><input class="in num" id="gfTarget" data-gf="target" inputmode="decimal" value="${esc(g.target??'')}" placeholder="z. B. 78"></label>
     <div class="small muted">${lw?'Start: '+fmt(lw.v,1)+' kg, zuletzt gewogen am '+dmy(lw.date):'Trag zuerst dein Gewicht ein, dann rechnet die App den Fortschritt aus.'}</div>`;
-  else if(ty==='lift'){const sel=exById(g.exId)||exs[0];f=exs.length?`<div class="field"><span class="eyebrow">Übung</span><div class="chips wrap" role="group" aria-label="Übung">${exs.map(e=>`<button class="chip" data-act="gfPick" data-f="exId" data-v="${e.id}" aria-pressed="${!!sel&&sel.id===e.id}">${esc(e.name)}</button>`).join('')}</div></div>
+  else if(ty==='lift'){const sel=exById(g.exId)||exs[0];f=exs.length?`<div class="field"><span class="eyebrow">Übung</span><div class="chips wrap" role="group" aria-label="Übung">${exs.map(e=>`<button class="chip" data-act="gfPick" data-f="exId" data-v="${e.id}" aria-pressed="${!!sel&&sel.id===e.id}">${esc(e.name)}</button>`).join('')}<button class="chip add" data-act="exPick" data-to="goal">Andere …</button></div></div>
     <label class="field"><span class="eyebrow">${sel.kind==='wdh'?'Ziel: Wiederholungen in einem Satz':'Ziel: geschätztes 1RM in kg'}</span><input class="in num" id="gfTarget" data-gf="target" inputmode="decimal" value="${esc(g.target??'')}"></label>
     <div class="small muted">Aktuell: ${fmt(liftNow(sel.id),1)} ${sel.kind==='wdh'?'Wdh.':'kg'}</div>`:'<div class="small muted">Leg zuerst eine Kraft- oder Wiederholungsübung an.</div>'}
   else if(ty==='habit')f=hs.length?`<div class="field"><span class="eyebrow">Gewohnheit</span><div class="chips wrap" role="group" aria-label="Gewohnheit">${hs.map(h=>`<button class="chip" data-act="gfPick" data-f="habitId" data-v="${h.id}" aria-pressed="${(g.habitId||hs[0].id)===h.id}">${esc(h.name)}</button>`).join('')}</div></div>
@@ -3027,38 +3205,73 @@ function viewVerlauf(){const list=sortedSessions().reverse();
    <div class="histwrap">${groupList(list.slice(0,histN))}</div>
    ${list.length>histN?`<button class="btn block" data-act="histMore">Ältere anzeigen (${list.length-histN})</button>`:''}`}
 
-/* ---------- Übungen: zuletzt benutzte zuerst, Gruppen nach Kategorie ---------- */
+/* ---------- Übungen: Gruppen nach Kategorie, Filter, Suche auch nach Muskel und englischem Namen ---------- */
 function exStats(){const c={},l={};for(const s of S.sessions)for(const e of s.entries){c[e.exId]=(c[e.exId]||0)+1;if(!l[e.exId]||l[e.exId]<s.date)l[e.exId]=s.date}return {c,l}}
-function exRecent(excl,n){const {l}=exStats();
-  return S.exercises.filter(e=>!excl.has(e.id)).sort((a,b)=>(l[b.id]||'').localeCompare(l[a.id]||'')||a.name.localeCompare(b.name,'de')).slice(0,n)}
+/* Für die Schnellauswahl: zuletzt trainierte, dann eigene, dann die üblichsten Standardübungen */
+function exRecent(excl,n){const {l}=exStats(),P=EX_POP,pi=e=>{const i=P.indexOf(e.id);return i<0?999:i},rk=e=>l[e.id]?0:!isLib(e.id)?1:P.includes(e.id)?2:3;
+  return S.exercises.filter(e=>!excl.has(e.id)).sort((a,b)=>rk(a)-rk(b)||(l[b.id]||'').localeCompare(l[a.id]||'')||pi(a)-pi(b)||a.name.localeCompare(b.name,'de')).slice(0,n)}
 function exGroups(list){const g={};for(const e of list){const c=e.cat||'';(g[c]=g[c]||[]).push(e)}
   return allCats().filter(c=>g[c]).concat(g['']?['']:[]).map(c=>({c,list:g[c].sort((a,b)=>a.name.localeCompare(b.name,'de'))}))}
-function exMatch(q){const W=words(q);return W.length?S.exercises.filter(e=>{const t=(e.name+' '+(e.cat||'')+' '+KIND_SHORT[e.kind]).toLowerCase();return W.every(w=>t.includes(w))}):S.exercises}
+function exHay(e){const n=e.name.toLowerCase();return n+' '+n.replace(/[^a-zäöüß]/g,'')+' '+(e.cat||'').toLowerCase()+' '+(KIND_SHORT[e.kind]||'').toLowerCase()+' '+(LIB_ALIAS.get(libId(e.id))||'')}
+function exMatch(q){const W=words(q);return W.length?S.exercises.filter(e=>{const t=exHay(e);return W.every(w=>t.includes(w))}):S.exercises}
+function exFilt(list,c){return !c?list:c==='-'?list.filter(e=>!e.cat):list.filter(e=>e.cat===c)}
+function catChips(cur,to){const cats=allCats().filter(c=>S.exercises.some(e=>e.cat===c));if(S.exercises.some(e=>!e.cat))cats.push('-');
+  return `<div class="chips excats" id="${to}Cats" role="group" aria-label="Nach Kategorie filtern">${[''].concat(cats).map(c=>`<button class="chip" data-act="exCatF" data-to="${to}" data-v="${esc(c)}" aria-pressed="${cur===c}">${esc(c===''?'Alle':c==='-'?'Ohne Kategorie':c)}</button>`).join('')}</div>`}
+/* Nach dem Zeichnen: gewählten Filter-Chip ins Bild holen, falls die Reihe weitergescrollt werden müsste */
+function chipSync(){for(const r of document.querySelectorAll('#main .excats')){const b=r.querySelector('[aria-pressed="true"]');if(b&&b.offsetLeft+b.offsetWidth>r.clientWidth)r.scrollLeft=Math.max(0,b.offsetLeft-12)}}
 function exRow(e,act,st,badge){const n=st.c[e.id]||0,last=st.l[e.id],b=badge?badge(e):'';
   return `<button class="navrow exnr" data-act="${act}" data-id="${e.id}">${KIND_IC[e.kind]||KIND_IC.kraft}<span class="nr-t"><b>${esc(e.name)}</b><span>${esc(KIND_SHORT[e.kind]||'')}${n?' · '+n+'× trainiert':''}${last?' · zuletzt '+dmy(last):''}</span></span>${b?`<span class="inbadge">${esc(b)}</span>`:''}${CHR}</button>`}
+/* Varianten einer Übung („Bizeps-Curl (Kurzhantel)“, „Bizeps-Curl (Kabelzug)“) teilen sich eine Zeile, die Geräte sind Knöpfe.
+   Jede Variante bleibt eine eigene Übung mit eigenem Verlauf. Reihenfolge wie im Katalog: die übliche Variante zuerst. */
+const LIB_ORD=new Map(EX_LIB.map((r,i)=>[r[0],i]));
+const VCHK=SV('<path d="M4.5 12.5l4.5 4.5 10-10"/>',2.6);
+function exVar(e){const m=String(e.name||'').match(/^(.+?)\s*\(([^()]+)\)\s*$/);return m?{base:m[1].trim(),v:m[2].trim()}:null}
+function exRows(list){const fam=new Map();
+  for(const e of list){const p=exVar(e);if(!p)continue;const k=p.base.toLowerCase();if(!fam.has(k))fam.set(k,[]);fam.get(k).push(e)}
+  const out=[],seen=new Set(),ord=e=>{const i=LIB_ORD.get(libId(e.id));return i==null?999:i};
+  for(const e of list){const p=exVar(e),k=p&&p.base.toLowerCase(),F=k?fam.get(k):null;
+    if(F&&F.length>1){if(seen.has(k))continue;seen.add(k);out.push({base:p.base,list:F.slice().sort((a,b)=>ord(a)-ord(b)||a.name.localeCompare(b.name,'de'))})}
+    else out.push({ex:e})}
+  return out}
+function famRow(F,act,st,badge){const L=F.list,k0=L[0].kind,same=L.every(e=>e.kind===k0),last=L.map(e=>st.l[e.id]||'').sort().pop();
+  return `<div class="navrow exnr exfam">${KIND_IC[k0]||KIND_IC.kraft}<span class="nr-t"><b>${esc(F.base)}</b><span>${same?esc(KIND_SHORT[k0]||'')+' · ':''}${L.length} Varianten${last?' · zuletzt '+dmy(last):''}</span>
+   <span class="vchips">${L.map(e=>{const c=st.c[e.id]||0,b=badge?badge(e):'';
+     return `<button class="vchip${b?' on':''}" data-act="${act}" data-id="${e.id}" aria-label="${esc(e.name)}${c?', '+c+'× trainiert':''}${b?', '+esc(b):''}">${b?VCHK:''}${esc(exVar(e).v)}${c?`<small>${c}×</small>`:''}</button>`}).join('')}</span></span></div>`}
 function exListHtml(list,act,badge){const st=exStats();
-  return exGroups(list).map(G=>`<div class="exgrp"><span class="eyebrow exg-h">${esc(G.c||'Ohne Kategorie')} <span class="cnt">${G.list.length}</span></span><div class="navlist exnav">${G.list.map(e=>exRow(e,act,st,badge)).join('')}</div></div>`).join('')}
-let exQ='';
+  return exGroups(list).map(G=>`<div class="exgrp"><span class="eyebrow exg-h">${esc(G.c||'Ohne Kategorie')} <span class="cnt">${G.list.length}</span></span><div class="navlist exnav">${exRows(G.list).map(r=>r.ex?exRow(r.ex,act,st,badge):famRow(r,act,st,badge)).join('')}</div></div>`).join('')}
+/* Leere Suche: Hinweis, Suche ohne Filter, neue Übung */
+function exNone(q,cat,to,act){const all=cat&&exMatch(q).length;
+  return `<div class="card empty"><b>Nichts gefunden${cat?' in '+esc(cat==='-'?'Ohne Kategorie':cat):''}</b>${all?`<button class="btn" data-act="exCatF" data-to="${to}" data-v="">In allen Kategorien suchen</button>`:''}${q.trim()?`<button class="btn" data-act="${act}">„${esc(q.trim())}“ als neue Übung anlegen</button>`:''}</div>`}
+let exQ='',exCatF='';
 function exListUpd(){const el=document.getElementById('exList');if(el)el.innerHTML=exListBody()}
-function exListBody(){const list=exMatch(exQ);
+function exListBody(){const list=exFilt(exMatch(exQ),exCatF);
   if(!S.exercises.length)return '<div class="card empty"><b>Noch keine Übungen</b>Leg deine erste Übung an. Danach kannst du sie im Training und in Plänen verwenden.</div>';
-  if(!list.length)return `<div class="card empty"><b>Nichts gefunden</b><button class="btn" data-act="exNew">„${esc(exQ.trim())}“ als neue Übung anlegen</button></div>`;
-  return exListHtml(list,'exOpen')}
+  if(!list.length)return exNone(exQ,exCatF,'list','exNew');
+  const g=Array.isArray(S.libGone)?S.libGone.length:0;
+  return exListHtml(list,'exOpen')+(g&&!exQ.trim()&&!exCatF?`<button class="btn subtle block" data-act="libRestore">${g===1?'Eine gelöschte Standardübung':g+' gelöschte Standardübungen'} zurückholen</button>`:'')}
+function libNoteCard(){const N=S.libNote;if(!N)return '';
+  return `<div class="card pane libnote"><div class="pane-h"><span class="eyebrow">Neu: Standardübungen</span><button class="lnk" data-act="libNoteOk">Ausblenden</button></div>
+   <div class="small">${N.n} Übungen sind dazugekommen, sortiert nach Kategorien und mit MET-Werten aus dem Compendium of Physical Activities 2024.${N.m?' '+(N.m===1?'Eine deiner Übungen entsprach':N.m+' deiner Übungen entsprachen')+' schon einer Standardübung und '+(N.m===1?'wurde':'wurden')+' nicht doppelt angelegt.':''} Deine eigenen Übungen und Einträge sind unverändert. Was du nicht brauchst, kannst du löschen.</div></div>`}
 function viewExList(){
-  return `${banner()}<button class="btn primary block big" data-act="exNew">+ Neue Übung</button>
-   ${S.exercises.length>=8?`<input class="in" type="search" id="exQ" enterkeyhint="search" autocomplete="off" spellcheck="false" placeholder="Übung suchen" value="${esc(exQ)}" aria-label="Übung suchen">`:''}
+  return `${banner()}${libNoteCard()}<button class="btn primary block big" data-act="exNew">+ Neue Übung</button>
+   ${S.exercises.length>=8?`<input class="in" type="search" id="exQ" enterkeyhint="search" autocomplete="off" spellcheck="false" placeholder="Suchen, z. B. Bizeps oder Plank" value="${esc(exQ)}" aria-label="Übung suchen">${catChips(exCatF,'list')}`:''}
    <div id="exList" class="exwrap">${exListBody()}</div>`}
 
 /* ---------- Übung anlegen oder bearbeiten ---------- */
 let exEdit=null;
 function exUsed(id){return S.sessions.some(s=>s.entries.some(e=>e.exId===id))||!!(S.draft&&S.draft.entries.some(e=>e.exId===id))}
-function exEditOpen(id,then,name){const e=id?exById(id):null;
-  exEdit=e?{id:e.id,name:e.name,kind:e.kind,cat:e.cat||'',catNew:false,catName:'',sport:e.sport||'laufen',met:num(e.met)?String(e.met).replace('.',','):'',then:then||null}
-    :{id:null,name:name||'',kind:'kraft',cat:'',catNew:false,catName:'',sport:'laufen',met:'',then:then||null};
+function exEditOpen(id,then,name,cat){const e=id?exById(id):null;
+  exEdit=e?{id:e.id,name:e.name,kind:e.kind,cat:e.cat||'',catNew:false,catName:'',sport:e.sport||'laufen',met:num(e.met)?String(e.met).replace('.',','):'',ref:MET_REF[e.metRef]?e.metRef:'',then:then||null}
+    :{id:null,name:name||'',kind:'kraft',cat:cat&&cat!=='-'&&allCats().includes(cat)?cat:'',catNew:false,catName:'',sport:'laufen',met:'',ref:'',then:then||null};
   flash='';push('uebung')}
+/* Quelle des MET-Werts: nur solange der Wert unverändert aus dem Compendium stammt */
+function metSrcOk(f){return !!f.ref&&!!MET_REF[f.ref]&&num(f.met)===MET_REF[f.ref][0]}
+function metSrcUpd(){const el=document.getElementById('exMetSrc');if(el&&exEdit)el.hidden=!metSrcOk(exEdit)}
+function metNote(f){if(f.kind==='distanz'&&f.sport!=='andere')return 'Kalorien automatisch aus Tempo und Körpergewicht, Werte aus dem Compendium of Physical Activities 2024.';
+  return metSrcOk(f)?'MET '+fmt(num(f.met))+' · '+metSrcTxt(f.ref):''}
 function viewExEdit(){const f=exEdit;if(!f)return '<div class="card empty"><b>Keine Übung gewählt</b>Geh zurück und wähl eine Übung.</div>';
   const locked=!!f.id&&exUsed(f.id),K=[['kraft','Gewicht × Wdh.','z. B. Kniebeuge'],['wdh','Nur Wiederholungen','z. B. Klimmzüge'],['zeit','Zeit','z. B. Plank'],['distanz','Distanz + Zeit','z. B. Laufen']];
-  const st=f.id?exStats():null,n=st?st.c[f.id]||0:0,showMet=perf()&&(f.kind!=='distanz'||f.sport==='andere');
+  const st=f.id?exStats():null,n=st?st.c[f.id]||0:0,showMet=perf()&&(f.kind!=='distanz'||f.sport==='andere'),bn=!perf()&&f.id?metNote(f):'';
   return `<div class="card section">
     <label class="field"><span class="eyebrow">Name</span><input class="in" id="exN" data-xf="name" maxlength="60" autocomplete="off" value="${esc(f.name)}" placeholder="z. B. Kreuzheben, Seilspringen"></label>
     <div class="field"><div class="lbl-row"><span class="eyebrow">Was trägst du ein?</span>${infoBtn('exKindInfo','Werte')}</div>${iBox('exKindInfo',KIND_INFO)}
@@ -3070,7 +3283,10 @@ function viewExEdit(){const f=exEdit;if(!f)return '<div class="card empty"><b>Ke
     ${perf()&&f.kind==='distanz'?`<div class="field"><div class="lbl-row"><span class="eyebrow">Sportart</span>${infoBtn('exSportInfo','Sportart')}</div>${iBox('exSportInfo',SPORT_INFO)}
      <div class="seg sm" role="group" aria-label="Sportart">${Object.entries(SPORTS).map(([k,v])=>`<button data-act="exSport" data-v="${k}" aria-pressed="${f.sport===k}">${esc(v.replace(' / Gehen','').replace(' Sportart',''))}</button>`).join('')}</div></div>`:''}
     ${showMet?`<div class="field"><div class="lbl-row"><span class="eyebrow">MET-Wert</span>${infoBtn('exMetInfo','MET-Wert')}</div>${iBox('exMetInfo',metInfo(f.kind,f.sport))}
-     <input class="in num" id="exMet" data-xf="met" inputmode="decimal" autocomplete="off" value="${esc(f.met)}" placeholder="optional, Standard ${fmt(MET_DEF[f.kind==='distanz'?'andere':f.kind]||5)}"></div>`:''}
+     <input class="in num" id="exMet" data-xf="met" inputmode="decimal" autocomplete="off" value="${esc(f.met)}" placeholder="optional, Standard ${fmt(MET_DEF[f.kind==='distanz'?'andere':f.kind]||5)}">
+     ${f.ref&&MET_REF[f.ref]?`<span class="small muted metsrc" id="exMetSrc"${metSrcOk(f)?'':' hidden'}>Quelle: ${esc(metSrcTxt(f.ref))}</span>`:''}</div>`:''}
+    ${perf()&&f.kind==='distanz'&&f.sport!=='andere'?`<div class="small muted metsrc">${esc(metNote(f))}</div>`:''}
+    ${bn?`<div class="field"><span class="eyebrow">Kalorien</span><span class="small muted metsrc">${esc(bn)}</span></div>`:''}
    </div>
    ${flash?`<div class="err">${flash}</div>`:''}
    <button class="btn primary block big" data-act="exSave">${f.id?'Speichern':'Übung anlegen'}</button>
@@ -3079,17 +3295,24 @@ function viewExEdit(){const f=exEdit;if(!f)return '<div class="card empty"><b>Ke
 
 /* ---------- Übung wählen: für das laufende Training und für Pläne ---------- */
 let exPick=null;
-/* Über dem Plan-Editor liegt jede Unterseite eine Ebene tiefer, damit Zurück richtig animiert */
-function peDepth(){return planEdit&&S.ui.stack.includes('plaene')?1:0}
-function exPickOpen(to){exPick={to,q:''};push('exwahl')}
+/* Über dem Plan- und dem Ziel-Editor liegt jede Unterseite eine Ebene tiefer, damit Zurück richtig animiert */
+function peDepth(){return (planEdit&&S.ui.stack.includes('plaene'))||(goalEdit&&S.ui.stack.includes('ziele'))?1:0}
+const goalKind=e=>!!e&&(e.kind==='kraft'||e.kind==='wdh');
+function exPickOpen(to){exPick={to,q:'',cat:''};push('exwahl')}
 function exPickIn(){const S2=new Set();if(!exPick)return S2;
   if(exPick.to==='plan'&&planEdit)for(const it of planEdit.items)S2.add(it.exId);
-  if(exPick.to==='session'&&S.draft)for(const e of S.draft.entries)S2.add(e.exId);return S2}
-function exPickBody(){if(!exPick)return '';const list=exMatch(exPick.q),inn=exPickIn(),lbl=exPick.to==='plan'?'im Plan':'im Training';
-  if(!list.length)return `<div class="card empty"><b>Nichts gefunden</b><button class="btn" data-act="exPickNew">„${esc(exPick.q.trim())}“ als neue Übung anlegen</button></div>`;
-  return exListHtml(list,'exPickDo',e=>inn.has(e.id)?lbl:'')}
+  if(exPick.to==='session'&&S.draft)for(const e of S.draft.entries)S2.add(e.exId);
+  if(exPick.to==='goal'&&goalEdit&&goalEdit.exId)S2.add(goalEdit.exId);return S2}
+function exPickBody(){if(!exPick)return '';const P=exPick,goal=P.to==='goal',pool=L=>goal?L.filter(goalKind):L;
+  const list=exFilt(pool(exMatch(P.q)),P.cat),inn=exPickIn(),lbl=P.to==='plan'?'im Plan':goal?'gewählt':'im Training',bd=e=>inn.has(e.id)?lbl:'';
+  if(!list.length)return exNone(P.q,P.cat,'pick','exPickNew');
+  /* Ohne Suche und Filter: die zuletzt trainierten Übungen obenauf */
+  const st=exStats(),l=st.l,rec=!P.q.trim()&&!P.cat?pool(S.exercises.filter(e=>l[e.id])).sort((a,b)=>l[b.id].localeCompare(l[a.id])).slice(0,5):[];
+  return (rec.length&&list.length>rec.length+6?`<div class="exgrp"><span class="eyebrow exg-h">Zuletzt trainiert</span><div class="navlist exnav">${rec.map(e=>exRow(e,'exPickDo',st,bd)).join('')}</div></div>`:'')
+    +exListHtml(list,'exPickDo',bd)}
 function viewExPick(){if(!exPick)return '<div class="card empty"><b>Keine Auswahl offen</b>Geh zurück.</div>';
-  return `<input class="in" type="search" id="exPQ" enterkeyhint="search" autocomplete="off" spellcheck="false" placeholder="Übung suchen" value="${esc(exPick.q)}" aria-label="Übung suchen">
+  return `<input class="in" type="search" id="exPQ" enterkeyhint="search" autocomplete="off" spellcheck="false" placeholder="Suchen, z. B. Bizeps oder Plank" value="${esc(exPick.q)}" aria-label="Übung suchen">
+   ${catChips(exPick.cat,'pick')}
    <div id="exPList" class="exwrap">${exPickBody()}</div>
    <button class="btn block" data-act="exPickNew">+ Neue Übung anlegen</button>`}
 function exToDraft(id){ensureDraft();const lt=lastFor(id,S.draft.id),kd=(exById(id)||{}).kind;
@@ -3102,6 +3325,13 @@ function exQuick(d){const inn=new Set(d.entries.map(e=>e.exId)),L=exRecent(inn,8
    ${L.length?`<div class="chips wrap">${L.map(e=>`<button class="chip exchip" data-act="addEntry" data-id="${e.id}">${esc(e.name)}</button>`).join('')}</div>`:''}
    <button class="btn block" data-act="exPick" data-to="session">${L.length<S.exercises.length?'Alle Übungen …':'Übung suchen oder neu anlegen …'}</button></div>`}
 
+/* Ziel für eine Übung: trainierte Kraft- und Wiederholungsübungen als Chips, alle anderen über die Auswahl */
+function goalExChoices(selId){const {l}=exStats(),sel=selId?S.exercises.find(e=>e.id===selId&&goalKind(e)):null;
+  const L=S.exercises.filter(e=>goalKind(e)&&l[e.id]).sort((a,b)=>l[b.id].localeCompare(l[a.id])).slice(0,8);
+  if(sel&&!L.includes(sel))L.unshift(sel);
+  if(L.length<6)for(const e of exRecent(new Set(L.map(x=>x.id)),60))if(goalKind(e)&&L.length<6)L.push(e);
+  return L}
+
 /* ---------- Training starten: Plan als Chips, Körpergewicht als Zahl ---------- */
 function setupPlanChips(d){return `<div class="field"><span class="eyebrow">Trainingsplan</span><div class="chips wrap" role="group" aria-label="Trainingsplan">${[['','Ohne Plan']].concat(S.plans.map(p=>[p.id,p.name])).map(([id,n])=>`<button class="chip" data-act="setupPlan" data-id="${id}" aria-pressed="${(d.planId||'')===id}">${esc(n)}</button>`).join('')}</div></div>`}
 function bwInput(d){
@@ -3109,9 +3339,18 @@ function bwInput(d){
 
 /* ---------- Aktionen und Eingaben ---------- */
 function trainAct(a,el,ck){const ds=el&&el.dataset||{};switch(a){
+  /* Übungen neu geöffnet: ohne Suche und Filter vom letzten Mal */
+  case 'tab':if(ds.v==='uebungen'){exQ='';exCatF=''}return false;
   case 'histOpen':histN=40;push('verlauf');render();return true;
   case 'histMore':histN+=60;render();return true;
-  case 'exNew':exEditOpen(null,null,exQ.trim()&&!exMatch(exQ).length?exQ.trim():'');render();return true;
+  case 'exNew':exEditOpen(null,null,exQ.trim()&&!exFilt(exMatch(exQ),exCatF).length?exQ.trim():'',exCatF);render();return true;
+  case 'exCatF':{const v=ds.v||'',pick=ds.to==='pick';if(pick&&!exPick)return true;
+    if(pick)exPick.cat=exPick.cat===v?'':v;else exCatF=exCatF===v?'':v;
+    const cur=pick?exPick.cat:exCatF,row=document.getElementById(pick?'pickCats':'listCats');
+    if(row)for(const b of row.querySelectorAll('button'))b.setAttribute('aria-pressed',String((b.dataset.v||'')===cur));
+    const box=document.getElementById(pick?'exPList':'exList');if(box)box.innerHTML=pick?exPickBody():exListBody();else render();return true}
+  case 'libNoteOk':delete S.libNote;render();return true;
+  case 'libRestore':{const n=libRestore();toast(n?(n===1?'Eine Standardübung':n+' Standardübungen')+' zurückgeholt':'Die Übungen gibt es schon unter gleichem Namen');render();return true}
   case 'exOpen':exEditOpen(ds.id);render();return true;
   case 'exKind':if(exEdit&&!(exEdit.id&&exUsed(exEdit.id))){exEdit.kind=ds.v;flash=''}render();return true;
   case 'exCat':if(exEdit){exEdit.cat=!exEdit.catNew&&exEdit.cat===ds.v?'':ds.v;exEdit.catNew=false}render();return true;
@@ -3126,19 +3365,20 @@ function trainAct(a,el,ck){const ds=el&&el.dataset||{};switch(a){
     if(isNew){e={id:uid(),name:n,kind:KINDS[f.kind]?f.kind:'kraft'};S.exercises.push(e)}else{e.name=n;if(!exUsed(e.id)&&KINDS[f.kind])e.kind=f.kind}
     if(cat)e.cat=cat;else delete e.cat;
     if(perf()&&(e.kind!=='distanz'||f.sport==='andere')){if(mt>0)e.met=Math.min(25,mt);else delete e.met}
+    if(f.ref&&MET_REF[f.ref]&&num(e.met)===MET_REF[f.ref][0])e.metRef=f.ref;else delete e.metRef;
     if(e.kind==='distanz')e.sport=perf()?f.sport:(e.sport||(/rad|bike|cycl|velo/i.test(n)?'rad':'laufen'));else delete e.sport;
     const then=f.then;exEdit=null;flash='';pop();
-    if(then&&curView()==='exwahl'){if(then==='plan')exToPlan(e.id);else exToDraft(e.id);exPick=null;pop();if(then==='session')toTop()}
+    if(then&&curView()==='exwahl'){if(then==='plan')exToPlan(e.id);else if(then==='goal'){if(goalEdit&&goalKind(e))goalEdit.exId=e.id}else exToDraft(e.id);exPick=null;pop();if(then==='session')toTop()}
     toast(isNew?n+' angelegt':'Gespeichert');render();return true}
-  case 'exDel':{const id=ds.id;S.exercises=S.exercises.filter(e=>e.id!==id);
+  case 'exDel':{const id=ds.id;libGoneAdd(id);S.exercises=S.exercises.filter(e=>e.id!==id);
     for(const s of S.sessions)s.entries=s.entries.filter(e=>e.exId!==id);S.sessions=S.sessions.filter(s=>s.entries.length);
     for(const p of S.plans)p.items=p.items.filter(it=>it.exId!==id);
     if(S.draft){S.draft.entries=S.draft.entries.filter(e=>e.exId!==id);if(S.draft.cur>S.draft.entries.length)S.draft.cur=S.draft.entries.length}
     exEdit=null;flash='';pop();toast('Übung gelöscht');render();return true}
-  case 'exPick':exPickOpen(ds.to==='plan'?'plan':'session');render();return true;
-  case 'exPickDo':{if(!exPick)return true;const to=exPick.to,id=ds.id;if(!exById(id))return true;
-    if(to==='plan')exToPlan(id);else exToDraft(id);exPick=null;pop();if(to==='session')toTop();render();return true}
-  case 'exPickNew':if(exPick)exEditOpen(null,exPick.to,exPick.q.trim());render();return true;
+  case 'exPick':exPickOpen(ds.to==='plan'||ds.to==='goal'?ds.to:'session');render();return true;
+  case 'exPickDo':{if(!exPick)return true;const to=exPick.to,id=ds.id,x=exById(id);if(!x)return true;
+    if(to==='plan')exToPlan(id);else if(to==='goal'){if(goalEdit&&goalKind(x))goalEdit.exId=id}else exToDraft(id);exPick=null;pop();if(to==='session')toTop();render();return true}
+  case 'exPickNew':if(exPick)exEditOpen(null,exPick.to,exPick.q.trim(),exPick.cat);render();return true;
   case 'setupPlan':ensureDraft();if(ds.id)S.draft.planId=ds.id;else delete S.draft.planId;render();return true;
   case 'gfPick':if(goalEdit&&(ds.f==='exId'||ds.f==='habitId'))goalEdit[ds.f]=ds.v;render();return true;
   case 'nPal':{const n=nut();if(N_PAL.some(p=>p[0]===ds.v))n.pal=ds.v;delete n._demo;WL=null;render();return true}}
@@ -3150,7 +3390,7 @@ function trainInput(T){const ds=T.dataset||{},id=T.id;
     save();return true}
   if(ds.f==='bw'){ensureDraft();const v=String(T.value).trim();S.draft.bw=v===''?'':String(num(v));save();return true}
   if(id==='durH'||id==='durM'){durFromInputs();return true}
-  if(ds.xf){if(exEdit)exEdit[ds.xf]=T.value;return true}
+  if(ds.xf){if(exEdit){exEdit[ds.xf]=T.value;if(ds.xf==='met')metSrcUpd()}return true}
   if(id==='exQ'){exQ=T.value;exListUpd();return true}
   if(id==='exPQ'){if(exPick){exPick.q=T.value;const el=document.getElementById('exPList');if(el)el.innerHTML=exPickBody()}return true}
   return false}
@@ -3389,7 +3629,7 @@ const bk={busy:false,file:null,info:'',err:'',pending:null};let importText='';
 function bufToDataUrl(buf,type){return new Promise((res,rej)=>{const fr=new FileReader();fr.onload=()=>res(fr.result);fr.onerror=()=>rej(fr.error);fr.readAsDataURL(new Blob([buf],{type:type||'image/jpeg'}))})}
 function dataUrlToBlob(d){const i=d.indexOf(','),type=(d.slice(5,i).split(';')[0])||'image/jpeg',bin=atob(d.slice(i+1)),u=new Uint8Array(bin.length);for(let j=0;j<bin.length;j++)u[j]=bin.charCodeAt(j);return new Blob([u],{type})}
 function backupObj(){return {app:'trainingsbuch',v:3,created:new Date().toISOString(),exercises:S.exercises,sessions:S.sessions,plans:S.plans,nutri:S.nutri||null,habits:S.habits,days:S.days,goals:S.goals,favs:S.favs,
-  photos:S.photos.map(p=>({id:p.id,date:p.date})),products:S.products,recipes:S.recipes,mods:S.mods,goal:S.goal||3,restSec:S.restSec,restOn:S.restOn,mode:S.mode,bkEvery:S.bkEvery}}
+  photos:S.photos.map(p=>({id:p.id,date:p.date})),products:S.products,recipes:S.recipes,mods:S.mods,goal:S.goal||3,restSec:S.restSec,restOn:S.restOn,mode:S.mode,bkEvery:S.bkEvery,libV:num(S.libV),libGone:Array.isArray(S.libGone)?S.libGone:[]}}
 async function backupWithPhotos(){const o=backupObj();
   for(const p of o.photos){try{const r=await tx('photos','readonly',st=>st.get(p.id));if(r)p.data=await bufToDataUrl(r.full,r.type)}catch(e){}}return o}
 const fmtSize=n=>n>=1048576?fmt(n/1048576,1)+' MB':Math.max(1,Math.round(n/1024))+' KB';
@@ -3424,6 +3664,8 @@ async function applyBackup(p){bkCheck(p);
   if(p.mods&&typeof p.mods==='object')S.mods=p.mods;if(num(p.goal))S.goal=Math.min(7,Math.max(1,num(p.goal)));
   for(const f of ['restSec','restOn','mode'])if(p[f]!=null)S[f]=p[f];if(p.bkEvery!=null)S.bkEvery=num(p.bkEvery);
   S.photos=photos;S.demo=false;S.draft=null;realBak=null;try{localStorage.removeItem(BAK)}catch(e){}
+  /* Backup von vor dem Übungskatalog: Standardübungen beim migrate() ergänzen */
+  S.libV=num(p.libV);S.libGone=Array.isArray(p.libGone)?p.libGone.filter(x=>typeof x==='string'):[];delete S.libNote;
   S.lastBackup=Date.now();migrate();WL=null;userActed=true;S._ts=Date.now();
   return photos.length}
 function bkApply(p){applyBackup(p).then(n=>{bk.pending=null;showImport=false;toast('Backup wiederhergestellt'+(n?' mit '+n+(n===1?' Foto':' Fotos'):''));S.ui.stack=[];S.ui.root='heute';render()},
@@ -3511,7 +3753,7 @@ function wipeList(scope){const n=(v,one,many)=>v?[v,v===1?one:many]:null,L=[],dr
   L.push(n(S.sessions.length,'Training','Trainings'));if(dr)L.push(['','laufendes Training']);
   L.push(n(Object.keys(S.days).length,'Tag mit Einträgen','Tage mit Einträgen'));L.push(n(S.photos.length,'Foto','Fotos'));
   if(scope==='all'){L.push(n(S.recipes.length,'Rezept','Rezepte'),n(S.products.length,'gespeichertes Lebensmittel','gespeicherte Lebensmittel'),n(S.favs.length,'Favorit','Favoriten'),
-      n(S.goals.length,'Ziel','Ziele'),n(S.exercises.length,'Übung','Übungen'),n(S.plans.length,'Trainingsplan','Trainingspläne'),n(S.habits.length,'Gewohnheit','Gewohnheiten'));
+      n(S.goals.length,'Ziel','Ziele'),n(S.exercises.filter(e=>!isLib(e.id)).length,'eigene Übung','eigene Übungen'),n(S.plans.length,'Trainingsplan','Trainingspläne'),n(S.habits.length,'Gewohnheit','Gewohnheiten'));
     if(S.nutri&&Object.keys(S.nutri).length)L.push(['','Angaben zum Tagesbedarf']);L.push(['','Einstellungen'])}
   return L.filter(Boolean)}
 function viewWipe(){
@@ -3543,7 +3785,7 @@ async function wipeRun(scope){if(wipeBusy||S.demo)return;wipeBusy=true;render();
   const t=today(),photoIds=S.photos.map(p=>p.id),W={at:Date.now(),day:t,scope,until:Date.now()+WIPE_DAYS*864e5,hide:false,photoIds};
   if(scope==='all'){const d=demo(),keep={lastBackup:S.lastBackup||null,schema:S.schema,_ts:S._ts};
     S={exercises:d.exercises,sessions:[],plans:d.plans,habits:d.habits,days:{},goals:[],photos:[],favs:[],products:[],recipes:[],recDraft:null,nutri:{},
-      mods:{food:true,mind:true,body:true},demo:false,draft:null,mode:'basic',ui:{root:'heute',stack:[],progEx:'e1'},...keep};
+      mods:{food:true,mind:true,body:true},demo:false,draft:null,mode:'basic',libV:EX_LIB_V,ui:{root:'heute',stack:[],progEx:'e1'},...keep};
     W.tpl={ex:d.exercises.map(x=>x.id),pl:d.plans.map(x=>x.id),hb:d.habits.map(x=>x.id)}}
   else{S.sessions=[];S.days={};S.photos=[];S.draft=null}
   for(const h of S.habits){h.created=t;if(h.kind==='quit'){h.since=t;h.start=t;delete h.prevSince}}
@@ -3595,7 +3837,9 @@ function wipeMerge(O,C,W){const R=JSON.parse(JSON.stringify(C)),A=a=>Array.isArr
     /* Tagesbedarf: die App füllt leere Angaben selbst mit Standardwerten, deshalb gelten die alten Angaben */
     R.nutri={...(R.nutri||{}),...(O.nutri||{})};
     for(const f of ['mods','goal','restSec','restOn','mode','bkEvery'])if(O[f]!==undefined)R[f]=O[f];
-    for(const k in O)if(R[k]===undefined&&k!=='wiped'&&k!=='ui')R[k]=O[k]}
+    for(const k in O)if(R[k]===undefined&&k!=='wiped'&&k!=='ui')R[k]=O[k];
+    /* Stand von vor dem Übungskatalog: Vorlagen beim nächsten migrate() noch anpassen */
+    if(!num(O.libV))R.libV=0}
   else{/* nur Einträge: die beim Löschen zurückgesetzten Startdaten der Gewohnheiten zurückholen */
     for(const h of A(R.habits)){const o=A(O.habits).find(x=>x.id===h.id);if(!o)continue;
       if(h.created===W.day&&o.created)h.created=o.created;
@@ -3707,7 +3951,7 @@ function navTab(v){
   durOpen=false;calOff=0;exportText='';showImport=false;render()}
 /* Lange Tab-Namen notfalls etwas kleiner setzen, statt sie abzuschneiden */
 function fitTabs(){const tb=document.getElementById('tabbar');if(!tb)return;for(const sp of tb.querySelectorAll('.tab span')){sp.classList.remove('tight');if(sp.scrollWidth>sp.clientWidth+1)sp.classList.add('tight')}}
-try{if(document.fonts){if(document.fonts.ready)document.fonts.ready.then(fitTabs);if(document.fonts.addEventListener)document.fonts.addEventListener('loadingdone',()=>fitTabs())}}catch(e){}
+try{if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fitTabs)}catch(e){}
 window.addEventListener('resize',()=>fitTabs());
 function tabbarHtml(sc){const d=S.draft,live=!!(d&&!d.id&&d.started),R=roots();
   return R.map(r=>`<button class="tab${r===sc.root?' on':''}" data-act="navTab" data-v="${r}"${r===sc.root?' aria-current="page"':''}>${ICONS[r]}<span>${rootLabel(r)}</span>${r==='training'&&live?'<i class="live" aria-hidden="true"></i>':''}</button>`).join('')}
@@ -3815,7 +4059,7 @@ function render(){
   }
   navHint=null;
   try{document.body.classList.toggle('sheet',!!sc.sheet)}catch(e){}
-  paint(sc,prev,mode,html);scanSync();
+  paint(sc,prev,mode,html);scanSync();chipSync();
   curScr=sc;wantTop=false;
   syncWake();restTick();
   if(pendingScroll){const el=document.getElementById(pendingScroll);pendingScroll=null;if(el)el.scrollIntoView({block:'center',behavior:'smooth'})}
@@ -3912,7 +4156,7 @@ function act(a,el){
     case 'saveGoal':{const e=goalEdit;if(!e)break;const g={id:e.id||uid(),type:G_TYPES.some(x=>x[0]===e.type)?e.type:'weight',created:e.created||today()},t=num(e.target);
       if(e.until&&/^\d{4}-\d{2}-\d{2}$/.test(e.until))g.until=e.until;
       if(g.type==='weight'){if(!bwOk(t)){flash='Gib ein Zielgewicht zwischen 30 und 250 kg an.';break}const lw=lastWeight();g.target=t;g.start=e.id&&num(e.start)?num(e.start):lw?lw.v:t}
-      else if(g.type==='lift'){const ex=exById(e.exId)||S.exercises.find(x=>x.kind==='kraft'||x.kind==='wdh');if(!ex){flash='Leg zuerst eine Kraft- oder Wiederholungsübung an.';break}
+      else if(g.type==='lift'){const ex=(goalKind(exById(e.exId))?exById(e.exId):null)||goalExChoices(null)[0];if(!ex){flash='Leg zuerst eine Kraft- oder Wiederholungsübung an.';break}
         if(!(t>0)){flash='Gib einen Zielwert an.';break}g.exId=ex.id;g.target=t;g.start=e.id&&e.exId===ex.id&&e.start!=null?num(e.start):liftNow(ex.id)}
       else if(g.type==='habit'){const h=S.habits.find(x=>x.id===e.habitId&&!x.arch)||S.habits.find(x=>!x.arch);if(!h){flash='Leg zuerst eine Gewohnheit an.';break}
         if(!(t>=1)){flash='Gib an, an wie vielen Tagen.';break}g.habitId=h.id;g.target=Math.round(t)}
