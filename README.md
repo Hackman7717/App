@@ -6,6 +6,14 @@ Sie läuft als installierbare Web-App (PWA) auf dem iPhone, auf Android und am C
 - **Offline:** Nach dem ersten Öffnen funktioniert die App ohne Internet.
 - **Kein Konto:** Alle Daten bleiben auf deinem Gerät. Fotos eingeschlossen.
 - **Backup:** Unter *Ich → Daten & Backup* sicherst du alles als Datei, am besten in iCloud Drive. Die App erinnert dich daran.
+- **Ernährung mit Barcode und Suche:** Strichcode mit der Kamera scannen, als Foto laden oder die Zahlen eintippen. Lebensmittel nach Namen suchen. Daten kommen von [Open Food Facts](https://world.openfoodfacts.org) (Lizenz ODbL). Fehlt ein Produkt, legst du es einmal selbst an. Gefundene und eigene Produkte merkt sich die App, sie funktionieren danach auch offline.
+
+## Barcode und Lebensmittelsuche
+
+- **Scannen:** *Ernährung* → Strichcode-Symbol neben „Mahlzeit eintragen“. Den Strichcode waagerecht in den Rahmen halten, etwa 15 bis 25 cm vom Handy entfernt. Lesbar sind EAN-13, EAN-8 und UPC-A. Ein Code gilt erst, wenn er in zwei Kamerabildern gleich gelesen wurde.
+- **Suchen:** *Mahlzeit eintragen* → Suchbegriff eingeben → *Suchen*. Treffer auf dem Gerät erscheinen sofort, Open Food Facts wird erst beim Tippen auf *Suchen* gefragt. Open Food Facts erlaubt nur wenige Suchen pro Minute.
+- **Menge:** Gewicht oder Milliliter eintippen oder eine Portion antippen. Kalorien und Makros rechnet die App aus den Werten pro 100 g aus. Die Menge lässt sich im Tagebuch später ändern, die Werte rechnen sich dann neu.
+- **Datenschutz:** Für Suche und Barcode schickt die App nur den Suchbegriff oder die Barcode-Nummer an Open Food Facts. Deine Einträge bleiben auf dem Gerät.
 
 ## Installieren auf dem iPhone
 
