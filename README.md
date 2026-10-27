@@ -10,12 +10,19 @@ Sie läuft als installierbare Web-App (PWA) auf dem iPhone, auf Android und am C
 - **Ernährung mit Barcode und Suche:** Strichcode mit der Kamera scannen, als Foto laden oder die Zahlen eintippen. Lebensmittel nach Namen suchen. Daten kommen von [Open Food Facts](https://world.openfoodfacts.org) (Lizenz ODbL). Fehlt ein Produkt, legst du es einmal selbst an. Gefundene und eigene Produkte merkt sich die App, sie funktionieren danach auch offline.
 - **Rezepte:** Eigene Gerichte aus Zutaten anlegen und danach portionsweise oder nach Gewicht ins Ernährungstagebuch eintragen.
 
+## Heute
+
+- **Check-in:** Schlaf, Schlafqualität und Stimmung. Die Schlafdauer änderst du nur mit − und +. Ein Tipp auf den Wert übernimmt den Vorschlag, solange noch nichts eingetragen ist, danach ändert ein Tipp nichts mehr.
+- **Übersicht:** Ist alles ausgefüllt, ist der Check-in erledigt. Die Karte zeigt dann in derselben Größe die Werte des Tages, den Durchschnitt und die letzten sieben Tage als Balken. *Ändern* öffnet die Eingabe wieder.
+- **Training:** Die Karte nennt die trainierten Kategorien, etwa *Beine · Brust · Bauch & Core*, darunter Plan, Dauer, Zahl der Übungen und Gefühl.
+
 ## Training
 
 - **Starten:** *Training starten* oder ein angehefteter Plan unter *Mit Plan starten*. Plan und Körpergewicht wählst du per Antippen, Gewicht und Wiederholungen tippst du direkt ein oder änderst sie mit − und +.
 - **Übungen:** Liste nach Kategorien mit Filter und Suche (auch nach Muskel oder englischem Namen, z. B. „Trizeps“ oder „Lat Pulldown“). Eine Übung antippen, um sie umzubenennen, die Kategorie zu ändern oder sie zu löschen. Was pro Satz eingetragen wird, lässt sich ändern, solange es noch keine Einträge gibt.
-- **Übung hinzufügen:** Im Training die zuletzt benutzten Übungen antippen oder über *Alle Übungen …* suchen. Fehlt eine Übung, legst du sie dort an und sie landet direkt im Training. Genauso in Trainingsplänen und bei Zielen.
-- **Verlauf:** Alle Trainings, nach Monaten, mit Bearbeiten über den Stift.
+- **Übung hinzufügen:** Unter *+ Übung* schlägt die App Übungen aus denselben Kategorien vor wie die Übungen, die schon im Training sind (*Passend*). Zuerst kommt, was du oft machst, sonst die übliche Reihenfolge im Studio. Varianten einer Übung, die du gerade gemacht hast, stehen hinten. Eine andere Kategorie wählst du per Chip, alles andere über *Alle Übungen …*. Fehlt eine Übung, legst du sie dort an und sie landet direkt im Training. Genauso in Trainingsplänen und bei Zielen.
+- **Als Trainingsplan speichern:** Beim Abschließen mit dem Schalter *Als Trainingsplan speichern*. Der Name ist vorgeschlagen, etwa *Brust und Arme* oder ab vier Kategorien *Ganzkörper*, und lässt sich ändern. Gespeichert werden die erledigten Übungen mit ihrer Zahl an Sätzen. Gibt es den Plan schon, legt die App keinen zweiten an. *Ansehen* im Hinweis springt zum Plan.
+- **Verlauf:** Alle Trainings, nach Monaten. Ein Training antippen, dann mit dem Stift bearbeiten oder mit dem Plan-Symbol als Trainingsplan speichern.
 - Die App kommt ohne Auswahllisten (Dropdowns) aus: Auswahl per Kacheln, Chips oder Zahlenfeld.
 
 ## Standardübungen und MET-Werte
@@ -29,7 +36,8 @@ Sie läuft als installierbare Web-App (PWA) auf dem iPhone, auf Android und am C
 
 - **Anlegen:** *Ernährung → Rezepte → Neues Rezept* oder *Mahlzeit eintragen → Rezepte → Neues Rezept*. Name eingeben und festlegen, wie viele Portionen das Rezept ergibt.
 - **Zutaten:** *Zutat hinzufügen* sucht wie beim Eintragen einer Mahlzeit, das Strichcode-Symbol daneben scannt direkt. Für Dinge ohne Packung gibt es *Eigene Werte*. Mengen lassen sich in der Zutatenliste direkt ändern, die Nährwerte pro Portion rechnen sofort mit.
-- **Gewicht fertig gekocht (optional):** Wer das fertige Essen wiegt, kann später auch in Gramm eintragen, etwa 350 g aus dem Topf.
+- **In Gramm eintragen:** Beim Eintragen auf *Gramm* tippen und das Gewicht deiner Portion eingeben, etwa 300 g statt 1 Portion. Die App merkt sich das für das Rezept, beim nächsten Mal steht es schon auf Gramm.
+- **Gewicht fertig gekocht (optional):** Ohne diese Angabe rechnet die App mit dem Gewicht der Zutaten. Wer das fertige Essen einmal wiegt und im Rezept einträgt, bekommt genauere Werte, weil beim Kochen Wasser verdampft oder Reis und Nudeln Wasser aufnehmen.
 - **Eintragen:** Rezept antippen, Portionen oder Gramm wählen, *Eintragen*. Im Tagebuch lassen sich die Portionen später ändern, die Werte rechnen sich neu. Spätere Änderungen am Rezept verändern frühere Einträge nicht.
 - **Entwurf:** Ein Rezept, das noch nicht gespeichert ist, geht nicht verloren, auch wenn du zurückgehst oder die App zwischendurch schließt. Unter *Rezepte* kannst du weitermachen oder den Entwurf verwerfen.
 - Rezepte sind im Backup enthalten.
@@ -44,7 +52,9 @@ Sie läuft als installierbare Web-App (PWA) auf dem iPhone, auf Android und am C
 
 ## Barcode und Lebensmittelsuche
 
-- **Scannen:** *Ernährung* → Strichcode-Symbol neben „Mahlzeit eintragen“. Den Strichcode waagerecht in den Rahmen halten, etwa 15 bis 25 cm vom Handy entfernt. Lesbar sind EAN-13, EAN-8 und UPC-A. Ein Code gilt erst, wenn er in zwei Kamerabildern gleich gelesen wurde.
+- **Scannen:** *Ernährung* → Strichcode-Symbol neben „Mahlzeit eintragen“. Den Strichcode in den Rahmen halten, etwa 15 bis 25 cm vom Handy entfernt, waagerecht oder senkrecht. Lesbar sind EAN-13, EAN-8 und UPC-A. Ein Code gilt erst, wenn er in zwei Kamerabildern gleich gelesen wurde.
+- **Wenn die Kamera hängt:** Bleibt das Kamerabild stehen oder schwarz, startet die App die Kamera einmal neu. Hilft das nicht, schlägt sie *Foto* vor: Strichcode fotografieren, die App liest ihn aus dem Bild. Das betrifft vor allem iPhones, auf denen die Kamera in Apps vom Home-Bildschirm manchmal nicht startet.
+- **Wenn Open Food Facts nicht antwortet:** Die App fragt bis zu dreimal nach, auch über eine zweite Schnittstelle. Klappt es nicht, kannst du es erneut versuchen, die Werte selbst eintragen oder weiter scannen. Gefundene Produkte merkt sich die App, sie brauchen danach kein Internet mehr.
 - **Suchen:** *Mahlzeit eintragen* → Suchbegriff eingeben → *Suchen*. Treffer auf dem Gerät erscheinen sofort, Open Food Facts wird erst beim Tippen auf *Suchen* gefragt. Open Food Facts erlaubt nur wenige Suchen pro Minute.
 - **Menge:** Gewicht oder Milliliter eintippen oder eine Portion antippen. Kalorien und Makros rechnet die App aus den Werten pro 100 g aus. Die Menge lässt sich im Tagebuch später ändern, die Werte rechnen sich dann neu.
 - **Datenschutz:** Für Suche und Barcode schickt die App nur den Suchbegriff oder die Barcode-Nummer an Open Food Facts. Deine Einträge bleiben auf dem Gerät.

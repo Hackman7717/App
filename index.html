@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-title" content="Trainingsbuch">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="format-detection" content="telephone=no">
-<meta name="app-version" content="1.5.0">
+<meta name="app-version" content="1.6.0">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icons/icon-180.png">
 <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
@@ -980,6 +980,34 @@ input.wh:focus{outline:none;border-color:var(--accent-fg);box-shadow:inset 0 0 0
 .vchip:active{background:var(--press)}
 .vchip svg{width:15px;height:15px;flex:none}
 .vchip.on{border-color:var(--accent-fg);color:var(--accent-fg);box-shadow:inset 0 0 0 1px var(--accent-fg)}
+/* ---------- 1.6.0 ---------- */
+.sugcats{margin-top:2px}
+.sugbody{display:flex;flex-direction:column;gap:10px;margin-top:4px}
+.sugrow{display:flex;flex-direction:column;gap:6px}
+.sug-c{font-family:var(--f-display);font-size:12.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-fg)}
+.splan{position:absolute;right:68px;top:50%;width:44px;height:44px;margin-top:-22px;padding:0;border:1px solid var(--accent-fg);background:var(--surface);color:var(--accent-fg);display:grid;place-items:center;
+  opacity:0;transform:translateX(12px);pointer-events:none;transition:opacity .16s ease,transform .2s ease}
+.splan svg{width:20px;height:20px;flex:none}
+.sess.sel .splan{opacity:1;transform:none;pointer-events:auto}
+@media (prefers-reduced-motion: reduce){.splan{transition:none}}
+.ci-row span.val{display:inline-flex;align-items:baseline;justify-content:center;min-width:88px;min-height:44px;padding:9px 8px 0;border:1px solid var(--line);color:var(--ink);
+  font-family:var(--f-display);font-size:25px;font-weight:800;line-height:1}
+.ci-row span.val small{font-size:14px;font-weight:700;color:var(--muted);margin-left:3px}
+.cis-ok{display:inline-flex;align-items:center;gap:6px;color:var(--good)}
+.cis-ok svg{width:16px;height:16px;flex:none}
+.cisum{justify-content:space-between}
+.cis-row{display:flex;align-items:center;justify-content:space-between;gap:14px;border-top:1px solid var(--line);padding-top:4px}
+.cis-l{display:flex;flex-direction:column;gap:2px;min-width:0}
+.cis-l .small{font-size:12.5px;line-height:1.3}
+.cis-l b{font-family:var(--f-display);font-size:24px;font-weight:800;line-height:1;letter-spacing:.01em}
+.cis-l b small{font-size:14px;font-weight:700;color:var(--muted);margin-left:5px;letter-spacing:0}
+.cis-bars{flex:none;display:flex;align-items:flex-end;gap:4px;width:126px;height:48px}
+.cis-bars i{flex:1;background:color-mix(in srgb,var(--accent-fg) 38%,var(--soft))}
+.cis-bars i.no{background:var(--soft)}
+.cis-bars i.td{background:var(--accent-fg)}
+.plan.hl{box-shadow:inset 0 0 0 2px var(--accent-fg)}
+@media (prefers-reduced-motion: no-preference){.plan.hl{animation:hlpl 2.8s ease-out forwards}}
+@keyframes hlpl{0%,55%{box-shadow:inset 0 0 0 2px var(--accent-fg)}100%{box-shadow:inset 0 0 0 0 transparent}}
 
 @media (prefers-reduced-motion: no-preference){
   .toast{animation:pop .2s ease-out}
@@ -1128,6 +1156,14 @@ const EX_LIB=[
 const LIB_ID=new Set(EX_LIB.map(r=>r[0])),LIB_ALIAS=new Map(EX_LIB.map(r=>[r[0],r[6]||'']));
 /* Reihenfolge für die Schnellauswahl, solange noch nichts trainiert wurde */
 const EX_POP=['e1','e2','k-kh','e3','k-sdkh','k-lat','k-rukz','k-bp','k-ls','k-bckh','k-tdk','k-sh','e5','e4','k-rdl','k-dips','k-cr','k-ct'];
+/* Vorschläge im Training: übliche Reihenfolge je Kategorie (was im Studio meist zuerst drankommt), Varianten weiter hinten */
+const EX_SUG=['e1','k-bp','k-rdl','k-afkh','k-bst','k-bbg','k-bss','k-hip','k-wad','k-gob','k-fkb','k-abd','k-add','k-kbs','k-kbkg','k-afkg',
+  'e2','k-sbkh','k-bfly','k-brp','k-flkz','k-dips','k-ls','k-bdkh','k-sblh','k-flkh',
+  'e3','k-lat','k-rukz','k-rukh','k-rulh','k-kh','k-rst','k-rum','k-kzug',
+  'k-sdkh','k-sh','k-fp','k-rbf','k-sdm','k-sdlh','k-vsh','k-fh','k-shr',
+  'k-bckh','k-tdk','k-hc','k-fps','k-bcsz','k-tuk','k-bckz','k-kc','k-bclh','k-ebd','k-bdip',
+  'e5','k-cr','k-hbh','k-ss','k-crk','k-br','k-rt','k-su',
+  'e4','k-lb','k-erg','k-ct','k-rg','k-rad','k-geh','k-ts','k-sp','k-sw','k-bur','k-mc','k-hm','k-bro'];
 /* Andere Namen, unter denen eine eigene Übung einer Standardübung entspricht (nur für die Zuordnung beim Update) */
 const LIB_SYN={e1:'Squat,Squats,Back Squat',e2:'Bench Press',e3:'Klimmzug,Pull-ups,Pullups',e4:'Joggen,Jogging,Running',e5:'Plank,Planke',
   'k-lat':'Latziehen,Lat Pulldown,Latissimuszug','k-ss':'Side Plank','k-tdk':'Trizeps Pushdown,Pushdown,Trizeps am Kabel,Trizepsdrücken am Kabel',
@@ -1237,7 +1273,7 @@ if(!Array.isArray(S.plans))S.plans=S.demo&&S.exercises.some(e=>e.id==='e1')?demo
 /* ---------- Speicher auf dem Gerät ----------
    IndexedDB ist der Hauptspeicher (Daten und Fotos). Eine Kopie der Daten liegt zusätzlich im localStorage,
    damit die App sofort startet. Beim Start gewinnt der neuere Stand. Es gibt keinen Server und kein Konto. */
-const APPV='1.5.0',SCHEMA=3;
+const APPV='1.6.0',SCHEMA=3;
 const cloud={state:'local',deferred:false};
 const store={open:null,timer:null,ok:false,err:false,warned:false,persist:false};
 function idb(){if(store.open)return store.open;
@@ -1657,6 +1693,7 @@ function viewFinish(d){
      <div class="feel">${FEEL.map((f,i)=>`<button data-act="feel" data-v="${i+1}" aria-pressed="${d.feel===i+1}"><b>${i+1}</b><span>${f}</span></button>`).join('')}</div></div>
     <label class="field"><span class="eyebrow">Notiz (optional)</span><input class="in" id="f-note" data-f="note" value="${esc(d.note||'')}" placeholder="z. B. Knie leicht gezwickt"></label>
    </div>
+   ${asPlanCard(d)}
    ${flash?`<div class="err">${flash}</div>`:''}
    <button class="btn primary block big" data-act="saveSession">${d.id?'Änderungen speichern':'Training speichern'}</button>
    <button class="btn ghost block" data-act="backToLive">Zurück zum Training</button>
@@ -1698,7 +1735,7 @@ function sessCard(x){
   const lines=x.entries.map(e=>{const ex=exById(e.exId);return ex?`<div class="line"><b>${esc(ex.name)}</b> <span class="muted">${esc(formatSets(ex.kind,e.sets))}</span></div>`:''}).join('');
   const vol=sessVolume(x);
   return `<div class="sess" role="button" tabindex="0" data-act="selSess" data-id="${x.id}" aria-label="Training vom ${d.getDate()}.${d.getMonth()+1}. auswählen"><div class="day"><b class="num">${d.getDate()}</b><span>${WD[d.getDay()]}</span></div>
-    <div class="body">${lines}<div class="meta">${sessIssues(x).length?'<span class="warnchip">'+WARN_IC+'Prüfen</span>':''}${x.feel?`<span>Gefühl: ${FEEL[x.feel-1]}</span>`:''}${x.dur?`<span class="num">${x.dur} Min</span>`:''}${perf()&&sessKcal(x)?`<span class="num">≈ ${sessKcal(x)} kcal</span>`:''}${perf()&&vol?`<span class="num">${fmt(vol,0)} kg bewegt</span>`:''}${x.bw?`<span class="num">${fmt(num(x.bw))} kg KG</span>`:''}${x.note?`<span>${esc(x.note)}</span>`:''}</div></div><button class="spen" data-act="edit" data-id="${x.id}" tabindex="-1" aria-label="Training bearbeiten"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/></svg></button></div>`;
+    <div class="body">${lines}<div class="meta">${sessIssues(x).length?'<span class="warnchip">'+WARN_IC+'Prüfen</span>':''}${x.feel?`<span>Gefühl: ${FEEL[x.feel-1]}</span>`:''}${x.dur?`<span class="num">${x.dur} Min</span>`:''}${perf()&&sessKcal(x)?`<span class="num">≈ ${sessKcal(x)} kcal</span>`:''}${perf()&&vol?`<span class="num">${fmt(vol,0)} kg bewegt</span>`:''}${x.bw?`<span class="num">${fmt(num(x.bw))} kg KG</span>`:''}${x.note?`<span>${esc(x.note)}</span>`:''}</div></div><button class="splan" data-act="sessPlan" data-id="${x.id}" tabindex="-1" aria-label="Als Trainingsplan speichern">${ICONS.plaene}</button><button class="spen" data-act="edit" data-id="${x.id}" tabindex="-1" aria-label="Training bearbeiten"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/></svg></button></div>`;
 }
 function groupList(list){let h='',cur='';for(const x of list){const d=parseD(x.date);const mk=MON[d.getMonth()]+' '+d.getFullYear();if(mk!==cur){h+=`<div class="hist-month">${mk}</div>`;cur=mk}h+=sessCard(x)}return h}
 
@@ -2513,24 +2550,6 @@ let dayOff=0,bannerOff=false;
 function hDate(){return offDate(dayOff)}
 function defSleep(){const ks=Object.keys(S.days).sort().reverse();for(const k of ks){const s=S.days[k].sleep;if(s&&num(s.h))return num(s.h)}return 7.5}
 function scaleHtml(act,cur,labels,lbl){return `<div class="scale" role="group" aria-label="${lbl}">${labels.map((l,i)=>`<button data-act="${act}" data-v="${i+1}" aria-pressed="${cur===i+1}"><b>${i+1}</b><span>${l}</span></button>`).join('')}</div>`}
-function checkinCard(k){
-  const D=dayGet(k),sl=D.sleep||{},h=num(sl.h),q=num(sl.q),mo=num(D.mood);
-  return `<div class="card pane"><div class="pane-h"><span class="eyebrow">Check-in</span>${h&&q&&mo?'<span class="small muted">vollständig</span>':''}</div>
-    <div class="ci-row"><div class="ci-l"><b>Schlaf</b><span class="small muted">${h?'Stunden in der Nacht davor':'Zahl antippen zum Übernehmen'}</span></div>
-     <div class="goalc"><button class="nudge" data-act="sleepH" data-d="-0.25" aria-label="15 Minuten weniger">−</button><button class="val num${h?'':' ph'}" data-act="sleepSet" aria-label="${h?'Schlafdauer '+fmtH(h)+' Stunden, antippen zum Entfernen':'Schlafdauer '+fmtH(defSleep())+' Stunden eintragen'}">${fmtH(h||defSleep())}<small>h</small></button><button class="nudge" data-act="sleepH" data-d="0.25" aria-label="15 Minuten mehr">+</button></div></div>
-    <div class="field"><span class="eyebrow">Schlafqualität</span>${scaleHtml('sleepQ',q,SLQ,'Schlafqualität')}</div>
-    <div class="field"><span class="eyebrow">Stimmung</span>${scaleHtml('mood',mo,MOOD,'Stimmung')}</div></div>`;
-}
-function trainCardToday(k){
-  const d=S.draft,live=d&&!d.id&&(d.started||(d.entries||[]).length),ss=S.sessions.filter(x=>x.date===k),isT=k===today();
-  const goal=S.goal||3,wd=weekDays(),wk=ymd(monday(parseD(k))),cnt=wd[wk]?wd[wk].size:0;
-  let body;
-  if(live&&isT)body=`<button class="btn primary block" data-act="goSession">Training fortsetzen</button><div class="small muted">${d.planName?esc(d.planName)+' · ':''}${d.entries.length} ${d.entries.length===1?'Übung':'Übungen'}</div>`;
-  else if(ss.length)body=ss.map(x=>`<div class="tdone"><b>${esc(x.planName||x.entries.map(e=>(exById(e.exId)||{}).name).filter(Boolean).slice(0,2).join(', ')||'Training')}</b><span class="small muted num">${x.dur?x.dur+' Min · ':''}${x.entries.length} ${x.entries.length===1?'Übung':'Übungen'}${x.feel?' · Gefühl: '+FEEL[x.feel-1]:''}</span></div>`).join('');
-  else if(isT){const pinned=S.plans.filter(p=>p.pinned);body=`<button class="btn primary block" data-act="goTrain">Training starten</button>${pinned.length?`<div class="qchips">${pinned.map(p=>`<button class="qchip" data-act="startPlan" data-id="${p.id}">${PLAY_IC}<span>${esc(p.name)}</span></button>`).join('')}</div>`:''}`}
-  else body=`<div class="small muted">An diesem Tag ist kein Training eingetragen.</div><button class="btn small" data-act="goTrain" data-date="${k}">Training nachtragen</button>`;
-  return `<div class="card pane"><div class="pane-h"><span class="eyebrow">Training</span><button class="lnk" data-act="tab" data-v="training"><span class="num">${cnt}/${goal}</span> in dieser Woche</button></div>${body}</div>`;
-}
 function foodCardToday(k){
   const items=dayGet(k).food||[],t=sumFood(items),r=nCalc(),tg=r.miss?null:foodTarget(r,k);
   return `<div class="card pane"><div class="pane-h"><span class="eyebrow">Ernährung</span><button class="lnk" data-act="goFood" data-date="${k}">Tagebuch</button></div>
@@ -2745,17 +2764,29 @@ function offNorm(o){if(!o||typeof o!=='object')return null;const N=o.nutriments|
     k:k==null?null:Math.round(k),p:nv('proteins_100g'),c:nv('carbohydrates_100g'),f:nv('fat_100g'),
     sv:num(o.serving_quantity)>0?num(o.serving_quantity):null,svt:String(o.serving_size||'').slice(0,30),
     img:String(o.image_front_small_url||o.image_small_url||''),de:Array.isArray(o.countries_tags)&&o.countries_tags.includes('en:germany'),src:'off'}}
-/* Ein Produkt per Barcode: {ok:true,p} oder {ok:false,why:'notfound'|'incomplete'|'offline'|'error',p?} */
-async function offProduct(code){if(navigator.onLine===false)return {ok:false,why:'offline'};
-  const codes=[code];if(code.length===13&&code[0]==='0')codes.push(code.slice(1));
-  try{for(const c of codes){const r=await offGet(OFF+'/api/v2/product/'+c+'.json?fields='+OFF_FIELDS);
-      if(r.status===404)continue;if(!r.ok)return {ok:false,why:'error'};
-      const j=await r.json();if(!j||j.status!=1||!j.product)continue;
-      const p=offNorm({...j.product,code});if(!p)continue;
-      if(!p.n||p.k==null)return {ok:false,why:'incomplete',p};
-      return {ok:true,p}}
-    return {ok:false,why:'notfound'}}
-  catch(e){return {ok:false,why:navigator.onLine===false?'offline':'error'}}}
+/* Ein Produkt per Barcode: {ok:true,p} oder {ok:false,why:'notfound'|'incomplete'|'offline'|'limit'|'error',p?}
+   'limit': HTTP 429. Open Food Facts erlaubt 15 Produktabrufe pro Minute und Gerät (Doku, Stand Okt. 2026); dann nicht nachhaken,
+   sonst verlängert jeder weitere Versuch die Sperre.
+   Open Food Facts hat immer wieder kurze Störungen (Fehler 502/503, z. B. am 27.10.2026 für 14 Minuten). Deshalb bei Fehlern
+   ein zweiter Versuch mit API v2, danach einer mit API v3 (v2 gilt als veraltet, läuft aber weiter). „Nicht gefunden“ zählt nicht als Fehler. */
+const sleepMs=ms=>new Promise(r=>setTimeout(r,ms));
+async function offOne(c,ver,ms){const r=await offGet(OFF+(ver===3?'/api/v3/product/'+c+'?fields=':'/api/v2/product/'+c+'.json?fields=')+OFF_FIELDS,ms);
+  if(r.status===404)return {nf:true};if(r.status===429){const e=new Error('limit');e.limit=true;throw e}if(!r.ok)throw new Error('http '+r.status);
+  let j;try{j=await r.json()}catch(e){throw new Error('kein json')}
+  if(ver===3){if(j&&j.product&&/^success/.test(String(j.status||'success')))return {p:j.product};if(j&&j.status==='failure')return {nf:true};throw new Error('v3 '+(j&&j.status))}
+  if(j&&j.status==1&&j.product)return {p:j.product};if(j&&j.status==0)return {nf:true};throw new Error('v2 ohne status')}
+async function offProduct(code,onWait){if(navigator.onLine===false)return {ok:false,why:'offline'};
+  const codes=[code];if(code.length===13&&code[0]==='0')codes.push(code.slice(1));let err=false;
+  for(const c of codes){let res=null;
+    for(const [ver,wait,ms] of [[2,0,7000],[2,1200,7000],[3,800,6000]]){
+      if(wait){if(onWait)onWait();await sleepMs(wait)}
+      try{res=await offOne(c,ver,ms);break}catch(e){res=null;if(e&&e.limit)return {ok:false,why:'limit'};if(navigator.onLine===false)return {ok:false,why:'offline'}}}
+    if(!res){err=true;continue}
+    if(res.nf)continue;
+    const p=offNorm({...res.p,code});if(!p)continue;
+    if(!p.n||p.k==null)return {ok:false,why:'incomplete',p};
+    return {ok:true,p}}
+  return {ok:false,why:err?'error':'notfound'}}
 /* Textsuche. Search-a-licious (search.openfoodfacts.org) sendet keine CORS-Kopfzeilen und ist aus dem Browser nicht nutzbar.
    Deshalb: klassische Suche, bei Störung (503, Zeitüberschreitung, HTML-Seite statt JSON) ein zweiter Versuch, danach die v2-Suche. */
 async function offTry(url,key,ms){const r=await offGet(url,ms);if(!r.ok)throw new Error('http '+r.status);
@@ -2878,18 +2909,33 @@ function ownForm(){const f=prod.form,why=prod.why;
   <button class="btn primary block big" data-act="prodSave">Speichern</button></section>`}
 
 /* ---------- Kamera und Strichcode ---------- */
-const SCAN={video:null,stream:null,track:null,raf:0,last:0,on:false,starting:false,frame:0,cv:null,cx:null,seen:{}};
+const SCAN={video:null,stream:null,track:null,raf:0,last:0,on:false,starting:false,frame:0,cv:null,cx:null,seen:{},tries:0,t0:0,lastSum:-1,lastChange:0,darkSince:0,bdBusy:false};
+/* Wo der Browser ihn anbietet (Android/Chrome), liest zusätzlich der eingebaute BarcodeDetector. Safari hat ihn nicht. */
+const BDET=(()=>{try{return 'BarcodeDetector' in window?new window.BarcodeDetector({formats:['ean_13','ean_8','upc_a']}):null}catch(e){return null}})();
+/* iOS-Fehler bei Apps auf dem Home-Bildschirm (WebKit-Bug 252465, auch unter iOS 26): Das Kamerabild bleibt schwarz oder steht still,
+   video.play() kehrt manchmal nie zurück. Wächter: Kommt 4 s lang kein neues Bild (oder 5 s lang nur Schwarz), startet die Kamera
+   einmal neu mit frischem Video-Element und einfacheren Vorgaben. Hilft das nicht, empfiehlt die App das Foto:
+   Das öffnet die normale Kamera-App, die von dem Fehler nicht betroffen ist. */
+function scanVideoDrop(){const v=SCAN.video;if(v&&v.parentNode)v.parentNode.removeChild(v);SCAN.video=null}
+function scanStall(){if(!scan)return;scanStop();
+  if(SCAN.tries<1){SCAN.tries++;scanVideoDrop();scan.status='start';scanMsg();setTimeout(()=>{if(scan&&curView()==='scan'&&scan.status==='start'&&!scan.code)scanStart(true)},250)}
+  else{scan.status='stuck';render()}}
 function scanVideoEl(){if(!SCAN.video){const v=document.createElement('video');v.setAttribute('playsinline','');v.setAttribute('muted','');v.muted=true;v.autoplay=true;SCAN.video=v}return SCAN.video}
 function scanCanvas(w,h){if(!SCAN.cv){SCAN.cv=document.createElement('canvas');SCAN.cx=SCAN.cv.getContext('2d',{willReadFrequently:true})}
   if(SCAN.cv.width!==w)SCAN.cv.width=w;if(SCAN.cv.height!==h)SCAN.cv.height=h;try{SCAN.cx.imageSmoothingQuality='high'}catch(e){}return SCAN.cx}
-async function scanStart(){if(SCAN.on||SCAN.starting||!scan)return;SCAN.starting=true;
+async function scanStart(simple){if(SCAN.on||SCAN.starting||!scan)return;SCAN.starting=true;
   try{if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia)throw {name:'NotFoundError'};
-    const st=await navigator.mediaDevices.getUserMedia({audio:false,video:{facingMode:{ideal:'environment'},width:{ideal:1920},height:{ideal:1080}}});
+    const st=await navigator.mediaDevices.getUserMedia({audio:false,video:simple?{facingMode:'environment'}:{facingMode:{ideal:'environment'},width:{ideal:1920},height:{ideal:1080}}});
     if(curView()!=='scan'||!scan||scan.code){st.getTracks().forEach(t=>t.stop());SCAN.starting=false;return}
     SCAN.stream=st;SCAN.track=st.getVideoTracks()[0];const v=scanVideoEl();v.srcObject=st;
     const box=document.getElementById('scanBox');if(box&&v.parentNode!==box)box.insertBefore(v,box.firstChild);
-    try{await v.play()}catch(e){}
-    SCAN.on=true;SCAN.seen={};scan.status='run';
+    /* play() kann auf dem iPhone hängen bleiben: höchstens 2,5 s warten, den Rest erledigt der Wächter */
+    try{await Promise.race([v.play(),sleepMs(2500)])}catch(e){}
+    if(!scan||curView()!=='scan'||scan.code){scanStop();SCAN.starting=false;return}
+    try{SCAN.track.addEventListener('ended',()=>{if(SCAN.on&&scan&&!scan.code)scanStall()})}catch(e){}
+    SCAN.on=true;SCAN.seen={};scan.status='run';SCAN.t0=SCAN.lastChange=Date.now();SCAN.lastSum=-1;SCAN.darkSince=0;
+    /* Neues Bild erkennen: requestVideoFrameCallback (Safari ab 15.4, Chrome) und zusätzlich jedes veränderte Bild (Rauschen der Kamera) */
+    if(v.requestVideoFrameCallback){const cb=()=>{if(!SCAN.on||SCAN.video!==v)return;SCAN.lastChange=Date.now();v.requestVideoFrameCallback(cb)};try{v.requestVideoFrameCallback(cb)}catch(e){}}
     try{const caps=SCAN.track.getCapabilities?SCAN.track.getCapabilities():{};scan.canTorch=!!caps.torch}catch(e){scan.canTorch=false}
     SCAN.raf=requestAnimationFrame(scanFrame)}
   catch(e){if(scan)scan.status=e&&(e.name==='NotAllowedError'||e.name==='SecurityError')?'denied':'nocam'}
@@ -2906,37 +2952,51 @@ function scanSync(){if(curView()==='scan'&&scan&&document.visibilityState!=='hid
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')scanStop();else if(curView()==='scan'&&scan&&scan.status==='run'){scan.status='start';render()}});
 /* Je Bild ein Band in der Mitte lesen: meist waagerecht, jedes dritte Bild senkrecht.
    Ein Code gilt erst, wenn er in zwei verschiedenen Bildern gelesen wurde. */
+function scanHit(code,f){const now=Date.now(),s=SCAN.seen[code]=SCAN.seen[code]||{frames:new Set(),t:now};if(now-s.t>2500){s.frames=new Set();s.t=now}
+  s.frames.add(f);if(s.frames.size>=2){scanFound(code);return true}return false}
 function scanFrame(t){if(!SCAN.on)return;SCAN.raf=requestAnimationFrame(scanFrame);if(t-SCAN.last<70)return;SCAN.last=t;
-  const v=SCAN.video;if(!v||v.readyState<2||!v.videoWidth)return;const vw=v.videoWidth,vh=v.videoHeight,f=SCAN.frame++;let hits;
-  try{if(f%3!==2){const cw=Math.min(vw,1920),ch=48,cx=scanCanvas(cw,ch);cx.drawImage(v,0,vh*.3,vw,vh*.4,0,0,cw,ch);hits=EAN.scan(cx.getImageData(0,0,cw,ch),false,1)}
-    else{const ch=Math.min(vh,1920),cw=48,cx=scanCanvas(cw,ch);cx.drawImage(v,vw*.3,0,vw*.4,vh,0,0,cw,ch);hits=EAN.scan(cx.getImageData(0,0,cw,ch),true,1)}}catch(e){return}
-  const now=Date.now();
-  for(const code in hits){const s=SCAN.seen[code]=SCAN.seen[code]||{frames:new Set(),t:now};if(now-s.t>2500){s.frames=new Set();s.t=now}
-    s.frames.add(f);if(s.frames.size>=2){scanFound(code);return}}}
+  const v=SCAN.video,now=Date.now();
+  /* Wächter: 4 s kein neues Bild oder 5 s nur Schwarz → Kamera neu starten */
+  if(now-SCAN.lastChange>4000||(SCAN.darkSince&&now-SCAN.darkSince>5000)){scanStall();return}
+  if(!v||v.readyState<2||!v.videoWidth)return;const vw=v.videoWidth,vh=v.videoHeight,f=SCAN.frame++;let hits,d;
+  try{if(f%2===0){const cw=Math.min(vw,1920),ch=48,cx=scanCanvas(cw,ch);cx.drawImage(v,0,vh*.3,vw,vh*.4,0,0,cw,ch);d=cx.getImageData(0,0,cw,ch);hits=EAN.scan(d,false,1)}
+    else{const ch=Math.min(vh,1920),cw=48,cx=scanCanvas(cw,ch);cx.drawImage(v,vw*.3,0,vw*.4,vh,0,0,cw,ch);d=cx.getImageData(0,0,cw,ch);hits=EAN.scan(d,true,1)}}catch(e){return}
+  /* Neues Bild? (Prüfsumme ändert sich durch das Rauschen der Kamera) Nur Schwarz? (Kamera läuft, liefert aber kein Bild) */
+  let sum=0,n=0,ck=0;for(let i=0;i<d.data.length;i+=16){const g=d.data[i]+d.data[i+1]+d.data[i+2];sum+=g;n++;ck=(ck*31+g)%1000000007}
+  if(ck!==SCAN.lastSum){SCAN.lastSum=ck;SCAN.lastChange=now}
+  if(n&&sum/n/3<5){if(!SCAN.darkSince)SCAN.darkSince=now}else SCAN.darkSince=0;
+  for(const code in hits)if(scanHit(code,f))return;
+  if(BDET&&!SCAN.bdBusy&&f%4===1){SCAN.bdBusy=true;BDET.detect(v).then(rs=>{SCAN.bdBusy=false;if(!SCAN.on)return;
+      for(const r of rs||[]){const c=EAN.norm(String(r.rawValue||''));if((c.length===13||c.length===8)&&EAN.check(c)&&scanHit(c,'bd'+f))return}},()=>{SCAN.bdBusy=false})}}
 function scanBeep(){try{if(navigator.vibrate)navigator.vibrate(60)}catch(e){}
   try{if(!audioCtx)return;const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.frequency.value=1650;g.gain.value=.05;o.connect(g);g.connect(audioCtx.destination);o.start();o.stop(audioCtx.currentTime+.08)}catch(e){}}
 function scanFound(code){if(!scan||scan.code)return;scan.code=code;scanStop();scanBeep();scan.status='look';scanMsg();lookupCode(code)}
-async function lookupCode(code){if(!scan)return;code=EAN.norm(code);scan.code=code;scan.status='look';scanMsg();
+async function lookupCode(code){if(!scan)return;code=EAN.norm(code);scan.code=code;scan.status='look';scan.slow=false;scanMsg();
   const local=S.products.find(p=>p.code===code);
   if(local){openProduct(local,{replace:true,date:scan.date,to:scan.to});return}
-  const r=await offProduct(code);
-  if(!scan||scan.code!==code||curView()!=='scan')return;
+  const r=await offProduct(code,()=>{if(scan&&scan.code===code){scan.slow=true;scanMsg()}});
+  if(!scan||scan.code!==code||curView()!=='scan')return;scan.slow=false;
   if(r.ok){openProduct(saveProduct(r.p),{replace:true,date:scan.date,to:scan.to});return}
   if(r.why==='notfound'||r.why==='incomplete'){openOwnForm({...(r.p||{}),code},{replace:true,why:r.why,date:scan.date,to:scan.to});return}
-  scan.status='err';scan.err=r.why==='offline'?'Keine Internetverbindung. Leg das Produkt selbst an oder versuch es später.':'Open Food Facts antwortet gerade nicht. Versuch es gleich noch einmal oder leg das Produkt selbst an.';render()}
+  scan.status='err';scan.err=r.why==='offline'?'Keine Internetverbindung. Leg das Produkt selbst an oder versuch es später.':r.why==='limit'?'Open Food Facts lässt nur 15 Abfragen pro Minute zu, die sind gerade aufgebraucht. Warte eine Minute und tipp dann auf „Nochmal versuchen“, oder leg das Produkt selbst an.':'Open Food Facts antwortet gerade nicht, auch nach drei Versuchen. Das liegt an Open Food Facts, nicht an der App. Versuch es gleich noch einmal oder leg das Produkt selbst an.';render()}
 async function scanPhoto(file){if(!scan)return;scan.status='photo';scanMsg();let best=null;
   try{const url=URL.createObjectURL(file);
     try{const img=await new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=rej;i.src=url});
       const s=Math.min(1,1600/Math.max(img.naturalWidth||1,img.naturalHeight||1)),w=Math.max(1,Math.round(img.naturalWidth*s)),h=Math.max(1,Math.round(img.naturalHeight*s));
       const cx=scanCanvas(w,h);cx.drawImage(img,0,0,w,h);const d=cx.getImageData(0,0,w,h),tally={};
       for(const cols of [false,true]){const hs=EAN.scan(d,cols,3);for(const c in hs)tally[c]=(tally[c]||0)+hs[c]}
-      for(const c in tally)if(!best||tally[c]>tally[best])best=c}
+      for(const c in tally)if(!best||tally[c]>tally[best])best=c;
+      if(!best){/* weit weg fotografiert: Mitte in voller Auflösung */const nw=img.naturalWidth||1,nh=img.naturalHeight||1,cs=Math.min(1,2000/Math.max(nw*.6,nh*.6)),
+          w2=Math.max(1,Math.round(nw*.6*cs)),h2=Math.max(1,Math.round(nh*.6*cs)),cx2=scanCanvas(w2,h2);cx2.drawImage(img,nw*.2,nh*.2,nw*.6,nh*.6,0,0,w2,h2);
+        const d2=cx2.getImageData(0,0,w2,h2),t2={};for(const cols of [false,true]){const hs=EAN.scan(d2,cols,3);for(const c in hs)t2[c]=(t2[c]||0)+hs[c]}
+        for(const c in t2)if(!best||t2[c]>t2[best])best=c}}
     finally{URL.revokeObjectURL(url)}}catch(e){}
   if(!scan)return;
   if(best){scanFound(best);return}
   scan.status=SCAN.on?'run':'still';toast('Auf dem Foto war kein Strichcode zu erkennen. Geh näher ran und halt das Handy gerade.');scanMsg()}
 function scanMsgText(){const s=scan||{};return ({start:'Kamera wird gestartet …',run:'Halte den Strichcode waagerecht in den Rahmen.',photo:'Foto wird gelesen …',
-  look:'Gefunden: '+(s.code||'')+'. Produkt wird geladen …',still:'Nimm ein Foto vom Strichcode auf oder tipp die Zahlen ein.',
+  look:'Gefunden: '+(s.code||'')+(s.slow?'. Open Food Facts antwortet langsam, neuer Versuch …':'. Produkt wird geladen …'),still:'Nimm ein Foto vom Strichcode auf oder tipp die Zahlen ein.',
+  stuck:'Die Kamera zeigt hier kein Bild. Das ist ein bekannter iOS-Fehler bei Apps auf dem Home-Bildschirm. Tipp auf „Foto“: Das öffnet die normale Kamera, damit klappt es. Oft hilft auch ein Neustart des iPhones.',
   denied:'Die App darf die Kamera nicht benutzen. Prüf in den iPhone-Einstellungen unter Apps → Safari → Kamera, ob Fragen oder Erlauben gewählt ist. Du kannst die Zahlen auch eintippen.',
   nocam:'Keine Kamera verfügbar. Tipp die Zahlen unter dem Strichcode ein oder nimm ein Foto.',err:s.err||''})[s.status]||''}
 function scanMsg(){const el=document.getElementById('scanMsg');if(el){el.textContent=scanMsgText();const fr=document.querySelector('.scanframe');if(fr)fr.classList.toggle('hit',!!(scan&&scan.status==='look'));
@@ -2945,24 +3005,26 @@ function viewScan(){const s=scan;if(!s)return '<div class="card empty"><b>Scanne
   return `<div class="scanwrap"><div class="scanbox${!SCAN.on&&s.status!=='start'?' off':''}" id="scanBox"><div class="scanframe${s.status==='look'?' hit':''}" aria-hidden="true"><i></i></div></div>
    <div class="scanbar"><div class="scanmsg" id="scanMsg" role="status">${esc(scanMsgText())}</div>
     ${s.typing?`<div class="fsearch"><input class="in num" id="scanCode" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="14" autocomplete="off" placeholder="Zahlen unter dem Strichcode" value="${esc(s.typed||'')}" aria-label="Barcode-Nummer"><button class="btn primary" data-act="scanLookup">Suchen</button></div>`:''}
-    ${s.status==='err'?'<div class="row"><button class="btn small" data-act="scanRetry">Nochmal</button><button class="btn small" data-act="scanOwn">Selbst anlegen</button></div>':''}
-    <div class="scanctl">${s.canTorch?`<button class="btn small" data-act="scanTorch" aria-pressed="${!!s.torch}">${s.torch?'Licht aus':'Licht an'}</button>`:''}<label class="btn small filebtn">Foto<input type="file" id="scanPhoto" accept="image/*" capture="environment" hidden></label><button class="btn small" data-act="scanType" aria-pressed="${!!s.typing}">Zahlen eintippen</button></div></div></div>`}
+    ${s.status==='err'?'<div class="row"><button class="btn small primary" data-act="scanRetry">Nochmal versuchen</button><button class="btn small" data-act="scanOwn">Selbst anlegen</button><button class="btn small" data-act="scanAgain">Neu scannen</button></div>':''}
+    ${s.status==='stuck'?'<div class="row"><button class="btn small" data-act="scanAgain">Kamera neu starten</button></div>':''}
+    <div class="scanctl">${s.canTorch?`<button class="btn small" data-act="scanTorch" aria-pressed="${!!s.torch}">${s.torch?'Licht aus':'Licht an'}</button>`:''}<label class="btn small filebtn${s.status==='stuck'||s.status==='nocam'||s.status==='denied'?' primary':''}">Foto<input type="file" id="scanPhoto" accept="image/*" capture="environment" hidden></label><button class="btn small" data-act="scanType" aria-pressed="${!!s.typing}">Zahlen eintippen</button></div></div></div>`}
 
 /* ---------- Aktionen, Eingaben ---------- */
 function foodAct(a,el,ck){if(recAct(a,el,ck))return true;switch(a){
-  case 'scanOpen':scan={date:el.dataset.date||(meal&&meal.date)||today(),to:el.dataset.to==='rec'?'rec':'day',status:'start',code:null,err:'',typing:false,typed:'',canTorch:false,torch:false};push('scan');render();return true;
+  case 'scanOpen':SCAN.tries=0;scan={date:el.dataset.date||(meal&&meal.date)||today(),to:el.dataset.to==='rec'?'rec':'day',status:'start',code:null,err:'',typing:false,typed:'',canTorch:false,torch:false};push('scan');render();return true;
   case 'scanTorch':if(SCAN.track){const on=!scan.torch;SCAN.track.applyConstraints({advanced:[{torch:on}]}).then(()=>{scan.torch=on;render()},()=>toast('Das Licht lässt sich hier nicht schalten'))}return true;
   case 'scanType':if(scan){scan.typing=!scan.typing;render();if(scan.typing){const i=document.getElementById('scanCode');if(i)i.focus()}}return true;
   case 'scanLookup':{if(!scan)return true;const c=EAN.norm(scan.typed);if(c.length!==8&&c.length!==13){toast('Ein Barcode hat 8, 12 oder 13 Ziffern');return true}
     if(!EAN.check(c)){toast('Die letzte Ziffer passt nicht. Prüf die Zahlen noch einmal.');return true}
     const a2=document.activeElement;if(a2&&a2.blur)a2.blur();scanStop();scan.typing=false;lookupCode(c);return true}
-  case 'scanRetry':if(scan){scan.code=null;scan.err='';scan.status='start';render()}return true;
+  case 'scanRetry':if(scan){if(scan.code){const c=scan.code;scan.err='';lookupCode(c)}else{scan.err='';scan.status='start';render()}}return true;
+  case 'scanAgain':if(scan){scanStop();SCAN.tries=0;scanVideoDrop();scan.code=null;scan.err='';scan.slow=false;scan.status='start';render()}return true;
   case 'scanOwn':if(scan)openOwnForm({code:scan.code||''},{replace:true,why:'notfound',date:scan.date,to:scan.to});return true;
   case 'offSearch':offSearchRun();return true;
   case 'offPick':{const m=fctx(),to=fto(),v=curView(),p=m&&m.off.items[+el.dataset.i];if(!p)return true;
     if(p.k!=null){openProduct(p,{to});return true}
     toast('Lade Produkt …');offProduct(p.code).then(r=>{if(fctx()!==m||curView()!==v)return;
-      if(r.ok)openProduct(r.p,{to});else if(r.why==='incomplete'||r.why==='notfound')openOwnForm({...(r.p||p),code:p.code},{why:'incomplete',to});else toast('Open Food Facts antwortet gerade nicht')});return true}
+      if(r.ok)openProduct(r.p,{to});else if(r.why==='incomplete'||r.why==='notfound')openOwnForm({...(r.p||p),code:p.code},{why:'incomplete',to});else toast(r.why==='limit'?'Zu viele Abfragen bei Open Food Facts. Bitte eine Minute warten.':'Open Food Facts antwortet gerade nicht')});return true}
   case 'prodOpen':{const p=S.products.find(x=>x.id===el.dataset.id);if(p)openProduct(p,{to:fto()});return true}
   case 'prodNew':{const m=fctx();openOwnForm({n:m&&m.mode!=='manual'?m.q.trim():m&&m.res?String(m.res.n||'').trim():''},{to:fto()});return true}
   case 'prodStep':{if(!prod)return true;const g=num(prod.g),d=+el.dataset.d,st=g<20?1:g<100?5:10;prod.g=Math.max(0,Math.round((g+d*st)/st)*st);render();return true}
@@ -3076,21 +3138,24 @@ function recListHtml(){const L=S.recipes.slice().sort((a,b)=>(b.used||0)-(a.used
 function viewRecipes(){return recListHtml()}
 
 /* ---------- Rezept ansehen und eintragen ---------- */
-function rvOpen(id){const r=recById(id);if(!r)return false;const L=r.last||{},w=num(r.w),P=recPor(r),mode=L.m==='g'&&w>0?'g':'por';
+/* Gewicht des ganzen Rezepts für das Eintragen in Gramm: gewogen, sonst die Summe der Zutaten (roh, ml zählt wie g) */
+function recWt(r){const w=num(r.w);if(w>0)return {w,est:false};let g=0;for(const x of r.items||[])if(x.per&&num(x.g)>0)g+=num(x.g);return {w:Math.round(g),est:true}}
+function rvOpen(id){const r=recById(id);if(!r)return false;const L=r.last||{},w=recWt(r).w,P=recPor(r),mode=L.m==='g'&&w>0?'g':'por';
   rv={id,date:recCtxDate(),mode,v:num(L.v)>0&&L.m===mode?num(L.v):mode==='g'?Math.round(w/P):1};return true}
-function rvShare(r){const v=num(rv.v),w=num(r.w);return rv.mode==='g'&&w>0?v/w:v/recPor(r)}
+function rvShare(r){const v=num(rv.v),w=recWt(r).w;return rv.mode==='g'&&w>0?v/w:v/recPor(r)}
 function rvTotHtml(r){return totHtml(rTot(recSum(r),rvShare(r)))}
 function viewRecipe(){const r=rv&&recById(rv.id);if(!r)return '<div class="card empty"><b>Kein Rezept gewählt</b>Geh zurück und wähl ein Rezept.</div>';
-  const t=recSum(r),P=recPor(r),pp=rTot(t,1/P),w=num(r.w),byG=rv.mode==='g'&&w>0,v=num(rv.v),ps=w>0?Math.round(w/P):0;
-  const opts=byG?[[ps,'1 Portion · '+fmt(ps,0)+' g']].concat([200,250,300,400].filter(x=>x!==ps).map(x=>[x,x+' g'])):[[.5,'½'],[1,'1'],[1.5,'1½'],[2,'2'],[3,'3']];
+  const t=recSum(r),P=recPor(r),pp=rTot(t,1/P),W=recWt(r),w=W.w,byG=rv.mode==='g'&&w>0,v=num(rv.v),ps=w>0?Math.round(w/P):0;
+  const opts=byG?[[ps,'1 Portion '+(W.est?'≈ ':'· ')+fmt(ps,0)+' g']].concat([200,250,300,400].filter(x=>x!==ps).map(x=>[x,x+' g'])):[[.5,'½'],[1,'1'],[1.5,'1½'],[2,'2'],[3,'3']];
   const dr=!!(S.recDraft&&S.recDraft.id===r.id&&recDirty());
   return `${dr?`<div class="infobox">An diesem Rezept gibt es nicht gespeicherte Änderungen. <button class="lnk inl" data-act="recResume">Weiter bearbeiten</button></div>`:''}
-   <div class="card pane prodcard"><div class="prod-h"><span class="pimg rthumb" aria-hidden="true">${ICONS.rezepte}</span><div class="prod-t"><b>${esc(r.n)}</b><span class="small muted">Ergibt ${porTxt(P)}${w?' · fertig '+fmt(w,0)+' g':''}</span></div></div>
+   <div class="card pane prodcard"><div class="prod-h"><span class="pimg rthumb" aria-hidden="true">${ICONS.rezepte}</span><div class="prod-t"><b>${esc(r.n)}</b><span class="small muted">Ergibt ${porTxt(P)}${w?(W.est?' · Zutaten ':' · fertig ')+fmt(w,0)+' g':''}</span></div></div>
     <div class="small muted num">pro Portion: ${kLine(pp)}</div></div>
    <div class="card pane"><div class="pane-h"><span class="eyebrow">Menge</span></div>
     ${w>0?`<div class="seg sm" role="group" aria-label="Menge angeben in"><button data-act="rvMode" data-v="por" aria-pressed="${!byG}">Portionen</button><button data-act="rvMode" data-v="g" aria-pressed="${byG}">Gramm</button></div>`:''}
     <div class="amt"><button class="nudge" data-act="rvStep" data-d="-1" aria-label="Weniger">−</button><input class="hin num amt-in" type="text" inputmode="decimal" autocomplete="off" id="rvAmt" value="${vIn(v)}" aria-label="${byG?'Menge in Gramm':'Anzahl Portionen'}"><span class="amt-u" id="rvU">${byG?'g':v===1?'Portion':'Portionen'}</span><button class="nudge plus" data-act="rvStep" data-d="1" aria-label="Mehr">+</button></div>
     <div class="sugg amts${byG?'':' pors'}">${opts.map(([x,l])=>`<button data-act="rvAmt" data-v="${x}" aria-pressed="${v===x}"${byG?'':` aria-label="${porTxt(x)}"`}>${esc(l)}</button>`).join('')}</div>
+    ${byG&&W.est?`<div class="small muted">Gerechnet mit dem Gewicht der Zutaten, zusammen ${fmt(w,0)} g. Wiegst du das fertige Essen und trägst es im Rezept ein, wird es genauer.</div>`:''}
     <div id="rvTot">${rvTotHtml(r)}</div>
     <button class="btn primary block big" data-act="recEat">Eintragen: ${dayTitle(rv.date)}</button></div>
    <div class="card pane"><div class="pane-h"><span class="eyebrow">Zutaten <span class="cnt">${r.items.length}</span></span><span class="small muted">für ${porTxt(P)}</span></div>
@@ -3118,7 +3183,7 @@ function viewRecipeEdit(){const R=S.recDraft;if(!R)return '<div class="card empt
    <div class="addrow"><button class="btn" data-act="recIngAdd">+ Zutat hinzufügen</button><button class="btn scanq" data-act="scanOpen" data-to="rec" aria-label="Zutat per Barcode scannen">${SCAN_IC}</button></div></div>
   <div class="card pane"><div class="pane-h"><span class="eyebrow">Pro Portion</span></div><div id="recTot">${recTotHtml(R)}</div></div>
   <div class="card section">
-   <label class="field"><span class="eyebrow">Gewicht fertig gekocht in g (optional)</span><input class="in num" id="recW" data-rf="w" type="text" inputmode="decimal" autocomplete="off" value="${vIn(R.w)}" placeholder="z. B. 1400"><span class="small muted">Wiegst du das fertige Essen, kannst du auch nach Gewicht eintragen, etwa 350 g aus dem Topf.</span></label>
+   <label class="field"><span class="eyebrow">Gewicht fertig gekocht in g (optional)</span><input class="in num" id="recW" data-rf="w" type="text" inputmode="decimal" autocomplete="off" value="${vIn(R.w)}" placeholder="z. B. 1400"><span class="small muted">Nach Gramm eintragen geht immer. Ohne diese Angabe rechnet die App mit dem Gewicht der Zutaten. Gewogen ist es genauer, etwa wenn Nudeln oder Reis beim Kochen Wasser aufnehmen.</span></label>
    <label class="field"><span class="eyebrow">Zubereitung (optional)</span><textarea class="in jnote" id="recNote" data-rf="note" maxlength="4000" rows="4" placeholder="Schritte, Zeiten, Tipps">${esc(R.note||'')}</textarea></label></div>
   ${flash?`<div class="err">${flash}</div>`:''}
   <button class="btn primary block big" data-act="recSave">Rezept speichern</button>
@@ -3159,13 +3224,13 @@ function recAct(a,el,ck){const ds=el&&el.dataset||{};switch(a){
     if(S.recDraft&&S.recDraft.id===id)S.recDraft=null;recResumed=false;flash='';
     if(curView()==='rezeptEdit')pop();if(curView()==='rezept'){rv=null;pop()}
     toast('Rezept gelöscht');render();return true}
-  case 'rvMode':{const r=rv&&recById(rv.id);if(!r)return true;const w=num(r.w),P=recPor(r),m=ds.v==='g'&&w>0?'g':'por';
+  case 'rvMode':{const r=rv&&recById(rv.id);if(!r)return true;const w=recWt(r).w,P=recPor(r),m=ds.v==='g'&&w>0?'g':'por';
     if(m!==rv.mode){const s=rvShare(r);rv.mode=m;rv.v=m==='g'?Math.round(s*w):Math.round(s*P*10)/10}render();return true}
   case 'rvStep':{if(!rv)return true;const v=num(rv.v),d=+ds.d;
     if(rv.mode==='g'){const st=v<100?5:10;rv.v=Math.max(0,Math.round((v+d*st)/st)*st)}else rv.v=Math.max(.5,Math.round((v+d*.5)*2)/2);render();return true}
   case 'rvAmt':if(rv)rv.v=num(ds.v);render();return true;
   case 'recEat':{const r=rv&&recById(rv.id);if(!r)return true;const v=num(rv.v);if(!(v>0)){toast('Gib eine Menge an');return true}
-    const t=recSum(r),w=num(r.w),P=recPor(r),byG=rv.mode==='g'&&w>0,T=rTot(t,byG?v/w:v/P);
+    const t=recSum(r),w=recWt(r).w,P=recPor(r),byG=rv.mode==='g'&&w>0,T=rTot(t,byG?v/w:v/P);
     const x=byG?addFood(rv.date,{n:r.n,k:T.k,p:T.p,c:T.c,f:T.f,g:v,u:'g',per:{k:t.k/w*100,p:t.p/w*100,c:t.c/w*100,f:t.f/w*100},rec:r.id})
       :addFood(rv.date,{n:r.n,k:T.k,p:T.p,c:T.c,f:T.f,por:v,pp:{k:t.k/P,p:t.p/P,c:t.c/P,f:t.f/P},rec:r.id});
     r.used=Date.now();r.uses=(r.uses||0)+1;r.last={m:byG?'g':'por',v};
@@ -3201,7 +3266,7 @@ function histBtn(){const L=sortedSessions(),n=L.length;if(!n)return '';const lk=
   return `<button class="histbtn" data-act="histOpen">${HIST_IC}<span class="hb-t"><b>Verlauf</b><span>${n} ${n===1?'Training':'Trainings'}${r?' · '+r+' in den letzten 30 Tagen':''}</span></span>${CHR}</button>`}
 function viewVerlauf(){const list=sortedSessions().reverse();
   if(!list.length)return '<div class="card empty"><b>Noch keine Trainings</b>Dein erstes gespeichertes Training erscheint hier.</div>';
-  return `<div class="small muted">Tippe ein Training an und dann auf den Stift, um es zu bearbeiten.</div>
+  return `<div class="small muted">Tippe ein Training an. Mit dem Stift bearbeitest du es, mit dem Plan-Symbol daneben speicherst du es als Trainingsplan.</div>
    <div class="histwrap">${groupList(list.slice(0,histN))}</div>
    ${list.length>histN?`<button class="btn block" data-act="histMore">Ältere anzeigen (${list.length-histN})</button>`:''}`}
 
@@ -3306,10 +3371,13 @@ function exPickIn(){const S2=new Set();if(!exPick)return S2;
 function exPickBody(){if(!exPick)return '';const P=exPick,goal=P.to==='goal',pool=L=>goal?L.filter(goalKind):L;
   const list=exFilt(pool(exMatch(P.q)),P.cat),inn=exPickIn(),lbl=P.to==='plan'?'im Plan':goal?'gewählt':'im Training',bd=e=>inn.has(e.id)?lbl:'';
   if(!list.length)return exNone(P.q,P.cat,'pick','exPickNew');
-  /* Ohne Suche und Filter: die zuletzt trainierten Übungen obenauf */
-  const st=exStats(),l=st.l,rec=!P.q.trim()&&!P.cat?pool(S.exercises.filter(e=>l[e.id])).sort((a,b)=>l[b.id].localeCompare(l[a.id])).slice(0,5):[];
-  return (rec.length&&list.length>rec.length+6?`<div class="exgrp"><span class="eyebrow exg-h">Zuletzt trainiert</span><div class="navlist exnav">${rec.map(e=>exRow(e,'exPickDo',st,bd)).join('')}</div></div>`:'')
-    +exListHtml(list,'exPickDo',bd)}
+  /* Ohne Suche und Filter obenauf: im Training und im Plan die Übungen passend zu den Kategorien darin, sonst die zuletzt trainierten */
+  const st=exStats(),l=st.l,free=!P.q.trim()&&!P.cat,src=P.to==='session'&&S.draft?S.draft.entries:P.to==='plan'&&planEdit?planEdit.items:[],cats=free?sessCats(src):[];
+  let top='',tl='';
+  if(cats.length){const G=fitSug(cats,inn,st,6),L=[].concat(...G.map(g=>g.L)).slice(0,6);
+    if(L.length){top=L.map(e=>exRow(e,'exPickDo',st,bd)).join('');tl='Passend zu '+catsJoin(entCats(src).filter(c=>G.some(g=>g.c===c)))}}
+  if(!top&&free){const rec=pool(S.exercises.filter(e=>l[e.id])).sort((a,b)=>l[b.id].localeCompare(l[a.id])).slice(0,5);if(rec.length&&list.length>rec.length+6){top=rec.map(e=>exRow(e,'exPickDo',st,bd)).join('');tl='Zuletzt trainiert'}}
+  return (top?`<div class="exgrp"><span class="eyebrow exg-h">${esc(tl)}</span><div class="navlist exnav">${top}</div></div>`:'')+exListHtml(list,'exPickDo',bd)}
 function viewExPick(){if(!exPick)return '<div class="card empty"><b>Keine Auswahl offen</b>Geh zurück.</div>';
   return `<input class="in" type="search" id="exPQ" enterkeyhint="search" autocomplete="off" spellcheck="false" placeholder="Suchen, z. B. Bizeps oder Plank" value="${esc(exPick.q)}" aria-label="Übung suchen">
    ${catChips(exPick.cat,'pick')}
@@ -3319,11 +3387,64 @@ function exToDraft(id){ensureDraft();const lt=lastFor(id,S.draft.id),kd=(exById(
   const sets=kd==='zeit'?[{a:'',b:'',sec:0}]:kd==='distanz'?[{a:lt&&lt.e.sets.length?lt.e.sets[lt.e.sets.length-1].a:'',b:'',sec:0,tk:'b'}]:lt?lt.e.sets.map(s=>({a:s.a,b:s.b})):[{a:'',b:''}];
   S.draft.entries.push({exId:id,sets});S.draft.cur=S.draft.entries.length-1}
 function exToPlan(id){if(planEdit)planEdit.items.push({exId:id,sets:(exById(id)||{}).kind==='distanz'?1:3})}
-/* Schnellauswahl im laufenden Training: zuletzt benutzte Übungen als Chips */
-function exQuick(d){const inn=new Set(d.entries.map(e=>e.exId)),L=exRecent(inn,8);
-  return `<div class="field"><span class="eyebrow">${d.entries.length?'Weitere Übung':'Übung wählen'}</span>
-   ${L.length?`<div class="chips wrap">${L.map(e=>`<button class="chip exchip" data-act="addEntry" data-id="${e.id}">${esc(e.name)}</button>`).join('')}</div>`:''}
-   <button class="btn block" data-act="exPick" data-to="session">${L.length<S.exercises.length?'Alle Übungen …':'Übung suchen oder neu anlegen …'}</button></div>`}
+/* ---------- Vorschläge im Training: passend zur Kategorie der bisherigen Übungen ----------
+   Reihenfolge innerhalb einer Kategorie: oft trainiert, zuletzt trainiert, üblich (Katalog), Name. Nichts ist zufällig. */
+let sug={key:'',cat:null};
+function sessCats(entries){const out=[];for(let i=(entries||[]).length-1;i>=0;i--){const ex=exById(entries[i].exId),c=ex&&ex.cat;if(c&&!out.includes(c))out.push(c)}return out}
+/* Kategorien in der Reihenfolge des Trainings. „und“ statt „&“, weil „Bauch & Core“ selbst ein & enthält. */
+function entCats(entries){const out=[];for(const e of entries||[]){const ex=exById(e.exId),c=ex&&ex.cat;if(c&&!out.includes(c))out.push(c)}return out}
+function catsJoin(L){return L.length>1?L.slice(0,-1).join(', ')+' und '+L[L.length-1]:L[0]||''}
+function catsTxt(entries,sep){const out=entCats(entries);return sep?out.join(sep):catsJoin(out)}
+/* Reihenfolge: zuerst, was du oft und zuletzt trainiert hast, dann die übliche Reihenfolge im Studio (EX_SUG), eigene Übungen danach.
+   Varianten einer Übung, die schon im Training ist, rutschen nach hinten (nach Bankdrücken mit der Langhantel nicht als Nächstes
+   Bankdrücken mit Kurzhanteln, sondern eine andere Bewegung). */
+const SUG_ORD=new Map(EX_SUG.map((id,i)=>[id,i]));
+function famKey(e){const p=exVar(e);return (p?p.base:e.name).toLowerCase()}
+function exRanker(st,inn){const so=e=>{const i=SUG_ORD.get(libId(e.id));return i==null?999:i},fams=new Set();
+  for(const id of inn){const e=exById(id);if(e)fams.add(famKey(e))}
+  return (a,b)=>{const na=st.c[a.id]||0,nb=st.c[b.id]||0;if(!na!==!nb)return na?-1:1;if(na!==nb)return nb-na;
+    const r=(st.l[b.id]||'').localeCompare(st.l[a.id]||'');if(r)return r;
+    const fa=fams.has(famKey(a))?1:0,fb=fams.has(famKey(b))?1:0;if(fa!==fb)return fa-fb;
+    return so(a)-so(b)||a.name.localeCompare(b.name,'de')}}
+function catSug(cat,inn,n,st){return S.exercises.filter(e=>e.cat===cat&&!inn.has(e.id)).sort(exRanker(st,inn)).slice(0,n)}
+/* Passend: je Kategorie des Trainings (zuletzt benutzte zuerst) die besten Übungen */
+function fitSug(cats,inn,st,n){const C=cats.slice(0,3),per=Math.max(2,Math.ceil(n/C.length));return C.map(c=>({c,L:catSug(c,inn,per,st)})).filter(g=>g.L.length)}
+const exChip=e=>`<button class="chip exchip" data-act="addEntry" data-id="${e.id}">${esc(e.name)}</button>`;
+function exQuick(d){const inn=new Set(d.entries.map(e=>e.exId)),st=exStats(),cats=sessCats(d.entries);
+  const key=(d.id||d.startAt||'neu')+':'+d.entries.length;if(sug.key!==key){sug.key=key;sug.cat=null}
+  const all=allCats().filter(c=>S.exercises.some(e=>e.cat===c)),first=cats.length?['*','Passend']:Object.keys(st.l).length?['~','Zuletzt']:null;
+  const sel=sug.cat||(first?first[0]:''),chips=(first?[first]:[]).concat(all.map(c=>[c,c]));let body;
+  if(sel==='*'){const G=fitSug(cats,inn,st,6);
+    body=G.length?G.map(g=>`<div class="sugrow"><span class="sug-c">${esc(g.c)}</span><div class="chips wrap">${g.L.map(exChip).join('')}</div></div>`).join('')
+      :'<div class="small muted">Aus diesen Kategorien ist schon alles im Training. Wähl oben eine andere.</div>'}
+  else if(sel==='~'){const L=exRecent(inn,8);body=L.length?`<div class="chips wrap">${L.map(exChip).join('')}</div>`:''}
+  else if(sel){const L=catSug(sel,inn,10,st);body=L.length?`<div class="chips wrap">${L.map(exChip).join('')}</div>`:'<div class="small muted">Alle Übungen dieser Kategorie sind schon im Training.</div>'}
+  else body='<div class="small muted">Wähl eine Kategorie, dann erscheinen die passenden Übungen.</div>';
+  return `<div class="field sugbox" id="sugBox"><span class="eyebrow">${d.entries.length?'Weitere Übung':'Übung wählen'}</span>
+   <div class="chips excats sugcats" role="group" aria-label="Vorschläge nach Kategorie">${chips.map(([v,l])=>`<button class="chip" data-act="sugCat" data-v="${esc(v)}" aria-pressed="${sel===v}">${esc(l)}</button>`).join('')}</div>
+   <div class="sugbody">${body}</div>
+   <button class="btn block" data-act="exPick" data-to="session">Alle Übungen …</button></div>`}
+
+/* ---------- Training als Plan speichern: auf „Abschließen“ per Schalter, im Verlauf per Knopf ----------
+   Übungen in der Reihenfolge des Trainings, Sätze wie abgehakt. Name aus den Kategorien. Neue Pläne sind angeheftet,
+   damit sie unter „Mit Plan starten“ stehen. Gibt es schon einen Plan mit genau diesen Übungen und Sätzen, entsteht kein zweiter. */
+function planItemsFrom(entries){return (entries||[]).filter(e=>exById(e.exId)&&(e.sets||[]).length).map(e=>({exId:e.exId,sets:Math.min(10,Math.max(1,e.sets.length))}))}
+function planSameItems(a,b){return a.length===b.length&&a.every((x,i)=>x.exId===b[i].exId&&num(x.sets)===num(b[i].sets))}
+function planNameSuggest(entries){const C=entCats(entries),m=C.filter(c=>c!=='Ausdauer');
+  return (m.length>=4?'Ganzkörper'+(C.includes('Ausdauer')?' und Ausdauer':''):catsJoin(C)||'Mein Training').slice(0,50)}
+function planNameFree(n){const lc=x=>String(x||'').trim().toLowerCase();let m=n,i=2;while(S.plans.some(p=>lc(p.name)===lc(m))){m=n.slice(0,46)+' '+i;i++}return m}
+function planSave(entries,name){const items=planItemsFrom(entries);if(!items.length)return null;
+  const same=S.plans.find(p=>planSameItems(p.items||[],items));if(same)return {pl:same,dup:true};
+  const pl={id:uid(),name:planNameFree(String(name||'').trim().slice(0,50)||planNameSuggest(entries)),items,pinned:true};S.plans.push(pl);return {pl,dup:false}}
+function doneEntries(d){return d.entries.map(e=>({exId:e.exId,sets:e.sets.filter(s=>s.done&&setFilled(s))})).filter(e=>e.sets.length)}
+function asPlanCard(d){if(d.id)return '';const done=doneEntries(d);if(!done.length)return '';
+  const from=d.planId&&S.plans.find(p=>p.id===d.planId);if(from&&planSameItems(from.items||[],planItemsFrom(done)))return '';
+  const on=!!d.asPlan;
+  return `<div class="card pane asplan"><div class="ci-row"><div class="ci-l"><b>Als Trainingsplan speichern</b><span class="small muted">${on?'Mit diesen Übungen und Sätzen, angeheftet unter „Mit Plan starten“':'Übungen und Sätze fürs nächste Mal merken'}</span></div>
+    <button class="switch${on?' on':''}" data-act="asPlan" role="switch" aria-checked="${on}" aria-label="Als Trainingsplan speichern"><span></span></button></div>
+   ${on?`<label class="field"><span class="eyebrow">Name des Plans</span><input class="in" id="apName" data-ap="1" maxlength="50" autocomplete="off" value="${esc(d.asPlanName!=null?d.asPlanName:planNameSuggest(done))}"></label>`:''}</div>`}
+function toastAct(msg,label,act,id){const h=document.getElementById('toastHost');if(!h)return;
+  h.innerHTML=`<div class="toast act" role="status"><span>${esc(msg)}</span><button data-act="${act}"${id?` data-id="${esc(id)}"`:''}>${esc(label)}</button></div>`;clearTimeout(toastTimer);toastTimer=setTimeout(()=>{h.innerHTML=''},6000)}
 
 /* Ziel für eine Übung: trainierte Kraft- und Wiederholungsübungen als Chips, alle anderen über die Auswahl */
 function goalExChoices(selId){const {l}=exStats(),sel=selId?S.exercises.find(e=>e.id===selId&&goalKind(e)):null;
@@ -3350,6 +3471,17 @@ function trainAct(a,el,ck){const ds=el&&el.dataset||{};switch(a){
     if(row)for(const b of row.querySelectorAll('button'))b.setAttribute('aria-pressed',String((b.dataset.v||'')===cur));
     const box=document.getElementById(pick?'exPList':'exList');if(box)box.innerHTML=pick?exPickBody():exListBody();else render();return true}
   case 'libNoteOk':delete S.libNote;render();return true;
+  case 'asPlan':{const d=S.draft;if(!d)return true;d.asPlan=!d.asPlan;if(d.asPlan&&d.asPlanName==null)d.asPlanName=planNameSuggest(doneEntries(d));save();render();return true}
+  case 'sessPlan':{const x=S.sessions.find(s=>s.id===ds.id);if(!x)return true;const r=planSave(x.entries,planNameSuggest(x.entries));
+    if(!r){toast('In diesem Training ist keine Übung mehr vorhanden');return true}
+    render();toastAct(r.dup?'Diesen Plan gibt es schon: '+r.pl.name:'Plan „'+r.pl.name+'“ gespeichert','Ansehen','plansOpen',r.pl.id);return true}
+  case 'plansOpen':{const h=document.getElementById('toastHost');if(h)h.innerHTML='';planEdit=null;if(curView()!=='plaene')push('plaene');render();
+    /* zum gespeicherten Plan springen und ihn kurz hervorheben */
+    const m=document.getElementById('main'),b=ds.id&&m&&[...m.querySelectorAll('[data-act="startPlan"]')].find(x=>x.dataset.id===ds.id),c=b&&b.closest('.plan');
+    if(c){c.classList.add('hl');m.scrollTop+=c.getBoundingClientRect().top-m.getBoundingClientRect().top-Math.max(16,(m.clientHeight-c.offsetHeight)/2)}
+    return true}
+  case 'sugCat':{const v=ds.v||'';sug.cat=sug.cat===v?null:v;const b=document.getElementById('sugBox');
+    if(b&&S.draft){b.outerHTML=exQuick(S.draft);chipSync()}else render();return true}
   case 'libRestore':{const n=libRestore();toast(n?(n===1?'Eine Standardübung':n+' Standardübungen')+' zurückgeholt':'Die Übungen gibt es schon unter gleichem Namen');render();return true}
   case 'exOpen':exEditOpen(ds.id);render();return true;
   case 'exKind':if(exEdit&&!(exEdit.id&&exUsed(exEdit.id))){exEdit.kind=ds.v;flash=''}render();return true;
@@ -3388,6 +3520,7 @@ function trainInput(T){const ds=T.dataset||{},id=T.id;
     if(st){const v=String(T.value).trim();st[ds.k]=v===''?'':Math.max(0,num(v))}
     if(en&&ds.k==='a'){const pe=document.getElementById('pred-'+ds.e+'-'+ds.s),ex=exById(en.exId);if(pe&&ex)pe.innerHTML=predHtml(curRm(ex.id,S.draft),num(T.value))}
     save();return true}
+  if(ds.ap){if(S.draft){S.draft.asPlanName=String(T.value).slice(0,50);save()}return true}
   if(ds.f==='bw'){ensureDraft();const v=String(T.value).trim();S.draft.bw=v===''?'':String(num(v));save();return true}
   if(id==='durH'||id==='durM'){durFromInputs();return true}
   if(ds.xf){if(exEdit){exEdit[ds.xf]=T.value;if(ds.xf==='met')metSrcUpd()}return true}
@@ -3400,7 +3533,56 @@ function durFromInputs(){if(!S.draft)return;const h=num((document.getElementById
   const t=document.querySelector('.tbtn-tile .v');if(t)t.innerHTML=dur>=60?Math.floor(dur/60)+':'+pad(dur%60)+'<small>h</small>':(dur||'–')+'<small>Min</small>';save()}
 function trainChange(T){const id=T.id;
   if(id==='durH'||id==='durM'){durFromInputs();return true}
-  const d=T.dataset||{};if(d.f==='set'||d.xf||id==='exQ'||id==='exPQ')return true;
+  const d=T.dataset||{};if(d.f==='set'||d.xf||d.ap||id==='exQ'||id==='exPQ')return true;
+  return false}
+/* ======================= Heute: Check-in mit Übersicht, Training mit Kategorien =======================
+   Check-in: Die Schlafdauer ändert sich nur noch über − und +. Ein Tipp auf den Wert übernimmt ihn nur, solange noch nichts
+   eingetragen ist (vorher hat ein Tipp den Wert gelöscht). Sind Schlaf, Schlafqualität und Stimmung ausgefüllt, zeigt die Karte
+   eine Übersicht in derselben Größe mit den letzten sieben Tagen. „Ändern“ öffnet die Eingabe wieder. */
+let ciEdit=null;
+function ciDone(k){const D=dayGet(k),sl=D.sleep||{};return num(sl.h)>0&&num(sl.q)>0&&num(D.mood)>0}
+function days7(k){const d=parseD(k),out=[];for(let i=6;i>=0;i--){const x=new Date(d);x.setDate(d.getDate()-i);out.push(ymd(x))}return out}
+function ciBars(vals,max,lbl){const n=vals.length;
+  return `<div class="cis-bars" role="img" aria-label="${esc(lbl)}">${vals.map((v,i)=>`<i class="${i===n-1?'td':''}${v>0?'':' no'}" style="height:${v>0?Math.max(8,Math.min(100,v/max*100)).toFixed(0):6}%"></i>`).join('')}</div>`}
+function ciSummary(k){const D=dayGet(k),sl=D.sleep||{},h=num(sl.h),q=num(sl.q),mo=num(D.mood),ds=days7(k);
+  const hs=ds.map(x=>num((dayGet(x).sleep||{}).h)),qs=ds.map(x=>num((dayGet(x).sleep||{}).q)),ms=ds.map(x=>num(dayGet(x).mood));
+  const avg=a=>{const v=a.filter(x=>x>0);return v.length>1?v.reduce((t,x)=>t+x,0)/v.length:0};
+  const ah=avg(hs),aq=avg(qs),am=avg(ms),hmax=Math.max(9,...hs);
+  const row=(lbl,big,sub,bars)=>`<div class="cis-row"><div class="cis-l"><span class="eyebrow">${lbl}</span><b>${big}</b><span class="small muted num">${sub}</span></div>${bars}</div>`;
+  return `<div class="card pane cisum" data-date="${k}"><div class="pane-h"><span class="eyebrow cis-ok">${ICONS.check}Check-in erledigt</span><button class="lnk" data-act="ciEdit" data-date="${k}">Ändern</button></div>
+   ${row('Schlaf',`<span class="num">${fmtH(h)}</span><small>h</small>`,ah?'Ø 7 Tage '+fmtH(ah)+' h':'Noch kein Vergleich',ciBars(hs,hmax,'Schlafdauer der letzten 7 Tage'))}
+   ${row('Schlafqualität',`${esc(SLQ[q-1]||'')}<small class="num">${q}/5</small>`,aq?'Ø 7 Tage '+fmt(aq,1):'Noch kein Vergleich',ciBars(qs,5,'Schlafqualität der letzten 7 Tage'))}
+   ${row('Stimmung',`${esc(MOOD[mo-1]||'')}<small class="num">${mo}/5</small>`,am?'Ø 7 Tage '+fmt(am,1):'Noch kein Vergleich',ciBars(ms,5,'Stimmung der letzten 7 Tage'))}</div>`}
+function checkinCard(k){return ciDone(k)&&ciEdit!==k?ciSummary(k):ciEditor(k)}
+/* Die Übersicht bekommt genau die Höhe, die die Eingabe an dieser Stelle hätte: unsichtbar messen, dann als Mindesthöhe setzen */
+function ciFit(){const s=document.querySelector('#main .cisum'),m=s&&s.parentNode;if(!m)return;
+  const t=document.createElement('template');t.innerHTML=ciEditor(s.dataset.date).trim();const e=t.content.firstElementChild;if(!e)return;
+  e.style.cssText='position:absolute;left:0;top:0;margin:0;width:'+s.getBoundingClientRect().width+'px;visibility:hidden;pointer-events:none';
+  m.appendChild(e);const h=e.getBoundingClientRect().height;e.remove();s.style.minHeight=h>0?Math.round(h)+'px':''}
+function ciEditor(k){
+  const D=dayGet(k),sl=D.sleep||{},h=num(sl.h),q=num(sl.q),mo=num(D.mood),done=h&&q&&mo;
+  return `<div class="card pane cicard"><div class="pane-h"><span class="eyebrow">Check-in</span>${ciEdit===k?`<button class="lnk" data-act="ciClose">${done?'Fertig':'Schließen'}</button>`:''}</div>
+    <div class="ci-row"><div class="ci-l"><b>Schlaf</b><span class="small muted">${h?'Stunden in der Nacht davor, mit − und + ändern':'Wert antippen zum Übernehmen'}</span></div>
+     <div class="goalc"><button class="nudge" data-act="sleepH" data-d="-0.25" aria-label="15 Minuten weniger">−</button>${h?`<span class="val num" aria-label="Schlafdauer ${fmtH(h)} Stunden">${fmtH(h)}<small>h</small></span>`:`<button class="val num ph" data-act="sleepSet" aria-label="Schlafdauer ${fmtH(defSleep())} Stunden eintragen">${fmtH(defSleep())}<small>h</small></button>`}<button class="nudge" data-act="sleepH" data-d="0.25" aria-label="15 Minuten mehr">+</button></div></div>
+    <div class="field"><span class="eyebrow">Schlafqualität</span>${scaleHtml('sleepQ',q,SLQ,'Schlafqualität')}</div>
+    <div class="field"><span class="eyebrow">Stimmung</span>${scaleHtml('mood',mo,MOOD,'Stimmung')}</div></div>`}
+
+/* Training auf „Heute“: Kategorien statt Übungsnamen */
+function trainCardToday(k){
+  const d=S.draft,live=d&&!d.id&&(d.started||(d.entries||[]).length),ss=S.sessions.filter(x=>x.date===k),isT=k===today();
+  const goal=S.goal||3,wd=weekDays(),wk=ymd(monday(parseD(k))),cnt=wd[wk]?wd[wk].size:0,nEx=n=>n+' '+(n===1?'Übung':'Übungen');
+  let body;
+  if(live&&isT){const pl=d.planId&&S.plans.find(p=>p.id===d.planId),info=[pl?esc(pl.name):'',esc(catsTxt(d.entries,' · ')),d.entries.length?nEx(d.entries.length):'noch keine Übung'].filter(Boolean);
+    body=`<button class="btn primary block" data-act="goSession">Training fortsetzen</button><div class="small muted">${info.join(' · ')}</div>`}
+  else if(ss.length)body=ss.map(x=>`<div class="tdone"><b>${esc(catsTxt(x.entries,' · ')||x.planName||'Training')}</b><span class="small muted num">${x.planName?esc(x.planName)+' · ':''}${x.dur?x.dur+' Min · ':''}${nEx(x.entries.length)}${x.feel?' · Gefühl: '+FEEL[x.feel-1]:''}</span></div>`).join('');
+  else if(isT){const pinned=S.plans.filter(p=>p.pinned);body=`<button class="btn primary block" data-act="goTrain">Training starten</button>${pinned.length?`<div class="qchips">${pinned.map(p=>`<button class="qchip" data-act="startPlan" data-id="${p.id}">${PLAY_IC}<span>${esc(p.name)}</span></button>`).join('')}</div>`:''}`}
+  else body=`<div class="small muted">An diesem Tag ist kein Training eingetragen.</div><button class="btn small" data-act="goTrain" data-date="${k}">Training nachtragen</button>`;
+  return `<div class="card pane"><div class="pane-h"><span class="eyebrow">Training</span><button class="lnk" data-act="tab" data-v="training"><span class="num">${cnt}/${goal}</span> in dieser Woche</button></div>${body}</div>`;
+}
+
+function heuteAct(a,el){const ds=el&&el.dataset||{};switch(a){
+  case 'ciEdit':ciEdit=ds.date||hDate();render();return true;
+  case 'ciClose':ciEdit=null;render();return true}
   return false}
 
 /* ---------- Körper ---------- */
@@ -4059,7 +4241,7 @@ function render(){
   }
   navHint=null;
   try{document.body.classList.toggle('sheet',!!sc.sheet)}catch(e){}
-  paint(sc,prev,mode,html);scanSync();chipSync();
+  paint(sc,prev,mode,html);scanSync();chipSync();ciFit();
   curScr=sc;wantTop=false;
   syncWake();restTick();
   if(pendingScroll){const el=document.getElementById(pendingScroll);pendingScroll=null;if(el)el.scrollIntoView({block:'center',behavior:'smooth'})}
@@ -4082,8 +4264,8 @@ function act(a,el){
   userActed=true;
   if(a==='back'){navBack();return}
   if(a==='navTab'){navTab(el.dataset.v);return}
-  if(a==='selSess'){const on=!el.classList.contains('sel');document.querySelectorAll('.sess.sel').forEach(x=>{x.classList.remove('sel');const b=x.querySelector('.spen');if(b)b.tabIndex=-1});
-    if(on){el.classList.add('sel');const b=el.querySelector('.spen');if(b)b.tabIndex=0}return}
+  if(a==='selSess'){const on=!el.classList.contains('sel');document.querySelectorAll('.sess.sel').forEach(x=>{x.classList.remove('sel');x.querySelectorAll('.spen,.splan').forEach(b=>b.tabIndex=-1)});
+    if(on){el.classList.add('sel');el.querySelectorAll('.spen,.splan').forEach(b=>b.tabIndex=0)}return}
   if(a==='calToggle'&&el.classList.contains('goalbox')){openFold.cal=!openFold.cal;render();return}
   if(a==='nView'){nView=el.dataset.v||(nView==='heute'?'ziel':'heute');const o=document.getElementById('nutriOut');if(o)o.innerHTML=nutriOut();return}
   if(a==='info'){const b=document.getElementById(el.dataset.id);if(b){b.hidden=!b.hidden;try{el.setAttribute('aria-expanded',String(!b.hidden));el.classList.toggle('on',!b.hidden)}catch(e){}}return}
@@ -4091,7 +4273,7 @@ function act(a,el){
   const key=IDC.includes(a)?a+':'+el.dataset.id:a==='delEntry'?'delEntry:'+el.dataset.e:a;
   if((NEEDS_CONFIRM.has(a)||IDC.includes(a)||a==='delEntry')&&confirmKey!==key){confirmKey=key;flash='';render();return}
   const prevCK=confirmKey;confirmKey=null;if(a!=='saveSession'&&a!=='addEx'&&a!=='prodSave')flash='';
-  if(foodAct(a,el,prevCK)||wipeAct(a,el)||trainAct(a,el,prevCK))return;
+  if(foodAct(a,el,prevCK)||wipeAct(a,el)||trainAct(a,el,prevCK)||heuteAct(a,el))return;
   const d=S.draft;
   if(['nudge','tStart','tStop','tReset','tEdit'].includes(a)&&d){const en=d.entries[+el.dataset.e];const st=en&&en.sets[+el.dataset.s];if(st&&st.done)return}
   switch(a){
@@ -4116,7 +4298,7 @@ function act(a,el){
     case 'addMeal':mealReset();meal=newMeal(el.dataset.date||today());push('mahlzeit');break;
     case 'hday':dayOff=Math.min(0,dayOff+ +el.dataset.d);toTop();break;
     case 'sleepH':{const k=hDate(),D=dayMut(k),s=D.sleep||(D.sleep={});s.h=Math.round(Math.min(14,Math.max(1,(num(s.h)||defSleep())+ +el.dataset.d))*4)/4;break}
-    case 'sleepSet':{const k=hDate(),D=dayMut(k),s=D.sleep||(D.sleep={});if(num(s.h))delete s.h;else s.h=defSleep();dayTidy(k);break}
+    case 'sleepSet':{const k=hDate(),D=dayMut(k),s=D.sleep||(D.sleep={});if(!num(s.h))s.h=defSleep();dayTidy(k);break}
     case 'sleepQ':{const k=hDate(),D=dayMut(k),s=D.sleep||(D.sleep={}),v=+el.dataset.v;if(num(s.q)===v)delete s.q;else s.q=v;dayTidy(k);break}
     case 'mood':{const k=hDate(),D=dayMut(k),v=+el.dataset.v;if(num(D.mood)===v)delete D.mood;else D.mood=v;dayTidy(k);break}
     case 'habTog':{const h=S.habits.find(x=>x.id===el.dataset.id);if(h){const k=hDate();habSet(h,k,habDone(h,k)?0:1)}break}
@@ -4225,8 +4407,8 @@ function act(a,el){
       if(!entries.length){flash='Hake mindestens einen Satz ab, bevor du speicherst.';break}
       if(!d.date){flash='Bitte wähle ein Datum.';break}
       const s={id:d.id||uid(),date:d.date,feel:d.feel||null,bw:d.bw,note:d.note||'',entries,planId:d.planId||null,planName:d.planName||null,planItems:d.planItems||null,dur:(d.id||d.durSet)?(num(d.dur)||null):(d.startAt?Math.min(240,Math.round((Date.now()-d.startAt)/60000)):null)};
-      const i=S.sessions.findIndex(x=>x.id===s.id);if(i>=0)S.sessions[i]=s;else S.sessions.push(s);
-      const wasEdit=!!d.id;S.draft=null;flash='';if(wasEdit)pop();else{goRoot('training');openFold.r30=true}toast(i>=0?'Änderungen gespeichert':'Training gespeichert');break}
+      const i=S.sessions.findIndex(x=>x.id===s.id);if(i>=0)S.sessions[i]=s;else S.sessions.push(s);const apR=!d.id&&d.asPlan?planSave(entries,d.asPlanName):null;
+      const wasEdit=!!d.id;S.draft=null;flash='';if(wasEdit)pop();else{goRoot('training');openFold.r30=true}if(apR)toastAct(apR.dup?'Training gespeichert. Diesen Plan gibt es schon: '+apR.pl.name:'Training und Plan „'+apR.pl.name+'“ gespeichert','Ansehen','plansOpen',apR.pl.id);else toast(i>=0?'Änderungen gespeichert':'Training gespeichert');break}
     case 'edit':{if(S.draft&&!S.draft.id&&(S.draft.started||S.draft.entries.length)){toast('Schließ zuerst dein laufendes Training ab');break}
       const s=S.sessions.find(x=>x.id===el.dataset.id);if(s){S.draft=JSON.parse(JSON.stringify(s));S.draft.started=true;S.draft.finishing=false;S.draft.entries.forEach(e=>e.sets.forEach(x=>x.done=true));S.draft.cur=0;push('session')}break}
     case 'cancelEdit':S.draft=null;pop();break;

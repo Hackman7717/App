@@ -1,6 +1,6 @@
 /* Offline-Betrieb: Alle Dateien der App liegen im Cache. Neue Versionen werden im Hintergrund geladen
    und erst übernommen, wenn du in der App auf „Jetzt aktualisieren“ tippst. */
-const VERSION = '1.5.0';
+const VERSION = '1.6.0';
 const CACHE = 'trainingsbuch-' + VERSION;
 const FILES = [
   './', './index.html', './manifest.webmanifest',
