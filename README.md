@@ -55,7 +55,9 @@ Sie läuft als installierbare Web-App (PWA) auf dem iPhone, auf Android und am C
 - **Scannen:** *Ernährung* → Strichcode-Symbol neben „Mahlzeit eintragen“. Den Strichcode in den Rahmen halten, etwa 15 bis 25 cm vom Handy entfernt, waagerecht oder senkrecht. Lesbar sind EAN-13, EAN-8 und UPC-A. Ein Code gilt erst, wenn er in zwei Kamerabildern gleich gelesen wurde.
 - **Wenn die Kamera hängt:** Bleibt das Kamerabild stehen oder schwarz, startet die App die Kamera einmal neu. Hilft das nicht, schlägt sie *Foto* vor: Strichcode fotografieren, die App liest ihn aus dem Bild. Das betrifft vor allem iPhones, auf denen die Kamera in Apps vom Home-Bildschirm manchmal nicht startet.
 - **Wenn Open Food Facts nicht antwortet:** Die App fragt bis zu dreimal nach, auch über eine zweite Schnittstelle. Klappt es nicht, kannst du es erneut versuchen, die Werte selbst eintragen oder weiter scannen. Gefundene Produkte merkt sich die App, sie brauchen danach kein Internet mehr.
-- **Suchen:** *Mahlzeit eintragen* → Suchbegriff eingeben → *Suchen*. Treffer auf dem Gerät erscheinen sofort, Open Food Facts wird erst beim Tippen auf *Suchen* gefragt. Open Food Facts erlaubt nur wenige Suchen pro Minute.
+- **Suchen:** *Mahlzeit eintragen* → Suchbegriff eingeben → *Suchen*. Treffer auf dem Gerät erscheinen sofort. Open Food Facts wird erst beim Tippen auf *Suchen* gefragt, zuerst über die Schnellsuche *Search-a-licious*. Ist die nicht erreichbar oder findet nichts, springt die klassische Suche ein. Unter den Treffern steht, welche Suche geantwortet hat.
+- **Klassische Suche:** Open Food Facts erlaubt dort 10 Suchen pro Minute. Die App schickt pro Suche eine Anfrage und wartet bis zu 30 Sekunden, weil der Server eine neue Suche beim ersten Mal frisch ausrechnet. Läuft die Zeit ab, fragt sie einmal nach, dann liegt das Ergebnis meist bereit. Ist das Limit erreicht, zählt sie herunter und sucht dann von selbst.
+- **Gespeicherte Ergebnisse:** Dieselbe Suche kommt 7 Tage lang sofort vom Gerät, auch ohne Internet. *Neu suchen* fragt frisch. Gefundene Produkte erscheinen bei späteren Suchen unter *Auf diesem Gerät* und werden beim Scannen ohne Anfrage erkannt. *Alles löschen* leert diesen Speicher.
 - **Menge:** Gewicht oder Milliliter eintippen oder eine Portion antippen. Kalorien und Makros rechnet die App aus den Werten pro 100 g aus. Die Menge lässt sich im Tagebuch später ändern, die Werte rechnen sich dann neu.
 - **Datenschutz:** Für Suche und Barcode schickt die App nur den Suchbegriff oder die Barcode-Nummer an Open Food Facts. Deine Einträge bleiben auf dem Gerät.
 
@@ -85,7 +87,7 @@ Fotos aus der Claude-Version kommen dabei nicht mit.
 | `icons/` | App-Symbole |
 | `fonts/` | Schriften Saira Condensed und Public Sans (SIL Open Font License, siehe `fonts/OFL-*.txt`) |
 
-Daten liegen in IndexedDB (`trainingsbuch`, Speicher `kv` und `photos`) mit einer Kopie im localStorage (`trainingsbuch.v1`).
+Daten liegen in IndexedDB (`trainingsbuch`, Speicher `kv` und `photos`) mit einer Kopie im localStorage (`trainingsbuch.v1`). Gespeicherte Suchergebnisse liegen getrennt davon unter `kv/offcache` und sind nicht im Backup.
 
 ## Neue Version veröffentlichen
 

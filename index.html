@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-title" content="Trainingsbuch">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="format-detection" content="telephone=no">
-<meta name="app-version" content="1.6.0">
+<meta name="app-version" content="1.7.0">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icons/icon-180.png">
 <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
@@ -1273,7 +1273,7 @@ if(!Array.isArray(S.plans))S.plans=S.demo&&S.exercises.some(e=>e.id==='e1')?demo
 /* ---------- Speicher auf dem Gerät ----------
    IndexedDB ist der Hauptspeicher (Daten und Fotos). Eine Kopie der Daten liegt zusätzlich im localStorage,
    damit die App sofort startet. Beim Start gewinnt der neuere Stand. Es gibt keinen Server und kein Konto. */
-const APPV='1.6.0',SCHEMA=3;
+const APPV='1.7.0',SCHEMA=3;
 const cloud={state:'local',deferred:false};
 const store={open:null,timer:null,ok:false,err:false,warned:false,persist:false};
 function idb(){if(store.open)return store.open;
@@ -2725,7 +2725,7 @@ const EAN=(()=>{
 const SCAN_IC=SV('<path d="M3.5 7.5v-4h4M16.5 3.5h4v4M20.5 16.5v4h-4M7.5 20.5h-4v-4"/><path d="M7.5 8v8M10.5 8v8M13.5 8v8M16.5 8v8"/>');
 const OFF='https://world.openfoodfacts.org';
 const OFF_FIELDS='code,product_name,product_name_de,generic_name,generic_name_de,brands,quantity,serving_size,serving_quantity,nutriments,image_front_small_url,image_small_url,countries_tags';
-let scan=null,prod=null,pick=null;const offTimes=[];
+let scan=null,prod=null,pick=null;
 /* Suche und Produktseite dienen zwei Zielen: dem Tagebuch (to 'day') und einem Rezept (to 'rec', Ansicht 'zutat') */
 function fctx(){return curView()==='zutat'?pick:meal}
 function fto(){return curView()==='zutat'?'rec':'day'}
@@ -2744,8 +2744,11 @@ function saveProduct(p){const L=S.products;let i=p.code?L.findIndex(x=>x.code===
   if(L.length>400){const keep=L.filter(x=>x.src==='own').concat(L.filter(x=>x.src!=='own').sort((a,b)=>b.used-a.used).slice(0,Math.max(50,400-L.filter(x=>x.src==='own').length)));S.products=keep}
   userActed=true;return o}
 function words(q){return String(q||'').toLowerCase().split(/\s+/).filter(Boolean)}
-function localMatches(q){const W=words(q);if(!W.length)return [];
-  return S.products.filter(p=>{const t=(p.n+' '+p.b).toLowerCase();return W.every(w=>t.includes(w))}).sort((a,b)=>(b.uses||0)-(a.uses||0)||b.used-a.used).slice(0,10)}
+function localMatches(q){const W=words(q);if(!W.length)return [];const hit=p=>{const t=(p.n+' '+p.b).toLowerCase();return W.every(w=>t.includes(w))};
+  const own=S.products.filter(hit).sort((a,b)=>(b.uses||0)-(a.uses||0)||b.used-a.used).slice(0,10);
+  if(own.length>=10||!OFFC.d)return own;const have=new Set(own.map(p=>p.code).filter(Boolean));
+  /* dazu Produkte aus früheren Suchen (mit Nährwerten), die neuesten zuerst */
+  return own.concat(Object.values(OFFC.d.p).filter(p=>p.k!=null&&p.code&&!have.has(p.code)&&hit(p)).sort((a,b)=>b.t-a.t).slice(0,10-own.length))}
 function prodTotals(p,g){g=Math.max(0,num(g));const f=g/100;return {k:Math.round(num(p.k)*f),p:rnd1(num(p.p)*f),c:rnd1(num(p.c)*f),f:rnd1(num(p.f)*f)}}
 function per100(p){return 'pro 100 '+(p.u||'g')+': '+fmt(num(p.k),0)+' kcal · '+fmt(num(p.p),1)+' g E · '+fmt(num(p.c),1)+' g KH · '+fmt(num(p.f),1)+' g F'}
 
@@ -2787,20 +2790,76 @@ async function offProduct(code,onWait){if(navigator.onLine===false)return {ok:fa
     if(!p.n||p.k==null)return {ok:false,why:'incomplete',p};
     return {ok:true,p}}
   return {ok:false,why:err?'error':'notfound'}}
-/* Textsuche. Search-a-licious (search.openfoodfacts.org) sendet keine CORS-Kopfzeilen und ist aus dem Browser nicht nutzbar.
-   Deshalb: klassische Suche, bei Störung (503, Zeitüberschreitung, HTML-Seite statt JSON) ein zweiter Versuch, danach die v2-Suche. */
-async function offTry(url,key,ms){const r=await offGet(url,ms);if(!r.ok)throw new Error('http '+r.status);
-  const t=await r.text();let j;try{j=JSON.parse(t)}catch(e){throw new Error('kein json')}
-  return (j&&Array.isArray(j[key])?j[key]:[]).map(offNorm).filter(p=>p&&p.n&&p.code)}
-async function offSearch(q){const enc=encodeURIComponent(q),F='&fields='+OFF_FIELDS,wait=ms=>new Promise(r=>setTimeout(r,ms));
-  const tries=[()=>offTry(OFF+'/cgi/search.pl?search_terms='+enc+'&search_simple=1&action=process&json=1&page_size=24&sort_by=unique_scans_n'+F,'products',12000),
-    ()=>wait(1500).then(()=>offTry(OFF+'/cgi/search.pl?search_terms='+enc+'&search_simple=1&action=process&json=1&page_size=24'+F,'products',12000)),
-    ()=>offTry(OFF+'/api/v2/search?search_terms='+enc+'&page_size=24&sort_by=unique_scans_n'+F,'products',12000)];
-  let L=null,err=null;
-  for(const t of tries){try{L=await t();if(L.length)break}catch(e){err=e}}
-  if(!L){throw err||new Error('fehler')}
-  const seen=new Set();L=L.filter(p=>!seen.has(p.code)&&seen.add(p.code));
-  return L.map((p,i)=>({p,s:i+(p.de?0:6)})).sort((a,b)=>a.s-b.s).map(o=>o.p)}
+/* ---------- Lebensmittelsuche ----------
+   1) Schnellsuche „Search-a-licious“ (search.openfoodfacts.org): eigener Suchdienst von Open Food Facts auf Elasticsearch-Basis, für Textsuche
+      gebaut und nicht Teil des Limits der klassischen Suche. Laut Doku noch im Aufbau, deshalb immer mit Rückfall: Fehler, Zeitüberschreitung
+      oder keine Treffer → klassische Suche. Fällt sie aus, lässt die App sie 15 Minuten lang aus.
+   2) Klassische Suche (/cgi/search.pl): 10 Suchen pro Minute und IP-Adresse, gezählt je Kalenderminute, abgewiesene Anfragen zählen mit
+      (Server-Code von Open Food Facts, Okt. 2026). Eine neue Suche rechnet der Server frisch aus (erlaubt sind dort bis etwa 50 s) und hebt das
+      Ergebnis eine Stunde lang auf. Deshalb eine Anfrage mit 30 s Wartezeit; läuft sie ab, nach 4 s genau dieselbe Anfrage noch einmal, dann
+      liegt das Ergebnis meist bereit. Die App schickt höchstens 8 Anfragen pro Minute, sonst zählt sie herunter und sucht dann von selbst.
+      Keine v2-Suche mehr: /api/v2/search beachtet das Suchwort nicht und liefert nur beliebte Produkte. */
+const SAL='https://search.openfoodfacts.org';
+const SAL_FIELDS='code,product_name,product_name_de,generic_name,generic_name_de,brands,quantity,serving_size,serving_quantity,nutriments,image_front_small_url,countries,obsolete';
+const OFFS={budget:8,t1:30000,pause:4000,t2:25000,salT:8000,salOff:15*60000,slow:6000};
+const offLog=[];let offBlock=0,salDown=0,offTimer=0;
+const offMin=t=>Math.floor(t/6e4);
+function offErr(kind,x){const e=new Error(kind);e.kind=kind;return Object.assign(e,x||{})}
+/* Wie lange bis zur nächsten erlaubten Anfrage der klassischen Suche (0 = sofort). 3 s Reserve für die Uhr des Servers. */
+function offWait(){const now=Date.now();if(offBlock>now)return offBlock-now;const m=offMin(now);
+  return offLog.filter(t=>offMin(t)===m).length>=OFFS.budget?(m+1)*6e4+3000-now:0}
+/* Suchbegriff für die Lucene-Syntax der Schnellsuche: Sonderzeichen wären dort Operatoren */
+function salQ(q){return String(q||'').toLowerCase().replace(/[+\-!(){}[\]^"~*?:\\\/&|<>=]+/g,' ').replace(/\s+/g,' ').trim()}
+/* Marken kommen dort als Kennung („dr-oetker“, „xx:ehrmann“): lesbar machen */
+function salBrand(b){const t=String((Array.isArray(b)?b:String(b||'').split(','))[0]||'').replace(/^[a-z]{2}:/,'').replace(/-/g,' ').trim();
+  return t.replace(/(^|\s)(\p{L})/gu,(x,a,c)=>a+c.toUpperCase())}
+async function salSearch(q){const s=salQ(q);if(!s)return [];
+  const r=await offGet(SAL+'/search?q='+encodeURIComponent(s)+'&langs=de,en&page_size=24&sort_by=-unique_scans_n&fields='+SAL_FIELDS,OFFS.salT);
+  if(!r.ok)throw offErr('sal',{status:r.status});let j;try{j=await r.json()}catch(e){throw offErr('sal')}
+  if(!j||!Array.isArray(j.hits))throw offErr('sal');
+  return j.hits.filter(h=>h&&!h.obsolete).map(h=>offNorm({...h,brands:salBrand(h.brands),countries_tags:Array.isArray(h.countries)?h.countries:h.countries_tags})).filter(p=>p&&p.n&&p.code)}
+function offUrl(q){return OFF+'/cgi/search.pl?search_terms='+encodeURIComponent(q)+'&search_simple=1&action=process&json=1&page_size=24&sort_by=unique_scans_n&fields='+OFF_FIELDS}
+async function offOnce(url,ms){const w=offWait();if(w>0)throw offErr('limit',{until:Date.now()+w});
+  offLog.push(Date.now());if(offLog.length>40)offLog.splice(0,offLog.length-40);
+  const r=await offGet(url,ms);
+  if(r.status===429){offBlock=(offMin(Date.now())+1)*6e4+3000;throw offErr('limit',{until:offBlock})}
+  if(!r.ok)throw offErr('http',{status:r.status});
+  const t=await r.text();let j;try{j=JSON.parse(t)}catch(e){throw offErr('json')}
+  return (j&&Array.isArray(j.products)?j.products:[]).map(offNorm).filter(p=>p&&p.n&&p.code)}
+async function offClassic(q,ph){const url=offUrl(q);
+  try{return await offOnce(url,OFFS.t1)}
+  catch(e){if(e.kind==='limit'||navigator.onLine===false)throw e;
+    ph('retry');await sleepMs(OFFS.pause);return await offOnce(url,OFFS.t2)}}
+/* Gleiche Codes nur einmal, Produkte aus Deutschland nach vorn */
+function offRank(L){const seen=new Set();return L.filter(p=>!seen.has(p.code)&&seen.add(p.code)).map((p,i)=>({p,s:i+(p.de?0:6)})).sort((a,b)=>a.s-b.s).map(o=>o.p)}
+async function foodSearch(q,ph){
+  if(Date.now()>=salDown){try{const L=await salSearch(q);if(L.length)return {items:offRank(L),src:'sal'}}
+    catch(e){if(navigator.onLine===false)throw offErr('offline');salDown=Date.now()+OFFS.salOff}}
+  ph('classic');return {items:offRank(await offClassic(q,ph)),src:'off'}}
+
+/* ---------- Gespeicherte Suchergebnisse ----------
+   IndexedDB 'offcache': {v:1, q:{suchwort:{t,src,c:[codes]}}, p:{code:produkt}}. Dieselbe Suche kommt 7 Tage lang vom Gerät (auch offline,
+   „Neu suchen“ fragt frisch). Gefundene Produkte mit Nährwerten erscheinen bei späteren Suchen unter „Auf diesem Gerät“ und werden beim
+   Scannen ohne Anfrage erkannt. Höchstens 150 Suchen und 2500 Produkte. Nicht im Backup; „Alles löschen“ leert den Speicher. */
+const OFFC={d:null,p:null,t:0};
+const qKey=q=>words(q).join(' ');
+function offCacheLoad(){if(OFFC.d)return Promise.resolve();if(OFFC.p)return OFFC.p;
+  OFFC.p=kvGet('offcache').then(v=>v,()=>null).then(v=>{OFFC.d=v&&v.v===1&&v.q&&v.p?v:{v:1,q:{},p:{}};
+    const m=fctx(),cv=curView();if(m&&(cv==='mahlzeit'||cv==='zutat')){offAuto(m);resUpdate()}});return OFFC.p}
+function offCacheGet(q){const d=OFFC.d,e=d&&d.q[qKey(q)];if(!e||Date.now()-e.t>7*864e5)return null;
+  const items=e.c.map(c=>d.p[c]).filter(Boolean);if(e.c.length&&!items.length)return null;return {items,src:e.src,t:e.t}}
+function offCachePut(q,items,src){const d=OFFC.d;if(!d)return;const now=Date.now();
+  d.q[qKey(q)]={t:now,src,c:items.map(p=>p.code)};for(const p of items)d.p[p.code]={...p,t:now};
+  const Q=Object.entries(d.q);if(Q.length>150)d.q=Object.fromEntries(Q.sort((a,b)=>b[1].t-a[1].t).slice(0,150));
+  const P=Object.entries(d.p);if(P.length>2500)d.p=Object.fromEntries(P.sort((a,b)=>b[1].t-a[1].t).slice(0,2500));
+  clearTimeout(OFFC.t);OFFC.t=setTimeout(()=>{kvSet('offcache',OFFC.d).catch(()=>{})},400)}
+function offCacheClear(){OFFC.d={v:1,q:{},p:{}};clearTimeout(OFFC.t);kvSet('offcache',OFFC.d).catch(()=>{})}
+/* Beim Tippen: Gibt es für genau diesen Suchbegriff ein gespeichertes Ergebnis, steht es sofort da */
+function offAuto(m){const q=m.q.trim();if(q.length<2||(m.off.q===q&&m.off.status!=='idle'))return;
+  const c=offCacheGet(q);if(c)m.off={q,status:'done',items:c.items,src:c.src,at:c.t}}
+function whenTxt(t){const d=new Date(t),k=ymd(d),hm=String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
+  return (k===today()?'heute':dayN(k)===dayN(today())-1?'gestern':d.getDate()+'.'+(d.getMonth()+1)+'.')+', '+hm}
+function offBusyText(o){return o.phase==='retry'?'Noch ein Versuch, das Ergebnis liegt jetzt meist bereit …':o.slow?'Open Food Facts rechnet diese Suche gerade frisch aus. Beim ersten Mal kann das bis zu einer halben Minute dauern …':'Suche bei Open Food Facts …'}
 
 /* ---------- Mahlzeit eintragen: Suche, Favoriten, zuletzt verwendet, manuell ---------- */
 function newMeal(k){return {date:k||today(),mode:'find',q:'',off:{q:'',status:'idle',items:[]},res:null,fav:false,added:[],err:''}}
@@ -2813,15 +2872,18 @@ function foodResHtml(){const m=fctx();if(!m)return '';const q=m.q.trim(),forRec=
   if(!q){const rec=S.products.slice().sort((a,b)=>b.used-a.used).slice(0,15),fv=forRec?'':favList();
     return fv+(rec.length?`<div class="card pane"><div class="pane-h"><span class="eyebrow">Zuletzt verwendet</span></div><div class="flist">${rec.map(p=>prodRow(p,'prodOpen',`data-id="${p.id}"`)).join('')}</div></div>`
       :(fv?'':`<div class="card empty"><b>Scannen oder suchen</b>${forRec?'Such die Zutat oder scanne den Barcode auf der Verpackung. Was du einmal gefunden hast, findet die App danach auch ohne Internet.':'Scanne den Barcode auf der Verpackung oder such nach einem Lebensmittel. Was du einträgst, merkt sich die App und findet es danach auch ohne Internet.'}</div>`))}
-  const loc=localMatches(q),o=m.off,same=o.q===q,rl=forRec?[]:recMatches(q);let on='';
+  const o=m.off,same=o.q===q,rl=forRec?[]:recMatches(q);let on='';
+  /* Produkte aus früheren Suchen nicht doppelt zeigen, wenn sie ohnehin in der Trefferliste stehen */
+  const shown=new Set(same&&o.status==='done'?o.items.map(p=>p.code):[]),loc=localMatches(q).filter(p=>p.id||!shown.has(p.code));
   if(!same||o.status==='idle')on=`<button class="btn block" data-act="offSearch">„${esc(q)}“ bei Open Food Facts suchen</button>`;
-  else if(o.status==='loading')on=`<div class="busy" role="status"><i aria-hidden="true"></i><span>Suche bei Open Food Facts …</span></div>`;
+  else if(o.status==='loading')on=`<div class="busy" role="status"><i aria-hidden="true"></i><span>${esc(offBusyText(o))}</span></div>`;
   else if(o.status==='offline')on='<div class="small muted">Keine Internetverbindung. Gefunden wird gerade nur, was auf diesem Gerät gespeichert ist.</div>';
-  else if(o.status==='error')on=`<div class="err">Die Suche von Open Food Facts ist gerade gestört. Das liegt am Dienst, nicht an deinem Handy.</div><div class="small muted">Scannen klappt trotzdem, weil es einen anderen Zugang nutzt. Oder versuch die Suche in ein paar Minuten noch einmal.</div><button class="btn small" data-act="offSearch">Nochmal versuchen</button>`;
-  else if(!o.items.length)on='<div class="small muted">Keine Treffer. Versuch ein anderes Wort oder scanne den Barcode.</div>';
-  else on=`<div class="flist">${o.items.map((p,i)=>prodRow(p,'offPick',`data-i="${i}"`)).join('')}</div>`;
+  else if(o.status==='wait')on=`<div class="infobox" role="status">Open Food Facts erlaubt nur 10 Suchen pro Minute. Die Suche startet von selbst in <b class="num" id="offWaitS">${Math.max(1,Math.ceil((o.until-Date.now())/1000))}</b> s.</div>`;
+  else if(o.status==='error')on=`<div class="err">Open Food Facts hat nicht geantwortet, auch nicht beim zweiten Versuch. Das liegt am Dienst, nicht an deinem Handy.</div><div class="small muted">Versuch es in einer Minute noch einmal. Scannen klappt meist trotzdem, weil es einen anderen Zugang nutzt.</div><button class="btn small" data-act="offSearch">Nochmal versuchen</button>`;
+  else{on=o.items.length?`<div class="flist">${o.items.map((p,i)=>prodRow(p,'offPick',`data-i="${i}"`)).join('')}</div>`:'<div class="small muted">Keine Treffer. Versuch ein anderes Wort oder scanne den Barcode.</div>';
+    on+=`<div class="small muted offsrc">${o.at?`Gespeichertes Ergebnis von ${esc(whenTxt(o.at))} · <button class="lnk inl" data-act="offSearch" data-force="1">Neu suchen</button>`:o.src==='sal'?'Gefunden mit der Schnellsuche von Open Food Facts':'Gefunden mit der klassischen Suche von Open Food Facts'}</div>`}
   return `${rl.length?`<div class="card pane"><div class="pane-h"><span class="eyebrow">Rezepte</span></div><div class="flist">${rl.map(recRow).join('')}</div></div>`:''}
-   ${loc.length?`<div class="card pane"><div class="pane-h"><span class="eyebrow">Auf diesem Gerät</span></div><div class="flist">${loc.map(p=>prodRow(p,'prodOpen',`data-id="${p.id}"`)).join('')}</div></div>`:''}
+   ${loc.length?`<div class="card pane"><div class="pane-h"><span class="eyebrow">Auf diesem Gerät</span></div><div class="flist">${loc.map(p=>p.id?prodRow(p,'prodOpen',`data-id="${p.id}"`):prodRow(p,'seenPick',`data-code="${esc(p.code)}"`)).join('')}</div></div>`:''}
    <div class="card pane"><div class="pane-h"><span class="eyebrow">Open Food Facts</span></div>${on}
     <div class="small muted">Nicht dabei? <button class="lnk inl" data-act="prodNew">Eigenes Produkt anlegen</button></div></div>`}
 function resUpdate(){const el=document.getElementById('foodRes');if(el)el.innerHTML=foodResHtml();else if(curView()==='mahlzeit'||curView()==='zutat')softRender()}
@@ -2829,7 +2891,7 @@ function searchBlock(m,to){return `<div class="fsearch"><input class="in" type="
    <button class="btn block scanbtn" data-act="scanOpen" data-date="${m.date}"${to==='rec'?' data-to="rec"':''}>${SCAN_IC}<span>Barcode scannen</span></button>
    <div id="foodRes" class="foodres">${foodResHtml()}</div>
    <div class="small muted offnote">Suche und Barcode fragen Open Food Facts an, eine freie Lebensmittel-Datenbank. Daten unter der Lizenz ODbL.</div>`}
-function viewMeal(){if(!meal)meal=newMeal(today());const m=meal;
+function viewMeal(){if(!meal)meal=newMeal(today());const m=meal;offCacheLoad();
   const seg=`<div class="seg" role="group" aria-label="Art des Eintrags">${[['find','Suchen'],['rec','Rezepte'],['manual','Manuell']].map(([v,l])=>`<button data-act="mealMode" data-v="${v}" aria-pressed="${(m.mode==='rec'||m.mode==='manual'?m.mode:'find')===v}">${l}</button>`).join('')}</div>`;
   const ak=m.added.reduce((t,a)=>t+num(a.k),0);
   const added=m.added.length?`<div class="banner ok"><span><b>Eingetragen:</b> ${esc(m.added.map(a=>a.n).join(', '))} · ${fmt(ak,0)} kcal</span><button class="btn small" data-act="mealDone">Fertig</button></div>`:'';
@@ -2844,7 +2906,7 @@ function viewMeal(){if(!meal)meal=newMeal(today());const m=meal;
   return `${added}${seg}
    ${searchBlock(m,'day')}`}
 /* Zutat für ein Rezept: dieselbe Suche, dazu eigene Werte für Dinge ohne Packung */
-function viewPick(){if(!pick)pick=newMeal(today());const m=pick;
+function viewPick(){if(!pick)pick=newMeal(today());const m=pick;offCacheLoad();
   const seg=`<div class="seg" role="group" aria-label="Art der Zutat"><button data-act="pickMode" data-v="find" aria-pressed="${m.mode!=='manual'}">Suchen</button><button data-act="pickMode" data-v="manual" aria-pressed="${m.mode==='manual'}">Eigene Werte</button></div>`;
   if(m.mode==='manual'){if(!m.res)m.res={n:'',k:'',p:'',c:'',f:''};const res=m.res;
     return `${seg}<div class="card section mres"><span class="eyebrow">Werte für die Menge im Rezept</span>
@@ -2855,15 +2917,26 @@ function viewPick(){if(!pick)pick=newMeal(today());const m=pick;
      <div class="small muted">Du kennst die Werte pro 100 g? <button class="lnk inl" data-act="prodNew">Eigenes Produkt anlegen</button>, dann rechnet die App mit der Menge.</div></div>`}
   return `${seg}
    ${searchBlock(m,'rec')}`}
-function offSearchRun(){const m=fctx();if(!m)return;const q=m.q.trim();
-  if(q.length<2){toast('Gib mindestens zwei Buchstaben ein');return}
+function offSearchRun(o){o=o||{};const m=fctx();if(!m)return;const q=m.q.trim();
+  if(q.length<2){if(!o.auto)toast('Gib mindestens zwei Buchstaben ein');return}
+  if(!o.auto){const a=document.activeElement;if(a&&a.id==='foodQ')a.blur()}
+  if(m.off.q===q&&m.off.status==='loading')return;
+  const c=o.force?null:offCacheGet(q);
+  if(c){m.off={q,status:'done',items:c.items,src:c.src,at:c.t};resUpdate();return}
   if(navigator.onLine===false){m.off={q,status:'offline',items:[]};resUpdate();return}
-  const now=Date.now();while(offTimes.length&&now-offTimes[0]>60000)offTimes.shift();
-  if(offTimes.length>=5){toast('Kurz warten: Open Food Facts erlaubt nur wenige Suchen pro Minute');return}
-  offTimes.push(now);m.off={q,status:'loading',items:[]};resUpdate();
-  const a=document.activeElement;if(a&&a.id==='foodQ')a.blur();
-  offSearch(q).then(items=>{if(m.off.q===q&&m.off.status==='loading'){m.off={q,status:'done',items};if(fctx()===m)resUpdate()}},
-    ()=>{if(m.off.q===q&&m.off.status==='loading'){m.off={q,status:navigator.onLine===false?'offline':'error',items:[]};if(fctx()===m)resUpdate()}})}
+  const st={q,status:'loading',items:[],t0:Date.now(),tc:0,phase:'sal',slow:false};m.off=st;resUpdate();offTick();
+  foodSearch(q,ph=>{if(m.off!==st)return;st.phase=ph;if(ph==='classic')st.tc=Date.now();if(fctx()===m)resUpdate()})
+    .then(r=>{offCachePut(q,r.items,r.src);if(m.off!==st)return;m.off={q,status:'done',items:r.items,src:r.src};if(fctx()===m)resUpdate()},
+      e=>{if(m.off!==st)return;
+        m.off=e&&e.kind==='limit'?{q,status:'wait',items:[],until:e.until}:{q,status:navigator.onLine===false||(e&&e.kind==='offline')?'offline':'error',items:[]};
+        if(fctx()===m){resUpdate();offTick()}})}
+/* Jede Sekunde: Hinweis „rechnet frisch“ nach 6 s klassischer Suche, Countdown beim Limit, danach sucht die App von selbst */
+function offTick(){if(offTimer)return;offTimer=setInterval(()=>{const m=fctx(),o=m&&m.off,v=curView();
+  if(!o||(v!=='mahlzeit'&&v!=='zutat')||(o.status!=='wait'&&o.status!=='loading')){clearInterval(offTimer);offTimer=0;return}
+  if(o.status==='loading'){if(!o.slow&&o.phase==='classic'&&o.tc&&Date.now()-o.tc>OFFS.slow){o.slow=true;resUpdate()}return}
+  const sec=Math.ceil((o.until-Date.now())/1000);
+  if(sec>0){const el=document.getElementById('offWaitS');if(el)el.textContent=sec;return}
+  if(m.q.trim()===o.q){m.off={q:o.q,status:'idle',items:[]};offSearchRun({auto:true})}else{m.off={q:'',status:'idle',items:[]};resUpdate()}},1000)}
 
 /* ---------- Produkt: Menge wählen und eintragen, eigene Produkte anlegen ---------- */
 function defAmount(p){return num(p.lastG)>0?num(p.lastG):num(p.sv)>0?num(p.sv):100}
@@ -2974,6 +3047,8 @@ function scanFound(code){if(!scan||scan.code)return;scan.code=code;scanStop();sc
 async function lookupCode(code){if(!scan)return;code=EAN.norm(code);scan.code=code;scan.status='look';scan.slow=false;scanMsg();
   const local=S.products.find(p=>p.code===code);
   if(local){openProduct(local,{replace:true,date:scan.date,to:scan.to});return}
+  const seen=OFFC.d&&OFFC.d.p[code];
+  if(seen&&seen.n&&seen.k!=null){openProduct(saveProduct(seen),{replace:true,date:scan.date,to:scan.to});return}
   const r=await offProduct(code,()=>{if(scan&&scan.code===code){scan.slow=true;scanMsg()}});
   if(!scan||scan.code!==code||curView()!=='scan')return;scan.slow=false;
   if(r.ok){openProduct(saveProduct(r.p),{replace:true,date:scan.date,to:scan.to});return}
@@ -3020,7 +3095,8 @@ function foodAct(a,el,ck){if(recAct(a,el,ck))return true;switch(a){
   case 'scanRetry':if(scan){if(scan.code){const c=scan.code;scan.err='';lookupCode(c)}else{scan.err='';scan.status='start';render()}}return true;
   case 'scanAgain':if(scan){scanStop();SCAN.tries=0;scanVideoDrop();scan.code=null;scan.err='';scan.slow=false;scan.status='start';render()}return true;
   case 'scanOwn':if(scan)openOwnForm({code:scan.code||''},{replace:true,why:'notfound',date:scan.date,to:scan.to});return true;
-  case 'offSearch':offSearchRun();return true;
+  case 'offSearch':offSearchRun({force:el.dataset.force==='1'});return true;
+  case 'seenPick':{const p=OFFC.d&&OFFC.d.p[el.dataset.code];if(p)openProduct(p,{to:fto()});return true}
   case 'offPick':{const m=fctx(),to=fto(),v=curView(),p=m&&m.off.items[+el.dataset.i];if(!p)return true;
     if(p.k!=null){openProduct(p,{to});return true}
     toast('Lade Produkt …');offProduct(p.code).then(r=>{if(fctx()!==m||curView()!==v)return;
@@ -3055,7 +3131,7 @@ function foodAct(a,el,ck){if(recAct(a,el,ck))return true;switch(a){
   return false}
 function foodInput(T){const id=T.id,ds=T.dataset||{};
   if(recInput(T))return true;
-  if(id==='foodQ'){const m=fctx();if(m){m.q=T.value;const el=document.getElementById('foodRes');if(el)el.innerHTML=foodResHtml()}return true}
+  if(id==='foodQ'){const m=fctx();if(m){m.q=T.value;offAuto(m);const el=document.getElementById('foodRes');if(el)el.innerHTML=foodResHtml()}return true}
   if(id==='prodG'){if(prod&&prod.p){prod.g=T.value;const el=document.getElementById('prodTot');if(el)el.innerHTML=totHtml(prodTotals(prod.p,num(T.value)))}return true}
   if(ds.pf){if(prod&&prod.form)prod.form[ds.pf]=T.value;return true}
   if(ds.pk){if(pick&&pick.res)pick.res[ds.pk]=T.value;return true}
@@ -3968,7 +4044,7 @@ async function wipeRun(scope){if(wipeBusy||S.demo)return;wipeBusy=true;render();
   if(scope==='all'){const d=demo(),keep={lastBackup:S.lastBackup||null,schema:S.schema,_ts:S._ts};
     S={exercises:d.exercises,sessions:[],plans:d.plans,habits:d.habits,days:{},goals:[],photos:[],favs:[],products:[],recipes:[],recDraft:null,nutri:{},
       mods:{food:true,mind:true,body:true},demo:false,draft:null,mode:'basic',libV:EX_LIB_V,ui:{root:'heute',stack:[],progEx:'e1'},...keep};
-    W.tpl={ex:d.exercises.map(x=>x.id),pl:d.plans.map(x=>x.id),hb:d.habits.map(x=>x.id)}}
+    W.tpl={ex:d.exercises.map(x=>x.id),pl:d.plans.map(x=>x.id),hb:d.habits.map(x=>x.id)};offCacheClear()}
   else{S.sessions=[];S.days={};S.photos=[];S.draft=null}
   for(const h of S.habits){h.created=t;if(h.kind==='quit'){h.since=t;h.start=t;delete h.prevSince}}
   S.since=Date.now();S.wiped=W;migrate();wipeUiReset();userActed=true;wipeBusy=false;
