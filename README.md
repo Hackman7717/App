@@ -9,6 +9,7 @@ Sie läuft als installierbare Web-App (PWA) auf dem iPhone, auf Android und am C
 - **Löschen mit Rückgängig:** Alle Daten oder nur die Einträge löschen und 30 Tage lang zurückholen.
 - **Ernährung mit Barcode und Suche:** Strichcode mit der Kamera scannen, als Foto laden oder die Zahlen eintippen. Lebensmittel nach Namen suchen. Daten kommen von [Open Food Facts](https://world.openfoodfacts.org) (Lizenz ODbL). Fehlt ein Produkt, legst du es einmal selbst an. Gefundene und eigene Produkte merkt sich die App, sie funktionieren danach auch offline.
 - **Rezepte:** Eigene Gerichte aus Zutaten anlegen und danach portionsweise oder nach Gewicht ins Ernährungstagebuch eintragen.
+- **Mahlzeiten:** Das Ernährungstagebuch ist nach Frühstück, Mittagessen, Abendessen und Snacks unterteilt.
 
 ## Heute
 
@@ -19,17 +20,21 @@ Sie läuft als installierbare Web-App (PWA) auf dem iPhone, auf Android und am C
 ## Training
 
 - **Starten:** *Training starten* oder ein angehefteter Plan unter *Mit Plan starten*. Plan und Körpergewicht wählst du per Antippen, Gewicht und Wiederholungen tippst du direkt ein oder änderst sie mit − und +.
-- **Übungen:** Liste nach Kategorien mit Filter und Suche (auch nach Muskel oder englischem Namen, z. B. „Trizeps“ oder „Lat Pulldown“). Eine Übung antippen, um sie umzubenennen, die Kategorie zu ändern oder sie zu löschen. Was pro Satz eingetragen wird, lässt sich ändern, solange es noch keine Einträge gibt.
-- **Übung hinzufügen:** Unter *+ Übung* schlägt die App Übungen aus denselben Kategorien vor wie die Übungen, die schon im Training sind (*Passend*). Zuerst kommt, was du oft machst, sonst die übliche Reihenfolge im Studio. Varianten einer Übung, die du gerade gemacht hast, stehen hinten. Eine andere Kategorie wählst du per Chip, alles andere über *Alle Übungen …*. Fehlt eine Übung, legst du sie dort an und sie landet direkt im Training. Genauso in Trainingsplänen und bei Zielen.
+- **Übungen:** Liste nach Kategorien mit Filter und Suche (auch nach Gerät, Muskel oder englischem Namen, z. B. „Kabelzug“, „Trizeps“ oder „Lat Pulldown“). Mit einer Kategorie erscheint darunter eine zweite Reihe mit Muskelgruppen, etwa bei *Arme* Bizeps, Trizeps und Unterarme; die Liste ist dann nach Muskelgruppen gegliedert. Eine Übung antippen, um Name, Varianten, Kategorie und Muskelgruppe zu ändern oder sie zu löschen. Was pro Satz eingetragen wird, lässt sich ändern, solange es noch keine Einträge gibt.
+- **Varianten:** Jede Übung hat einen Namen ohne Klammern und optional Varianten, etwa *Hip Thrust* mit *Langhantel* und *Maschine* oder *Trizepsdrücken* mit *Stange* und *Seil*. Beim Anlegen und Bearbeiten fügst du Varianten per Knopf hinzu (Langhantel, Kurzhantel, SZ-Stange, Kabelzug, Maschine, Multipresse, Körpergewicht, Kettlebell) oder mit *+ Eigene*. Namen von Varianten lassen sich ändern. Eine Variante mit Einträgen wird beim Entfernen nur ausgeblendet. *Körpergewicht* zählt nur Wiederholungen, Geräte Gewicht × Wiederholungen. Tippst du ein Gerät in Klammern in den Namen, wird es zur Variante.
+- **Weitere Kategorien:** Eine Übung kann zusätzlich unter anderen Kategorien stehen, etwa *Reverse Butterfly* unter *Rücken* und unter *Schultern → Hinten*.
+- **Übung hinzufügen:** Unter *+ Übung* schlägt die App Übungen aus denselben Kategorien vor wie die Übungen, die schon im Training sind (*Passend*). Jede Übung erscheint einmal, mit der Variante, die du zuletzt genommen hast. Zuerst kommt, was du oft machst, sonst die übliche Reihenfolge im Studio. Eine andere Kategorie wählst du per Chip, alles andere über *Alle Übungen …*, dort direkt mit der Variante. Fehlt eine Übung, legst du sie dort an und sie landet direkt im Training. Genauso in Trainingsplänen und bei Zielen.
+- **Variante wechseln:** Im Training steht die Variante als Knopf unter dem Namen der Übung, im Plan genauso. Ist noch kein Satz abgehakt, übernimmt die App die Werte vom letzten Mal mit dieser Variante. Zwischen Gewicht × Wdh. und nur Wiederholungen bleiben die Wiederholungen erhalten.
 - **Als Trainingsplan speichern:** Beim Abschließen mit dem Schalter *Als Trainingsplan speichern*. Der Name ist vorgeschlagen, etwa *Brust und Arme* oder ab vier Kategorien *Ganzkörper*, und lässt sich ändern. Gespeichert werden die erledigten Übungen mit ihrer Zahl an Sätzen. Gibt es den Plan schon, legt die App keinen zweiten an. *Ansehen* im Hinweis springt zum Plan.
 - **Verlauf:** Alle Trainings, nach Monaten. Ein Training antippen, dann mit dem Stift bearbeiten oder mit dem Plan-Symbol als Trainingsplan speichern.
 - Die App kommt ohne Auswahllisten (Dropdowns) aus: Auswahl per Kacheln, Chips oder Zahlenfeld.
 
 ## Standardübungen und MET-Werte
 
-- **Katalog:** 77 übliche Übungen in den Kategorien Beine, Brust, Rücken, Schultern, Arme, Bauch & Core und Ausdauer sind von Anfang an da. Was du nicht brauchst, löschst du. Gelöschte Standardübungen holst du unten in der Übungsliste zurück.
-- **Varianten:** Jede Geräte-Variante ist eine eigene Übung mit eigenem Verlauf, etwa *Bizeps-Curl (Kurzhantel)* und *Bizeps-Curl (Kabelzug)*, weil sich die Gewichte nicht vergleichen lassen. In der Liste stehen die Varianten einer Übung in einer Zeile, das Gerät wählst du per Knopf. Einarmig oder beidarmig ist keine eigene Übung: Gewicht pro Hantel eintragen.
+- **Katalog:** 73 übliche Übungen mit zusammen 127 Varianten in den Kategorien Beine, Brust, Rücken, Schultern, Arme, Bauch & Core und Ausdauer sind von Anfang an da, mit Muskelgruppen: Beine (Quadrizeps, Beinbeuger, Po, Waden, Adduktoren), Rücken (Latissimus, oberer und unterer Rücken), Schultern (vorne, seitlich, hinten), Arme (Bizeps, Trizeps, Unterarme). Was du nicht brauchst, löschst du. Gelöschte Standardübungen holst du unten in der Übungsliste zurück.
+- **Eigener Verlauf je Variante:** Jede Variante hat eigene Einträge und Bestwerte, weil sich die Gewichte nicht vergleichen lassen. Im Verlauf steht die Variante grau hinter dem Namen, etwa *Bizeps-Curl · Kabelzug*. Einarmig oder beidarmig ist keine Variante: Gewicht pro Hantel eintragen.
 - **MET-Werte:** aus dem *2024 Adult Compendium of Physical Activities* (Herrmann et al., Journal of Sport and Health Science 13(1), 2024, [pacompendium.com](https://pacompendium.com)), mit Code unter dem Feld. Laufen, Gehen und Radfahren rechnen über das Tempo, ebenfalls mit den Werten von 2024. Kalorien sind Schätzungen: MET × Körpergewicht × Stunden.
+- **Update auf 1.9.0:** Aus *Bizeps-Curl (Kurzhantel)* wird *Bizeps-Curl* mit der Variante *Kurzhantel*. Einträge, Pläne und Ziele bleiben an ihrer Übung. Bei Übungen, die früher ohne Gerät hießen (Beinbeuger, Trizepsdrücken, Wadenheben, Latzug), stehen bisherige Einträge unter der üblichen Variante (Liegend, Stange, Stehend, Breiter Griff); ein Hinweis nennt sie, und du kannst die Variante umbenennen. Eigene Übungen, die einer Standardübung entsprechen, kommen in deren Familie. Vor der Umstellung legt die App eine Sicherheitskopie an.
 - **Update von 1.4.0:** Eigene Übungen, die einer Standardübung entsprechen (z. B. „Bizeps Curls“ oder „Latziehen“), werden nicht doppelt angelegt. Sie behalten Name, Einträge und einen selbst gesetzten MET-Wert und bekommen nur eine fehlende Kategorie und einen fehlenden MET-Wert.
 
 ## Rezepte
@@ -41,6 +46,13 @@ Sie läuft als installierbare Web-App (PWA) auf dem iPhone, auf Android und am C
 - **Eintragen:** Rezept antippen, Portionen oder Gramm wählen, *Eintragen*. Im Tagebuch lassen sich die Portionen später ändern, die Werte rechnen sich neu. Spätere Änderungen am Rezept verändern frühere Einträge nicht.
 - **Entwurf:** Ein Rezept, das noch nicht gespeichert ist, geht nicht verloren, auch wenn du zurückgehst oder die App zwischendurch schließt. Unter *Rezepte* kannst du weitermachen oder den Entwurf verwerfen.
 - Rezepte sind im Backup enthalten.
+
+## Mahlzeiten
+
+- **Tagebuch:** *Ernährung* zeigt den Tag in vier Abschnitten, Frühstück, Mittagessen, Abendessen und Snacks, jeweils mit Kalorien und einem eigenen Plus zum Eintragen.
+- **Eintragen:** Über das Plus eines Abschnitts ist die Mahlzeit schon gewählt. Über *Mahlzeit eintragen*, den Scanner, ein Rezept oder *Schnell nochmal* wählt die App nach Uhrzeit vor: bis 10:29 Frühstück, bis 14:59 Mittagessen, ab 17 Uhr Abendessen, sonst Snacks. Ändern geht oben in *Mahlzeit eintragen*, beim Produkt und beim Rezept direkt über dem Knopf.
+- **Ändern:** Eintrag im Tagebuch antippen und eine andere Mahlzeit wählen.
+- **Ältere Einträge** ordnet die App nach ihrer Uhrzeit ein.
 
 ## Daten löschen
 
