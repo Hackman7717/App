@@ -1,6 +1,6 @@
 /* Offline-Betrieb: Alle Dateien der App liegen im Cache. Neue Versionen werden im Hintergrund geladen
    und erst übernommen, wenn du in der App auf „Jetzt aktualisieren“ tippst. */
-const VERSION = '1.9.0';
+const VERSION = '1.10.0';
 const CACHE = 'trainingsbuch-' + VERSION;
 const SCOPE = new URL(self.registration.scope).pathname;
 const FILES = [

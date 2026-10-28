@@ -9,7 +9,8 @@ Sie läuft als installierbare Web-App (PWA) auf dem iPhone, auf Android und am C
 - **Löschen mit Rückgängig:** Alle Daten oder nur die Einträge löschen und 30 Tage lang zurückholen.
 - **Ernährung mit Barcode und Suche:** Strichcode mit der Kamera scannen, als Foto laden oder die Zahlen eintippen. Lebensmittel nach Namen suchen. Daten kommen von [Open Food Facts](https://world.openfoodfacts.org) (Lizenz ODbL). Fehlt ein Produkt, legst du es einmal selbst an. Gefundene und eigene Produkte merkt sich die App, sie funktionieren danach auch offline.
 - **Rezepte:** Eigene Gerichte aus Zutaten anlegen und danach portionsweise oder nach Gewicht ins Ernährungstagebuch eintragen.
-- **Mahlzeiten:** Das Ernährungstagebuch ist nach Frühstück, Mittagessen, Abendessen und Snacks unterteilt.
+- **Mahlzeiten:** Das Ernährungstagebuch ist nach Frühstück, Mittagessen, Abendessen und Snacks unterteilt, eingeklappt mit den Kalorien je Mahlzeit. Einträge und Favoriten lassen sich auf eine Mahlzeit ziehen.
+- **Tempo beim Ab- und Zunehmen:** 0,25 bis 1 kg pro Woche oder bis zu einem Datum, nie unter dem Grundumsatz.
 
 ## Heute
 
@@ -28,6 +29,10 @@ Sie läuft als installierbare Web-App (PWA) auf dem iPhone, auf Android und am C
 - **Als Trainingsplan speichern:** Beim Abschließen mit dem Schalter *Als Trainingsplan speichern*. Der Name ist vorgeschlagen, etwa *Brust und Arme* oder ab vier Kategorien *Ganzkörper*, und lässt sich ändern. Gespeichert werden die erledigten Übungen mit ihrer Zahl an Sätzen. Gibt es den Plan schon, legt die App keinen zweiten an. *Ansehen* im Hinweis springt zum Plan.
 - **Verlauf:** Alle Trainings, nach Monaten. Ein Training antippen, dann mit dem Stift bearbeiten oder mit dem Plan-Symbol als Trainingsplan speichern.
 - Die App kommt ohne Auswahllisten (Dropdowns) aus: Auswahl per Kacheln, Chips oder Zahlenfeld.
+
+## Fortschritt
+
+- **Muskelgruppen im Vergleich:** *Fortschritt → Training* in der Ansicht *Analyse* unter *Kraft* zeigt, wie sich deine abgehakten Sätze im Zeitraum auf die Muskelgruppen verteilen, grob nach Kategorie oder fein nach Muskelgruppe. Das ist ein reiner Vergleich ohne Zielwerte, denn für den Muskelaufbau zählt vor allem, wie fordernd die Sätze sind.
 
 ## Standardübungen und MET-Werte
 
@@ -49,10 +54,19 @@ Sie läuft als installierbare Web-App (PWA) auf dem iPhone, auf Android und am C
 
 ## Mahlzeiten
 
-- **Tagebuch:** *Ernährung* zeigt den Tag in vier Abschnitten, Frühstück, Mittagessen, Abendessen und Snacks, jeweils mit Kalorien und einem eigenen Plus zum Eintragen.
-- **Eintragen:** Über das Plus eines Abschnitts ist die Mahlzeit schon gewählt. Über *Mahlzeit eintragen*, den Scanner, ein Rezept oder *Schnell nochmal* wählt die App nach Uhrzeit vor: bis 10:29 Frühstück, bis 14:59 Mittagessen, ab 17 Uhr Abendessen, sonst Snacks. Ändern geht oben in *Mahlzeit eintragen*, beim Produkt und beim Rezept direkt über dem Knopf.
+- **Tagebuch:** *Ernährung* zeigt den Tag in vier Abschnitten, Frühstück, Mittagessen, Abendessen und Snacks. Eingeklappt steht nur der Name, die Kalorien und ein eigenes Plus zum Eintragen. Ein Tipp auf den Namen klappt die Mahlzeit auf; was offen ist, bleibt offen, bis du den Tag wechselst.
+- **Favoriten:** Über dem Tagebuch stehen nur deine Favoriten. Antippen trägt nach Uhrzeit ein. Zuletzt verwendete Lebensmittel findest du unter *Mahlzeit eintragen*.
+- **Eintragen:** Über das Plus eines Abschnitts ist die Mahlzeit schon gewählt. Über *Mahlzeit eintragen*, den Scanner, ein Rezept oder einen Favoriten wählt die App nach Uhrzeit vor: bis 10:29 Frühstück, bis 14:59 Mittagessen, ab 17 Uhr Abendessen, sonst Snacks. Ändern geht oben in *Mahlzeit eintragen*, beim Produkt und beim Rezept direkt über dem Knopf.
+- **Verschieben per Ziehen:** Einen Eintrag etwa eine halbe Sekunde gedrückt halten, bis er sich anhebt, und auf eine andere Mahlzeit ziehen, auch auf eine eingeklappte. Am oberen und unteren Rand scrollt die Seite mit. Einen Favoriten genauso auf eine Mahlzeit ziehen trägt ihn dort ein. Wer vorher wischt, scrollt ganz normal.
 - **Ändern:** Eintrag im Tagebuch antippen und eine andere Mahlzeit wählen.
 - **Ältere Einträge** ordnet die App nach ihrer Uhrzeit ein.
+
+## Tagesbedarf
+
+- **Wo:** *Ich → Tagesbedarf*. Aus Gewicht, Größe, Alter, Geschlecht und Alltag rechnet die App den Grundumsatz (Mifflin-St Jeor) und den Bedarf, deine Trainings kommen dazu.
+- **Tempo pro Woche:** Beim Abnehmen und Zunehmen wählst du 0,25, 0,5, 0,75 oder 1 kg pro Woche. 1 kg Körpergewicht entspricht grob 7.700 kcal, 0,5 kg pro Woche sind also etwa 550 kcal am Tag. Ohne Wahl rechnet die App beim Abnehmen mit 0,5 kg, beim Zunehmen mit 0,25 kg. Das Tempo merkt sie sich je Richtung.
+- **Bis Datum:** Mit Zielgewicht und Datum rechnet die App das Tempo selbst aus, höchstens 1 kg pro Woche. Unter dem Ergebnis steht, wann du dein Zielgewicht etwa erreichst.
+- **Grundumsatz als Untergrenze:** Der Zielbedarf geht nie unter den Grundumsatz. Wird es knapp, nennt die App das tatsächliche Tempo.
 
 ## Daten löschen
 

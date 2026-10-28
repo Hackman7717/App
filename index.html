@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-title" content="Trainingsbuch">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="format-detection" content="telephone=no">
-<meta name="app-version" content="1.9.0">
+<meta name="app-version" content="1.10.0">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icons/icon-180.png">
 <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
@@ -1052,6 +1052,28 @@ input.wh:focus{outline:none;border-color:var(--accent-fg);box-shadow:inset 0 0 0
 .chips.slots{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;overflow:visible;padding-bottom:0}
 .chips.slots .chip{padding:0 4px;min-width:0;font-size:14px;overflow:hidden;text-overflow:ellipsis}
 .fedit .slotrow{margin-bottom:2px}
+.ms-tog{flex:1;min-width:0;display:flex;align-items:center;gap:6px;min-height:42px;padding:0;border:0;background:none;color:var(--ink);text-align:left}
+.ms-tog:disabled{opacity:1;cursor:default}
+.ms-tog .eyebrow{flex:none;margin:0;color:var(--ink);opacity:1;font-size:15.5px;letter-spacing:.07em}
+.ms-tog .chev{width:18px;height:18px;flex:none;color:var(--muted);transition:transform .15s}
+.ms-tog[aria-expanded="true"] .chev{transform:rotate(180deg)}
+.ms-tog .ms-k{margin-left:auto}
+.ms-tog:not(:disabled):active{opacity:.7}
+.mslot{padding:6px 0}
+.mslot.open{padding-bottom:12px}
+.meals .mdhint{padding-top:8px;border-top:1px solid var(--line)}
+.meals .frow,.favq .fchip{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.mdsrc{opacity:.35}
+.mdghost{position:fixed;left:0;top:0;z-index:80;pointer-events:none;margin:0;background:var(--surface);border:1px solid var(--accent-fg);box-shadow:0 12px 30px rgba(0,0,0,.28);opacity:.96;transform:scale(1.03)}
+.frow.mdghost{padding:10px 12px}
+.frow.mdghost,.qchip.mdghost{background:var(--surface);opacity:1}
+.mslot.mdover{background:var(--accent-soft);box-shadow:inset 0 0 0 2px var(--accent-fg)}
+.mslot.mdover .ms-h{padding-inline:8px}
+body.mdrag,body.mdrag *{-webkit-user-select:none;user-select:none}
+.rates .chip{min-width:72px}
+.hbar.cmp{grid-template-columns:96px minmax(0,1fr) 42px}
+.hbar .fill.cmp{background:var(--accent-fg)}
+.msnote{line-height:1.45;padding-left:10px;border-left:3px solid var(--line-2)}
 
 @media (prefers-reduced-motion: no-preference){
   .toast{animation:pop .2s ease-out}
@@ -1452,7 +1474,7 @@ if(!Array.isArray(S.plans))S.plans=S.demo&&S.exercises.some(e=>e.id==='e1')?demo
 /* ---------- Speicher auf dem Gerät ----------
    IndexedDB ist der Hauptspeicher (Daten und Fotos). Eine Kopie der Daten liegt zusätzlich im localStorage,
    damit die App sofort startet. Beim Start gewinnt der neuere Stand. Es gibt keinen Server und kein Konto. */
-const APPV='1.9.0',SCHEMA=3;
+const APPV='1.10.0',SCHEMA=3;
 const cloud={state:'local',deferred:false};
 const store={open:null,timer:null,ok:false,err:false,warned:false,persist:false};
 function idb(){if(store.open)return store.open;
@@ -2244,18 +2266,7 @@ function anaKraft(R){
   const rc=recs.length?`<div class="card section"><div class="sec-h"><b>Bestwerte</b><span class="small muted">alle Zeiten</span></div>
     <div class="recs">${vis.map(({e,r})=>`<div class="rec"><b>${exNameH(e)}${r.some(c=>isNew(c.d))?'<span class="prbadge">NEU</span>':''}</b><div class="rec-g">${r.map(c=>`<div class="rec-c"><span>${c.k}</span><b class="num">${c.v}</b><span>${c.s?esc(c.s)+' · ':''}${dmy(c.d)}</span></div>`).join('')}</div></div>`).join('')}</div>
     ${recs.length>4?`<button class="btn small ghost" data-act="anaRecAll">${allR?'Weniger anzeigen':'Alle '+recs.length+' Übungen anzeigen'}</button>`:''}</div>`:'';
-  // Sätze pro Muskelgruppe
-  const cnt={};for(const x of R.list)for(const e of x.entries){const ex=exById(e.exId);if(!ex||isAusd(ex))continue;const n=cleanSets(ex,e.sets).length;if(!n)continue;const k=ex.cat||'Ohne Kategorie';cnt[k]=(cnt[k]||0)+n}
-  const base=['Beine','Brust','Rücken','Schultern','Arme','Bauch & Core'];
-  const cats=base.concat(Object.keys(cnt).filter(k=>!base.includes(k)).sort((a,b)=>a.localeCompare(b,'de')));
-  const per=k=>(cnt[k]||0)/R.weeks,mx=Math.max(25,...cats.map(per))*1.05,pc=v=>(v/mx*100).toFixed(1);
-  const rows=cats.map(k=>{const v=per(k);return `<div class="hbar"><span>${esc(k)}</span><div class="tr"><i class="band" style="left:${pc(10)}%;width:${pc(10)}%"></i><i class="fill ${v<10?'lo':v<=20?'ok':'hi'}" style="width:${pc(v)}%"></i></div><span class="v num">${fmt(v,1)}</span></div>`}).join('');
-  const hints=[],bb=per('Brust'),rr=per('Rücken'),up=bb+rr+per('Schultern')+per('Arme'),lg=per('Beine'),tot=cats.reduce((t,k)=>t+per(k),0),none=base.filter(k=>!cnt[k]);
-  if(Math.max(bb,rr)>=3&&Math.max(bb,rr)>1.5*Math.min(bb,rr))hints.push(bb>rr?`Deutlich mehr Brust als Rücken (${fmt(bb,1)} zu ${fmt(rr,1)} Sätze). Ein ähnliches Verhältnis von Druck- und Zugübungen entlastet die Schultern.`:`Deutlich mehr Rücken als Brust (${fmt(rr,1)} zu ${fmt(bb,1)} Sätze). Ein ähnliches Verhältnis von Zug- und Druckübungen gilt als ausgewogen.`);
-  if(up>=8&&lg<up/4)hints.push(`Beine kommen im Verhältnis zum Oberkörper kurz (${fmt(lg,1)} zu ${fmt(up,1)} Sätze pro Woche).`);
-  if(tot>=8&&none.length)hints.push('Im Zeitraum nicht trainiert: '+none.join(', ')+'.');
-  const ms=tot?`<div class="card section"><div class="lbl-row"><b>Sätze pro Muskelgruppe</b>${infoBtn('aiMs','Sätze pro Muskelgruppe')}</div>${iBox('aiMs',MS_INFO)}
-    <div class="small muted">Ø pro Woche im Zeitraum · grüner Bereich: 10–20 Sätze</div><div class="hbars">${rows}</div>${hints.map(h=>`<div class="note">${h}</div>`).join('')}</div>`:'';
+  const ms=muscleCard(R,true);
   // Bewegtes Gewicht
   const vol=R.bk.map(b=>{let v=0;for(const x of R.list)if(inBk(b,x.date))for(const e of x.entries){const ex=exById(e.exId);if(ex&&ex.kind==='kraft')v+=volume(cleanEntry(ex,e),'kraft')}return {label:b.label,parts:[v/1000]}});
   const vc=vol.some(b=>b.parts[0]>0)?`<div class="card section"><div><b>Bewegtes Gewicht</b><div class="small muted">Tonnen pro ${R.weekly?'Woche':'Monat'}, Summe aus Gewicht × Wiederholungen</div></div>${sBars(vol,{cur:true,label:'Bewegtes Gewicht in Tonnen'})}</div>`:'';
@@ -2437,7 +2448,7 @@ function nCalc(){
   const bmr=10*kg+6.25*cm-5*age+(sex==='w'?-161:5);
   const pal=num(n.pal)||1.4,life=bmr*pal;
   const tr=nTraining();const tdee=life+tr.perDay;
-  let delta=goal==='ab'?-Math.min(750,0.2*tdee):goal==='zu'?Math.min(500,0.1*tdee):0;
+  const ri=nRateInfo(n,kg,goal);let delta=ri?(goal==='ab'?-1:1)*ri.rate*KCAL_KG/7:0;
   let floored=false;if(tdee+delta<bmr){delta=bmr-tdee;floored=true}
   const type=tr.freq<1?'kaum':tr.strength>=0.5?'kraft':'ausdauer';
   let pk=type==='kaum'?0.8:type==='kraft'?(tr.freq<3?1.6:tr.freq<5?1.8:2.0):(tr.freq<3?1.2:tr.freq<5?1.4:1.6);
@@ -2446,7 +2457,7 @@ function nCalc(){
   const prot=pk*refKg,avgK=tdee+delta;
   const fat=diet==='highcarb'?Math.max(0.2*avgK/9,0.5*kg):Math.max(0.3*avgK/9,0.7*kg);
   const mac=k=>{k=Math.max(bmr,k);if(diet==='keto')return {k,c:KETO_C,p:prot,f:Math.max(0,(k-prot*4-KETO_C*4)/9)};return {k,c:Math.max(0,(k-prot*4-fat*9)/4),p:prot,f:fat}};
-  const r={w,kg,cm,age,sex,goal,diet,target,bmr,pal,life,tr,tdee,delta,floored,type,pk,refKg,
+  const r={ri,w,kg,cm,age,sex,goal,diet,target,bmr,pal,life,tr,tdee,delta,floored,type,pk,refKg,
     avg:mac(avgK),heute:mac(avgK+tr.todayKcal-tr.perDay),adj:tr.todayKcal-tr.perDay,rest:mac(life+delta),train:mac(life+tr.perSess+delta),today:tr.todayN?mac(life+tr.todayKcal+delta):null};
   r.bmi=kg/Math.pow(cm/100,2);r.tbmi=target>0?target/Math.pow(cm/100,2):null;
   if(target>0&&delta&&(goal==='ab'?target<kg:goal==='zu'?target>kg:false)){const pw=delta*7/7700;r.eta={pw,weeks:Math.ceil((target-kg)/pw)}}
@@ -2475,7 +2486,7 @@ function nNotes(r){const o=[],diff=r.target-r.kg;
     if(r.goal==='zu'&&diff<=0)o.push('Dein Zielgewicht liegt nicht über deinem aktuellen Gewicht. Prüf Ziel oder Zielgewicht.');
     if(r.goal==='halten'&&Math.abs(diff)>=2)o.push(`Dein Zielgewicht liegt ${fmt(Math.abs(diff))} kg ${diff<0?'unter':'über'} deinem Gewicht. Mit „${diff<0?'Abnehmen':'Zunehmen'}“ arbeitest du darauf hin.`);
   }
-  if(r.floored)o.push('Das Defizit ist gedeckelt, damit du nicht unter deinen Grundumsatz kommst.');
+  o.push(...nRateNotes(r));if(r.floored)o.push(nFloorTxt(r));
   if(!r.tr.n)o.push('In den letzten 4 Wochen ist kein Training eingetragen. Der Bedarf besteht deshalb nur aus Grundumsatz und Alltag.');
   if(r.diet==='keto')o.push(`<p>Höchstens etwa ${KETO_C} g Kohlenhydrate am Tag. Eiweiß bleibt auf deinem Sportniveau, die frei werdenden Kalorien kommen aus Fett.</p><p>Laut Studien bleibt die Kraft meist erhalten, Ausdauer- und Sprintleistung sinken dagegen häufig, vor allem in den ersten Wochen. Bei gleichen Kalorien und gleichem Eiweiß bringt ketogen keinen zusätzlichen Fettverlust.</p>`);
   if(r.diet==='highcarb')o.push(`<p>Fett ist auf 20 % der Kalorien gesenkt, der Rest geht in Kohlenhydrate. Das sind bei dir etwa ${fmt(r.avg.c/r.kg,1)} g pro kg Körpergewicht.</p><p>Richtwerte der Sporternährung: 3–5 g/kg bei leichtem Training, 5–7 g/kg bei etwa 1 Stunde täglich, 6–10 g/kg bei 1–3 Stunden. Sinnvoll vor allem bei viel Ausdauer- oder Intervalltraining.</p>`);
@@ -2488,8 +2499,7 @@ function nutriOut(){
   const typeTxt={kaum:'wenig Training',kraft:'Krafttraining',ausdauer:'Ausdauertraining'}[r.type];
   const why=[typeTxt+(r.tr.n?' (Ø '+fmt(r.tr.freq,1)+'× pro Woche)':'')];if(r.goal==='ab')why.push('Abnehmen');
   let eta='';
-  if(r.eta){const kgw=fmt(Math.abs(r.eta.pw),1);const wk=r.eta.weeks>52?'in über einem Jahr':'in rund '+r.eta.weeks+(r.eta.weeks===1?' Woche':' Wochen');
-    eta=`<div class="nwhy">${r.goal==='ab'?'−':'+'}${kgw} kg pro Woche · <b>${fmt(r.target)} kg ${wk}</b></div>`}
+  eta=nEtaHtml(r);
   const pct=Math.round(Math.abs(r.delta)/r.tdee*100);
   const spanTxt=r.tr.span<28?'seit '+r.tr.span+' Tagen':'letzte 4 Wochen';
   const palRow=N_PAL.find(p=>num(p[0])===r.pal)||N_PAL[0];
@@ -2520,14 +2530,14 @@ function nutriOut(){
      <li class="tot"><span>= Grundbedarf<small>ohne Training</small></span><span>${k0(X.G)} kcal</span></li>
      <li><span>+ Training Ø pro Tag<small>${r.tr.n?r.tr.n+(r.tr.n===1?' Einheit':' Einheiten')+', '+spanTxt:'keine Einheiten, '+spanTxt}</small></span><span>+${k0(X.T)} kcal</span></li>
      <li class="tot"><span>= Erhaltungsbedarf<small>Gewicht halten</small></span><span>${k0(X.E)} kcal</span></li>
-     <li><span>${r.delta?(r.delta<0?'−':'+'):'±'} Ziel: ${g}<small>${r.delta?pct+' % '+(r.delta<0?'weniger':'mehr')+(r.floored?', bis zum Grundumsatz':''):'keine Anpassung'}</small></span><span>${X.D?sg0(X.D):'0'} kcal</span></li>
+     <li><span>${r.delta?(r.delta<0?'−':'+'):'±'} Ziel: ${g}<small>${r.delta?nRateTxt(r):'keine Anpassung'}</small></span><span>${X.D?sg0(X.D):'0'} kcal</span></li>
      <li class="tot"><span>= Zielbedarf<small>Ø pro Tag</small></span><span>${k0(X.Z)} kcal</span></li>
      <li><span>± Heute<small>${r.tr.todayN?'Training heute ≈ '+k0(Math.round(r.tr.todayKcal))+' kcal statt Ø '+k0(X.T):'kein Training heute, Ø '+k0(X.T)+' kcal fallen weg'}</small></span><span>${sg0(X.H)} kcal</span></li>
      <li class="sum"><span>= Heute</span><span>${k0(X.HT)} kcal</span></li>
     </ul>
    </div>`;
 }
-function nSum(){const r=nCalc();return r.miss?'Noch nicht vollständig':fmt(r.kg,1)+' kg · '+fmt(r.cm,0)+' cm · '+fmt(r.age,0)+' J. · '+N_GOALS.find(x=>x[0]===r.goal)[1]+(r.diet!=='normal'?' · '+N_DIETS.find(x=>x[0]===r.diet)[1]:'')}
+function nSum(){const r=nCalc();return r.miss?'Noch nicht vollständig':fmt(r.kg,1)+' kg · '+fmt(r.cm,0)+' cm · '+fmt(r.age,0)+' J. · '+N_GOALS.find(x=>x[0]===r.goal)[1]+(r.delta?' '+fmt(nRateKg(r),2)+' kg/Woche':'')+(r.diet!=='normal'?' · '+N_DIETS.find(x=>x[0]===r.diet)[1]:'')}
 function viewBedarf(){
   const n=nut(),w=nWeight();
   const seg=(a,cur,opts,lbl)=>`<div class="seg" role="group" aria-label="${lbl}">${opts.map(([v,l])=>`<button data-act="${a}" data-v="${v}" aria-pressed="${cur===v}">${l}</button>`).join('')}</div>`;
@@ -2548,12 +2558,14 @@ function viewBedarf(){
     <div class="field">${lblRow('nPal','Alltag ohne Training','nPalInfo')}<div class="infobox" id="nPalInfo" hidden>${palInfo}</div>
      <div class="palist" role="group" aria-label="Alltag ohne Training">${N_PAL.map(p=>`<button class="palrow" data-act="nPal" data-v="${p[0]}" aria-pressed="${p===pr}"><b>${p[1]}</b><span>${p[2]}</span></button>`).join('')}</div></div>
     <div class="field"><span class="eyebrow">Ziel</span>${seg('nGoal',n.goal,N_GOALS,'Ziel')}</div>
+    ${nRateField(n)}
     <div class="field"><span class="eyebrow">Ernährungsform</span>${seg('nDiet',n.diet,N_DIETS,'Ernährungsform')}</div>
    </div>`:''}</div>
   <div class="section" id="nutriOut">${nutriOut()}</div>`;
 }
 function nutriInput(t){const n=nut(),k=t.dataset.nf;n[k]=t.value;delete n._demo;WL=null;
   if(k==='weight'){n.wDate=today();const h=document.getElementById('nwHint');if(h)h.hidden=true}
+  if(k==='target'){const h=document.getElementById('nTHint');if(h)h.hidden=num(t.value)>0}
   if(k==='pal'){const p=N_PAL.find(x=>x[0]===t.value),el=document.getElementById('nPalDesc');if(p&&el)el.textContent=p[2]}
   save();const o=document.getElementById('nutriOut');if(o)o.innerHTML=nutriOut();const s=document.getElementById('nSum');if(s)s.textContent=nSum()}
 /* ======================= Lebensbereiche: Tage, Gewohnheiten, Ziele, Module ======================= */
@@ -2795,7 +2807,7 @@ function foodRow(x,k){
 function viewFood(){
   const k=offDate(foodDay),items=(dayGet(k).food||[]).slice().sort((a,b)=>(a.t||'')<(b.t||'')?-1:1),t=sumFood(items),r=nCalc(),tg=r.miss?null:foodTarget(r,k);
   const mac=(cls,lbl,v,tv)=>`<div class="mcell ${cls}"><span class="mac-n">${lbl}</span><b class="num">${fmt(Math.round(v),0)}<small>${tv?' / '+fmt(r5(tv),0)+' g':' g'}</small></b>${tv?`<div class="pbar" aria-hidden="true"><i style="width:${Math.min(100,v/tv*100).toFixed(1)}%"></i></div>`:''}</div>`;
-  const rec=recentFoods(),rest=tg?tg.k-t.k:0;
+  const rest=tg?tg.k-t.k:0;
   return `<div class="daynav"><button class="iconbtn" data-act="foodDay" data-d="-1" aria-label="Vorheriger Tag">‹</button><b>${dayTitle(k)}</b><button class="iconbtn" data-act="foodDay" data-d="1" aria-label="Nächster Tag"${foodDay>=0?' disabled':''}>›</button></div>
    <div class="card pane">
     <div class="kc-big"><b class="num">${fmt(Math.round(t.k),0)}</b><span>${tg?'von '+fmt(r10(tg.k),0)+' kcal · '+(rest>=0?'noch '+fmt(r10(rest),0):fmt(r10(-rest),0)+' drüber'):'kcal gegessen'}</span></div>
@@ -2804,7 +2816,7 @@ function viewFood(){
     ${tg?'':'<button class="lnk" data-act="tab" data-v="bedarf">Tagesbedarf berechnen</button>'}
    </div>
    <div class="addrow"><button class="btn primary big" data-act="addMeal" data-date="${k}">+ Mahlzeit eintragen</button><button class="btn big scanq" data-act="scanOpen" data-date="${k}" aria-label="Barcode scannen">${SCAN_IC}</button></div>
-   ${rec.length?`<div class="quick"><span class="eyebrow">Schnell nochmal</span><div class="qchips">${rec.map((x,i)=>`<button class="qchip fchip" data-act="foodQuick" data-i="${i}" data-date="${k}">${x.fav?'★ ':''}${esc(x.n)} · ${fmt(Math.round(num(x.k)),0)}</button>`).join('')}</div></div>`:''}
+   ${favChips(k)}
    ${mealSlotsHtml(items,k)}
    <div class="navlist"><button class="navrow" data-act="recList" data-date="${k}">${ICONS.rezepte}<span class="nr-t"><b>Rezepte</b><span>${esc(recCount())}</span></span>${CHR}</button><button class="navrow" data-act="tab" data-v="bedarf">${ICONS.bedarf}<span class="nr-t"><b>Tagesbedarf</b><span>${esc(nSum())}</span></span>${CHR}</button></div>`}
 async function shrink(file,max,q){const url=URL.createObjectURL(file);
@@ -3206,12 +3218,20 @@ function ctxSl(o){return SLOT_N[o&&o.sl]?o.sl:meal&&SLOT_N[meal.sl]?meal.sl:slot
 function slotRow(cur,act){return `<div class="slotrow"><span class="eyebrow">Mahlzeit</span><div class="chips slots" role="group" aria-label="Mahlzeit">${SLOTS.map(([k])=>`<button class="chip" data-act="${act||'slotSet'}" data-v="${k}" aria-pressed="${cur===k}">${SLOT_S[k]}</button>`).join('')}</div></div>`}
 function eatLbl(date,sl){const z=SLOT_ZU[sl]||SLOT_ZU.sn;return z.charAt(0).toUpperCase()+z.slice(1)+' eintragen'+(date===today()?'':' · '+dayTitle(date))}
 function eatToast(x){return x.n+' '+(SLOT_ZU[x.sl]||'')+' eingetragen'}
-/* Tagebuch: vier Abschnitte mit Kalorien und eigenem Plus */
-function mealSlotsHtml(items,k){const g={fr:[],mi:[],ab:[],sn:[]};for(const x of items)g[slotOf(x)].push(x);
-  return `<div class="card pane meals">${items.length?'':'<div class="small muted">Noch nichts eingetragen. Tippe bei einer Mahlzeit auf Plus, scanne einen Barcode oder nimm etwas aus „Schnell nochmal“.</div>'}
-   ${SLOTS.map(([s,l])=>{const L=g[s],kc=L.reduce((t,x)=>t+num(x.k),0);
-    return `<div class="mslot" id="slot-${s}"><div class="ms-h"><span class="eyebrow">${l}</span><span class="ms-k num">${L.length?fmt(Math.round(kc),0)+'<small> kcal</small>':''}</span><button class="ms-add" data-act="addMeal" data-date="${k}" data-sl="${s}" aria-label="${esc(SLOT_ZU[s].charAt(0).toUpperCase()+SLOT_ZU[s].slice(1))} eintragen">${PLUS_IC}</button></div>
-     ${L.length?`<div class="flist">${L.map(x=>foodRow(x,k)).join('')}</div>`:''}</div>`}).join('')}</div>`}
+/* Tagebuch: vier Abschnitte, eingeklappt nur mit Kalorien und Plus. Ein Tipp auf den Namen klappt auf; was offen ist,
+   merkt sich die App, bis du den Tag wechselst. Ein Eintrag, der gerade bearbeitet wird, hält seinen Abschnitt offen. */
+let mealOpen={k:'',s:new Set()};
+function mealSlotsHtml(items,k){if(mealOpen.k!==k)mealOpen={k,s:new Set()};const g={fr:[],mi:[],ab:[],sn:[]};for(const x of items)g[slotOf(x)].push(x);
+  let any=false;
+  const body=SLOTS.map(([s,l])=>{const L=g[s],kc=L.reduce((t,x)=>t+num(x.k),0),open=L.length>0&&(mealOpen.s.has(s)||L.some(x=>foodEdit&&foodEdit.id===x.id));if(open)any=true;
+    return `<div class="mslot${open?' open':''}" id="slot-${s}" data-sl="${s}"><div class="ms-h"><button class="ms-tog" data-act="mealTog" data-v="${s}" aria-expanded="${open}"${L.length?'':' disabled'} aria-label="${esc(l)}${L.length?', '+fmt(Math.round(kc),0)+' kcal, '+L.length+(L.length===1?' Eintrag':' Einträge'):', noch nichts eingetragen'}"><span class="eyebrow">${l}</span>${L.length?CHEV:''}<span class="ms-k num">${L.length?fmt(Math.round(kc),0)+'<small> kcal</small>':''}</span></button><button class="ms-add" data-act="addMeal" data-date="${k}" data-sl="${s}" aria-label="${esc(SLOT_ZU[s].charAt(0).toUpperCase()+SLOT_ZU[s].slice(1))} eintragen">${PLUS_IC}</button></div>
+     ${open?`<div class="flist">${L.map(x=>foodRow(x,k)).join('')}</div>`:''}</div>`}).join('');
+  return `<div class="card pane meals">${items.length?'':'<div class="small muted">Noch nichts eingetragen. Tippe bei einer Mahlzeit auf Plus, scanne einen Barcode oder nimm einen Favoriten.</div>'}${body}
+   ${any?'<div class="small muted mdhint">Zum Verschieben einen Eintrag lange drücken und auf eine andere Mahlzeit ziehen.</div>':''}</div>`}
+/* Favoriten statt „Schnell nochmal“: Antippen trägt nach Uhrzeit ein, lange drücken und auf eine Mahlzeit ziehen trägt dort ein */
+function favChips(k){const F=Array.isArray(S.favs)?S.favs:[];
+  return `<div class="quick favq"><span class="eyebrow">Favoriten</span>${F.length?`<div class="qchips">${F.map((x,i)=>`<button class="qchip fchip" data-act="favQuick" data-i="${i}" data-date="${k}">★ ${esc(x.n)} · ${fmt(Math.round(num(x.k)),0)}</button>`).join('')}</div>`
+    :'<div class="small muted">Noch keine Favoriten. Beim Eintragen „Als Favorit merken“ ankreuzen oder im Tagebuch einen Eintrag öffnen und auf ☆ Favorit tippen.</div>'}</div>`}
 function feSlots(e){return slotRow(SLOT_N[e.sl]?e.sl:slotOf(e),'feSlot')}
 function newMeal(k,sl){return {date:k||today(),sl:SLOT_N[sl]?sl:slotNow(),mode:'find',q:'',off:{q:'',status:'idle',items:[]},res:null,fav:false,added:[],err:''}}
 function mealReset(){meal=null}
@@ -3506,7 +3526,12 @@ function foodAct(a,el,ck){if(recAct(a,el,ck))return true;switch(a){
     pick=null;pop();pendingScroll='ing-'+(R.items.length-1);toast(n+' hinzugefügt');render();return true}
   case 'mealDone':mealReset();pop();render();return true;
   case 'slotSet':{const v=el.dataset.v;if(!SLOT_N[v])return true;if(meal)meal.sl=v;if(prod)prod.sl=v;if(rv)rv.sl=v;render();return true}
-  case 'feSlot':{const v=el.dataset.v;if(SLOT_N[v]&&foodEdit)foodEdit.sl=v;render();return true}}
+  case 'feSlot':{const v=el.dataset.v;if(SLOT_N[v]&&foodEdit)foodEdit.sl=v;render();return true}
+  case 'mealTog':{const v=el.dataset.v;if(!SLOT_N[v])return true;if(mealOpen.s.has(v)){mealOpen.s.delete(v);if(foodEdit&&slotOf(foodEdit)===v)foodEdit=null}else mealOpen.s.add(v);render();return true}
+  case 'favQuick':{const x=S.favs[+el.dataset.i];if(x){const y=addFood(el.dataset.date||today(),{...x,sl:slotNow()});render();toast(eatToast(y))}return true}
+  case 'nRate':{const n=nut(),v=el.dataset.v,g=n.goal;if(g!=='ab'&&g!=='zu')return true;
+    if(!n.rates||typeof n.rates!=='object')n.rates={};const o=n.rates[g]=n.rates[g]&&typeof n.rates[g]==='object'?n.rates[g]:{};
+    if(v==='date')o.date=1;else if(N_RATES.includes(num(v))){o.v=num(v);delete o.date}delete n._demo;WL=null;render();return true}}
   return false}
 function foodInput(T){const id=T.id,ds=T.dataset||{};
   if(recInput(T))return true;
@@ -3539,6 +3564,77 @@ function addFood(k,x){const D=dayMut(k),sl=SLOT_N[x.sl]?x.sl:slotNow();const e={
   if(x.code)e.code=String(x.code);
   if(x.rec)e.rec=String(x.rec);
   (D.food=D.food||[]).push(e);return e}
+
+/* ---------- Ziehen: Eintrag oder Favorit lange drücken und auf eine Mahlzeit ziehen ----------
+   Eigene Touch-Steuerung, weil Drag and Drop in Safari auf dem iPhone nicht zuverlässig geht. Erst nach 0,4 s ohne Bewegung hebt
+   sich der Eintrag an; wer vorher wischt, scrollt wie gewohnt. Die Ereignisse hängen am angefassten Element, damit das Ziehen auch
+   weiterläuft, wenn die Seite zwischendurch neu gezeichnet wird. Am oberen und unteren Rand scrollt die Seite mit. */
+const MD={tm:0,el:null,on:false,gh:null,x0:0,y0:0,x:0,y:0,dx:0,dy:0,over:null,raf:0,kind:'',id:'',k:'',moved:false};
+function mdFind(t){return t&&t.closest?t.closest('#main .meals .frow[data-act="foodEdit"],#main .favq .fchip'):null}
+function mdReset(){clearTimeout(MD.tm);cancelAnimationFrame(MD.raf);const el=MD.el;
+  if(el){el.removeEventListener('touchmove',mdTM);el.removeEventListener('touchend',mdTE);el.removeEventListener('touchcancel',mdReset);el.classList.remove('mdsrc')}
+  if(MD.gh)MD.gh.remove();if(MD.over)MD.over.classList.remove('mdover');document.body.classList.remove('mdrag');
+  Object.assign(MD,{tm:0,el:null,on:false,gh:null,over:null,raf:0,moved:false})}
+document.addEventListener('touchstart',e=>{if(MD.el){if(MD.on)return;mdReset()}if(e.touches.length!==1)return;const el=mdFind(e.target);if(!el)return;const t=e.touches[0];
+  Object.assign(MD,{el,x0:t.clientX,y0:t.clientY,x:t.clientX,y:t.clientY});
+  el.addEventListener('touchmove',mdTM,{passive:false});el.addEventListener('touchend',mdTE,{passive:false});el.addEventListener('touchcancel',mdReset);
+  MD.tm=setTimeout(mdStart,400)},{passive:true});
+function mdTM(e){const t=e.touches[0];if(!t)return;MD.x=t.clientX;MD.y=t.clientY;
+  if(MD.on){if(e.cancelable)e.preventDefault();if(Math.abs(MD.y-MD.y0)>24||Math.abs(MD.x-MD.x0)>24)MD.moved=true;mdMove();return}
+  if(Math.abs(MD.x-MD.x0)>8||Math.abs(MD.y-MD.y0)>8)mdReset()}
+function mdTE(e){if(MD.on){if(e.cancelable)e.preventDefault();mdDrop()}else mdReset()}
+function mdStart(){const el=MD.el;MD.tm=0;if(!el||!el.isConnected){mdReset();return}
+  const fav=el.classList.contains('fchip'),r=el.getBoundingClientRect();
+  MD.kind=fav?'fav':'food';MD.id=fav?el.dataset.i:el.dataset.id;MD.k=el.dataset.date||today();
+  const g=el.cloneNode(true);g.removeAttribute('data-act');g.classList.add('mdghost');g.setAttribute('aria-hidden','true');
+  g.style.width=r.width+'px';document.body.appendChild(g);
+  MD.gh=g;MD.dx=MD.x0-r.left;MD.dy=MD.y0-r.top;MD.on=true;el.classList.add('mdsrc');document.body.classList.add('mdrag');
+  try{const sel=window.getSelection&&window.getSelection();if(sel)sel.removeAllRanges()}catch(e){}
+  mdMove();MD.raf=requestAnimationFrame(mdLoop)}
+function mdMove(){const g=MD.gh;if(g){g.style.left=(MD.x-MD.dx)+'px';g.style.top=(MD.y-MD.dy)+'px'}
+  const t=document.elementFromPoint(MD.x,MD.y),s=t&&t.closest?t.closest('#main .meals .mslot'):null;
+  if(s!==MD.over){if(MD.over)MD.over.classList.remove('mdover');MD.over=s;if(s)s.classList.add('mdover')}}
+/* Erst wenn der Finger schon unterwegs ist, damit ein Eintrag am Rand nicht sofort losscrollt */
+function mdLoop(){if(!MD.on)return;const m=document.getElementById('main');
+  if(m&&MD.moved){const r=m.getBoundingClientRect(),e=56,v=MD.y<r.top+e?-Math.ceil((r.top+e-MD.y)/8):MD.y>r.bottom-e?Math.ceil((MD.y-(r.bottom-e))/8):0;if(v){m.scrollTop+=v;mdMove()}}
+  MD.raf=requestAnimationFrame(mdLoop)}
+function mdDrop(){const s=MD.over&&MD.over.dataset.sl,kind=MD.kind,id=MD.id,k=MD.k;mdReset();noClickUntil=Date.now()+450;
+  if(!SLOT_N[s])return;userActed=true;
+  if(kind==='fav'){const f=S.favs[+id];if(!f)return;const y=addFood(k,{...f,sl:s});render();toast(eatToast(y));return}
+  const x=(dayGet(k).food||[]).find(f=>f.id===id);if(!x||slotOf(x)===s)return;x.sl=s;if(foodEdit&&foodEdit.id===x.id)foodEdit=null;render();toast(x.n+' '+SLOT_ZU[s]+' verschoben')}
+
+/* ---------- Tagesbedarf: Tempo beim Abnehmen und Zunehmen ----------
+   0,25 bis 1 kg pro Woche oder „Bis Datum“: Tempo aus Zielgewicht und Datum, höchstens 1 kg pro Woche.
+   1 kg Körpergewicht ≈ 7.700 kcal. Ohne Wahl: Abnehmen 0,5 kg, Zunehmen 0,25 kg. Unter den Grundumsatz geht es nie (nCalc).
+   Gemerkt wird das Tempo je Richtung (S.nutri.rates.ab / .zu: {v, date}), damit ein Wechsel von Abnehmen zu Zunehmen nicht 1 kg mitnimmt. */
+const N_RATES=[0.25,0.5,0.75,1],KCAL_KG=7700;
+const N_RATE_INFO='<p>Wie schnell du ab- oder zunehmen willst. 1 kg Körpergewicht entspricht grob 7.700 kcal: 0,5 kg pro Woche sind etwa 550 kcal am Tag, 1 kg etwa 1.100 kcal.</p><p>Mit „Bis Datum“ rechnet die App das Tempo aus deinem Zielgewicht und dem Datum aus, höchstens 1 kg pro Woche. Unter deinen Grundumsatz geht der Zielbedarf nie.</p><p>Die 7.700 kcal sind eine Faustregel. Am Anfang ändert sich das Gewicht oft schneller (Wasser), später langsamer. Wiege dich regelmäßig und passe nach 2 bis 3 Wochen an.</p>';
+function nRateGet(n,goal){const o=n&&n.rates&&n.rates[goal]||{};return {v:N_RATES.includes(num(o.v))?num(o.v):goal==='zu'?0.25:0.5,date:!!o.date}}
+function nRateInfo(n,kg,goal){if(goal!=='ab'&&goal!=='zu')return null;const g=nRateGet(n,goal),o={rate:g.v,by:'fix'};
+  if(!g.date)return o;
+  o.by='date';const t=num(n.target),d=String(n.tdate||''),td=today();
+  if(!(t>0)){o.bad='target';return o}
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(d)){o.bad='date';return o}
+  if(d<=td){o.bad='past';return o}
+  const need=goal==='ab'?kg-t:t-kg;if(need<=0){o.bad='reached';return o}
+  o.need=need/((dayN(d)-dayN(td))/7);o.rate=Math.min(1,o.need);o.capped=o.need>1;return o}
+const nRateKg=r=>Math.abs(r.delta)*7/KCAL_KG;
+function dDate(k){const d=parseD(k);return d.getDate()+'. '+MON[d.getMonth()]+(d.getFullYear()!==new Date().getFullYear()?' '+d.getFullYear():'')}
+function nRateNotes(r){const o=[],ri=r.ri,n=nut();if(!ri||ri.by!=='date')return o;const dz=fmt(ri.rate,2);
+  if(ri.bad==='target')o.push('Für „Bis Datum“ fehlt dein Zielgewicht. Bis dahin rechnet die App mit '+dz+' kg pro Woche.');
+  else if(ri.bad==='date')o.push('Wähl bei „Bis Datum“ ein Datum. Bis dahin rechnet die App mit '+dz+' kg pro Woche.');
+  else if(ri.bad==='past')o.push('Das Datum für dein Zielgewicht ist schon vorbei. Wähl ein neues; bis dahin rechnet die App mit '+dz+' kg pro Woche.');
+  else if(ri.capped)o.push('Bis zum '+dDate(n.tdate)+' bräuchtest du '+fmt(ri.need,2)+' kg pro Woche. Die App rechnet mit höchstens 1 kg pro Woche.');
+  return o}
+function nFloorTxt(r){return 'Mit '+fmt(r.ri?r.ri.rate:0,2)+' kg pro Woche kämst du unter deinen Grundumsatz. Die App rechnet deshalb mit '+fmt(nRateKg(r),2)+' kg pro Woche.'}
+function nRateTxt(r){return fmt(nRateKg(r),2)+' kg pro Woche'+(r.floored?', bis zum Grundumsatz':'')}
+function nEtaHtml(r){if(!r.eta)return '';const days=Math.ceil((r.target-r.kg)/(r.delta/KCAL_KG));
+  return `<div class="nwhy">${r.goal==='ab'?'−':'+'}${fmt(nRateKg(r),2)} kg pro Woche · <b>${fmt(r.target)} kg ${days>730?'in über zwei Jahren':'etwa am '+dDate(offDate(days))}</b>${days<=730?` <span class="muted">(in ${days<14?days+(days===1?' Tag':' Tagen'):Math.round(days/7)+' Wochen'})</span>`:''}</div>`}
+function nRateField(n){if(n.goal!=='ab'&&n.goal!=='zu')return '';const g=nRateGet(n,n.goal),by=g.date,cur=g.v,sg=n.goal==='ab'?'−':'+';
+  return `<div class="field"><div class="lbl-row"><span class="eyebrow">Tempo pro Woche</span>${infoBtn('nRateInfo','Tempo')}</div>${iBox('nRateInfo',N_RATE_INFO)}
+    <div class="chips wrap rates" role="group" aria-label="Tempo pro Woche">${N_RATES.map(v=>`<button class="chip" data-act="nRate" data-v="${v}" aria-pressed="${!by&&cur===v}">${sg}${fmt(v,2)} kg</button>`).join('')}<button class="chip" data-act="nRate" data-v="date" aria-pressed="${by}">Bis Datum</button></div>
+    ${by?`<label class="field"><span class="eyebrow">Zielgewicht erreichen bis</span><input class="in" type="date" id="nTDate" data-nf="tdate" value="${esc(n.tdate||'')}" min="${offDate(1)}"></label><span class="small muted" id="nTHint"${num(n.target)>0?' hidden':''}>Trag oben dein Zielgewicht ein.</span>`
+      :`<span class="small muted">≈ ${fmt(r10(cur*KCAL_KG/7),0)} kcal am Tag ${n.goal==='ab'?'weniger':'mehr'} als dein Erhaltungsbedarf</span>`}</div>`}
 /* ======================= Rezepte: anlegen, bearbeiten und portionsweise eintragen =======================
    S.recipes  [{id,n,por,w,note,items,used,uses,last,created}]
               por = Portionen, die das Rezept ergibt; w = Gewicht fertig gekocht in g (optional)
@@ -4156,6 +4252,38 @@ function trainCardToday(k){
 function heuteAct(a,el){const ds=el&&el.dataset||{};switch(a){
   case 'ciEdit':ciEdit=ds.date||hDate();render();return true;
   case 'ciClose':ciEdit=null;render();return true}
+  return false}
+/* ======================= Fortschritt ======================= */
+/* ---------- Muskelgruppen im Vergleich ----------
+   Anteil der abgehakten Sätze je Muskelgruppe im Zeitraum, ohne Zielbereich: ein reiner Vergleich zwischen den Gruppen.
+   Grob nach Kategorie, fein (nur in Analyse) nach Muskelgruppe der Übung. Eine Übung zählt nur bei ihrer Hauptgruppe; Ausdauer zählt nicht. */
+const MS_BASE=['Beine','Brust','Rücken','Schultern','Arme','Bauch & Core'];
+const MS_INFO2='<p>Verglichen wird, wie sich deine abgehakten Sätze im Zeitraum auf die Muskelgruppen verteilen. Eine Übung zählt bei ihrer Hauptgruppe, Ausdauer zählt nicht mit.</p><p>Das ist ein grober Vergleich: Für den Muskelaufbau zählt vor allem, wie fordernd deine Sätze sind, nicht nur ihre Zahl. Der Vergleich zeigt dir, ob eine Gruppe deutlich seltener vorkommt als die anderen.</p>';
+function msCount(list,fine){const cnt=new Map();
+  for(const x of list)for(const e of x.entries||[]){const ex=exById(e.exId);if(!ex||isAusd(ex))continue;const n=cleanSets(ex,e.sets).length;if(!n)continue;
+    const c=ex.cat||'Ohne Kategorie',k=fine&&SUBS[c]&&ex.sub&&SUBS[c].includes(ex.sub)?c+'|'+ex.sub:c;cnt.set(k,(cnt.get(k)||0)+n)}
+  return cnt}
+function msOrder(cnt,fine){const out=[];
+  for(const c of MS_BASE){if(fine&&SUBS[c]){for(const s of SUBS[c])if(cnt.has(c+'|'+s))out.push(c+'|'+s);if(cnt.has(c))out.push(c)}else out.push(c)}
+  for(const k of [...cnt.keys()].filter(k=>!out.includes(k)&&!k.includes('|')).sort((a,b)=>a.localeCompare(b,'de')))out.push(k);
+  return out}
+function msLabel(k){const i=k.indexOf('|');return i<0?k:k.slice(i+1)}
+function muscleCard(R,canFine){const fine=!!(canFine&&S.ui.msFine),cnt=msCount(R.list,fine),tot=[...cnt.values()].reduce((t,v)=>t+v,0);
+  const head=`<div class="sec-h"><div class="lbl-row"><b>Muskelgruppen im Vergleich</b>${infoBtn('aiMs','Muskelgruppen im Vergleich')}</div>${canFine?`<div class="seg mini" role="group" aria-label="Aufteilung"><button data-act="msFine" data-v="0" aria-pressed="${!fine}">Grob</button><button data-act="msFine" data-v="1" aria-pressed="${fine}">Fein</button></div>`:''}</div>${iBox('aiMs',MS_INFO2)}`;
+  if(!tot)return `<div class="card section">${head}<div class="small muted">Im Zeitraum gibt es noch keine abgehakten Sätze mit Kraft- oder Körpergewichtsübungen.</div></div>`;
+  const keys=msOrder(cnt,fine),sh=k=>(cnt.get(k)||0)/tot,mx=Math.max(...keys.map(sh))||1;
+  const rows=keys.map(k=>{const v=sh(k);return `<div class="hbar cmp"><span>${esc(msLabel(k))}</span><div class="tr"><i class="fill cmp" style="width:${(v/mx*100).toFixed(1)}%"></i></div><span class="v num">${v?Math.max(1,Math.round(v*100))+' %':'–'}</span></div>`}).join('');
+  /* Hinweise bewusst grob, ohne Zahlen */
+  const g=k=>{let n=0;for(const [key,v] of cnt)if(key===k||key.startsWith(k+'|'))n+=v;return n/tot},hints=[],b=g('Brust'),r=g('Rücken'),up=b+r+g('Schultern')+g('Arme'),lg=g('Beine'),none=MS_BASE.filter(c=>!g(c));
+  if(tot>=12&&Math.max(b,r)>=0.08&&Math.max(b,r)>1.5*Math.min(b,r))hints.push(b>r?'Brust kommt deutlich öfter vor als Rücken. Ein ähnliches Verhältnis von Druck- und Zugübungen gilt als ausgewogen.':'Rücken kommt deutlich öfter vor als Brust.');
+  if(tot>=12&&up>0&&lg<up/4)hints.push('Beine kommen im Vergleich zum Oberkörper selten vor.');
+  if(tot>=20&&none.length&&none.length<MS_BASE.length)hints.push('Im Zeitraum nicht dabei: '+catsJoin(none)+'.');
+  return `<div class="card section">${head}<div class="small muted">Anteil deiner Sätze im Zeitraum</div><div class="hbars">${rows}</div>
+    ${hints.map(h=>`<div class="small msnote">${h}</div>`).join('')}${tot<12?'<div class="small muted">Noch wenige Sätze im Zeitraum. Mit mehr Trainings wird der Vergleich aussagekräftiger.</div>':''}</div>`}
+
+/* ---------- Aktionen ---------- */
+function progAct(a,el){const ds=el&&el.dataset||{};switch(a){
+  case 'msFine':S.ui.msFine=ds.v==='1';render();return true}
   return false}
 
 /* ---------- Körper ---------- */
@@ -4847,7 +4975,7 @@ function act(a,el){
   const key=IDC.includes(a)?a+':'+el.dataset.id:a==='delEntry'?'delEntry:'+el.dataset.e:a;
   if((NEEDS_CONFIRM.has(a)||IDC.includes(a)||a==='delEntry')&&confirmKey!==key){confirmKey=key;flash='';render();return}
   const prevCK=confirmKey;confirmKey=null;if(a!=='saveSession'&&a!=='addEx'&&a!=='prodSave')flash='';
-  if(fdbAct(a,el,prevCK)||foodAct(a,el,prevCK)||wipeAct(a,el)||trainAct(a,el,prevCK)||heuteAct(a,el))return;
+  if(fdbAct(a,el,prevCK)||foodAct(a,el,prevCK)||wipeAct(a,el)||trainAct(a,el,prevCK)||heuteAct(a,el)||progAct(a,el))return;
   const d=S.draft;
   if(['nudge','tStart','tStop','tReset','tEdit'].includes(a)&&d){const en=d.entries[+el.dataset.e];const st=en&&en.sets[+el.dataset.s];if(st&&st.done)return}
   switch(a){
@@ -4929,7 +5057,7 @@ function act(a,el){
     case 'favDel':S.favs.splice(+el.dataset.i,1);break;
     case 'foodEdit':{const k=el.dataset.date,x=(dayGet(k).food||[]).find(f=>f.id===el.dataset.id);foodEdit=x&&!(foodEdit&&foodEdit.id===x.id)?{...x,sl:slotOf(x),date:k}:null;break}
     case 'foodSave':{const e=foodEdit;if(!e)break;const x=(dayGet(e.date).food||[]).find(f=>f.id===e.id);
-      if(x){x.sl=SLOT_N[e.sl]?e.sl:slotOf(x);x.n=String(e.n||'').trim().slice(0,60)||'Eintrag';x.k=Math.max(0,Math.round(num(e.k)));x.p=Math.max(0,rnd1(e.p));x.c=Math.max(0,rnd1(e.c));x.f=Math.max(0,rnd1(e.f));if(x.per&&num(e.g)>0)x.g=rnd1(e.g);if(x.pp&&!x.per&&num(e.por)>0)x.por=rnd2(e.por);toast('Gespeichert')}
+      if(x){x.sl=SLOT_N[e.sl]?e.sl:slotOf(x);mealOpen.s.add(x.sl);x.n=String(e.n||'').trim().slice(0,60)||'Eintrag';x.k=Math.max(0,Math.round(num(e.k)));x.p=Math.max(0,rnd1(e.p));x.c=Math.max(0,rnd1(e.c));x.f=Math.max(0,rnd1(e.f));if(x.per&&num(e.g)>0)x.g=rnd1(e.g);if(x.pp&&!x.per&&num(e.por)>0)x.por=rnd2(e.por);toast('Gespeichert')}
       foodEdit=null;break}
     case 'foodDel':{const k=el.dataset.date,D=S.days[k];if(D&&D.food){D.food=D.food.filter(f=>f.id!==el.dataset.id);dayTidy(k)}foodEdit=null;toast('Eintrag gelöscht');break}
     case 'foodFav':{const e=foodEdit;if(!e)break;const n=String(e.n||'').trim();if(!n)break;const i=S.favs.findIndex(f=>(f.n||'').toLowerCase()===n.toLowerCase());
