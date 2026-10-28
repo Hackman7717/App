@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-title" content="Trainingsbuch">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="format-detection" content="telephone=no">
-<meta name="app-version" content="1.10.0">
+<meta name="app-version" content="1.11.0">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icons/icon-180.png">
 <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
@@ -1074,6 +1074,58 @@ body.mdrag,body.mdrag *{-webkit-user-select:none;user-select:none}
 .hbar.cmp{grid-template-columns:96px minmax(0,1fr) 42px}
 .hbar .fill.cmp{background:var(--accent-fg)}
 .msnote{line-height:1.45;padding-left:10px;border-left:3px solid var(--line-2)}
+/* ---------- Fortschritt: Startseite und Bereiche ---------- */
+.fctl{display:flex;flex-direction:column;gap:8px}
+.fareas{display:flex;flex-direction:column;gap:8px}
+.scr > .fareas{margin-inline:calc(-1 * var(--bleed))}
+.fareas > .farea{padding-inline:var(--bleed);border-inline-width:0}
+.farea{display:flex;flex-direction:column;align-items:stretch;gap:10px;width:100%;margin:0;text-align:left;color:var(--ink);font:inherit;cursor:pointer}
+.farea:active{background:var(--soft)}
+.fa-h{display:flex;align-items:center;gap:10px;min-height:26px}
+.fa-h > svg:first-child{width:22px;height:22px;flex:none;color:var(--accent-fg)}
+.fa-h > svg:last-child{width:18px;height:18px;flex:none;color:var(--muted);margin-left:auto}
+.fa-t{font-family:var(--f-display);font-size:19px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;line-height:1.1}
+.fa-k{display:grid;grid-template-columns:repeat(var(--n,2),minmax(0,1fr));gap:12px}
+.fa-kpi{display:flex;flex-direction:column;min-width:0}
+.fa-kpi > b{font-family:var(--f-display);font-size:30px;font-weight:700;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fa-k[style*="--n:3"] .fa-kpi > b{font-size:25px}
+.fa-kpi > b small{font-size:15px;color:var(--muted);font-weight:600;margin-left:2px}
+.fa-kl{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.3}
+.fa-kpi .dlt{font-size:11.5px;font-weight:700;color:var(--muted);margin-top:2px;line-height:1.3}
+.spark{display:block;width:100%;height:34px;overflow:visible}
+.spark rect{fill:color-mix(in srgb,var(--accent-fg) 72%,var(--soft))}
+.spark rect.cur{fill:var(--pr)}
+.spark .ref{stroke:var(--ink);stroke-width:1;stroke-dasharray:4 3;vector-effect:non-scaling-stroke;opacity:.55}
+.spark .ln{fill:none;stroke:var(--accent-fg);stroke-width:2.2;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+.fa-n{font-size:13px;color:var(--muted);line-height:1.4}
+.fa-n .warn{color:var(--bad);font-weight:700}
+.fcal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.fcal .fc-l{font-family:var(--f-display);font-size:11.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);text-align:center}
+.fcal i{display:grid;place-items:center;aspect-ratio:1;font-style:normal;font-size:13px;font-variant-numeric:tabular-nums;background:var(--soft);color:var(--muted)}
+.fcal i.on{background:var(--accent);color:var(--accent-ink);font-weight:700}
+.fcal i.f{background:transparent}
+.fcal i.td{box-shadow:inset 0 0 0 2px var(--ink)}
+.fcal.w7 .fc-c{display:flex;flex-direction:column;gap:4px;min-width:0}
+.fexl{display:flex;flex-direction:column}
+.fex{border-top:1px solid var(--line)}
+.fex:first-child{border-top:0}
+.fex-r{display:flex;align-items:center;gap:10px;width:100%;min-height:56px;padding:8px 0;border:0;background:none;color:var(--ink);text-align:left}
+.fex-r:active{background:var(--press)}
+.fex-n{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:2px}
+.fex-n b{font-weight:700}
+.fex-r .chev{width:20px;height:20px;flex:none;color:var(--muted);transition:transform .15s}
+.fex-r[aria-expanded="true"] .chev{transform:rotate(180deg)}
+.fex-b{display:flex;flex-direction:column;gap:10px;padding:2px 0 14px}
+.fhabs{display:flex;flex-direction:column;gap:14px}
+.fhab{display:flex;flex-direction:column;gap:6px}
+.fbar{height:8px;background:var(--soft)}
+.fbar i{display:block;height:100%;background:var(--good)}
+.chart rect.m-ei{fill:var(--m-ei)}
+.chart rect.m-kh{fill:var(--m-kh)}
+.chart rect.m-fe{fill:var(--m-fe)}
+.legend .lg-ei{background:var(--m-ei)}
+.legend .lg-kh{background:var(--m-kh)}
+.legend .lg-fe{background:var(--m-fe)}
 
 @media (prefers-reduced-motion: no-preference){
   .toast{animation:pop .2s ease-out}
@@ -1474,7 +1526,7 @@ if(!Array.isArray(S.plans))S.plans=S.demo&&S.exercises.some(e=>e.id==='e1')?demo
 /* ---------- Speicher auf dem Gerät ----------
    IndexedDB ist der Hauptspeicher (Daten und Fotos). Eine Kopie der Daten liegt zusätzlich im localStorage,
    damit die App sofort startet. Beim Start gewinnt der neuere Stand. Es gibt keinen Server und kein Konto. */
-const APPV='1.10.0',SCHEMA=3;
+const APPV='1.11.0',SCHEMA=3;
 const cloud={state:'local',deferred:false};
 const store={open:null,timer:null,ok:false,err:false,warned:false,persist:false};
 function idb(){if(store.open)return store.open;
@@ -1940,87 +1992,6 @@ function sessCard(x){
 }
 function groupList(list){let h='',cur='';for(const x of list){const d=parseD(x.date);const mk=MON[d.getMonth()]+' '+d.getFullYear();if(mk!==cur){h+=`<div class="hist-month">${mk}</div>`;cur=mk}h+=sessCard(x)}return h}
 
-function weekStats(){
-  const m0=monday(new Date());const weeks=[];
-  for(let i=7;i>=0;i--){const d=new Date(m0);d.setDate(d.getDate()-i*7);weeks.push({key:ymd(d),d,count:0,vol:0,feel:[]})}
-  for(const s of S.sessions){const k=ymd(monday(parseD(s.date)));const w=weeks.find(w=>w.key===k);if(w){w.count++;w.vol+=sessVolume(s);w.kcal=(w.kcal||0)+sessKcal(s);if(s.feel)w.feel.push(s.feel)}}
-  return weeks;
-}
-function viewFortschrittBasic(){
-  if(!S.sessions.length)return `${banner()}<div class="card empty"><b style="color:var(--ink)">Noch nichts auszuwerten</b>Sobald du ein paar Trainings eingetragen hast, siehst du hier deine Entwicklung.<button class="btn primary" data-act="tab" data-v="training">Training eintragen</button></div>`;
-  const weeks=weekStats();const now=new Date();now.setHours(0,0,0,0);
-  const daysAgo=s=>(now-parseD(s.date))/864e5;
-  const last28=S.sessions.filter(s=>daysAgo(s)<28&&daysAgo(s)>=0);const prev28=S.sessions.filter(s=>daysAgo(s)>=28&&daysAgo(s)<56);
-  const v1=last28.reduce((t,s)=>t+sessVolume(s),0),v0=prev28.reduce((t,s)=>t+sessVolume(s),0);
-  const vch=v0>0?Math.round((v1-v0)/v0*100):null;
-  // Serie
-  const keys=new Set(S.sessions.map(s=>ymd(monday(parseD(s.date)))));let streak=0;const m=monday(now);
-  if(!keys.has(ymd(m)))m.setDate(m.getDate()-7);
-  while(keys.has(ymd(m))){streak++;m.setDate(m.getDate()-7)}
-  // Fortschritt je Übung (letzte 8 Wochen)
-  const prog=[];for(const ex of S.exercises){const sr=series(ex.id).filter(p=>(now-parseD(p.date))/864e5<56);if(sr.length>=2&&sr[0].v>0)prog.push({ex,pct:(sr[sr.length-1].v-sr[0].v)/sr[0].v*100,first:sr[0].v,last:sr[sr.length-1].v})}
-  prog.sort((a,b)=>b.pct-a.pct);
-  const avg=prog.length?prog.reduce((t,p)=>t+p.pct,0)/prog.length:null;
-  const sign=n=>(n>0?'+':'')+fmt(n,0);
-  const cls=n=>n>0.5?'up':n<-0.5?'down':'';
-
-  const tiles=`<div class="tiles${perf()?'':' t3'}">
-    <div class="tile"><div class="v num">${last28.length}</div><div class="k">Trainings in den letzten 4 Wochen</div></div>
-    <div class="tile"><div class="v num">${streak}<small>${streak===1?'Woche':'Wochen'}</small></div><div class="k">am Stück mit Training</div></div>
-    <div class="tile"><div class="v num ${avg==null?'':cls(avg)}">${avg==null?'–':sign(avg)+'<small>%</small>'}</div><div class="k">Ø Steigerung deiner Übungen (8 Wochen)</div></div>
-    ${perf()?`<div class="tile"><div class="v num ${vch==null?'':cls(vch)}">${vch==null?'–':sign(vch)+'<small>%</small>'}</div><div class="k">Trainingsvolumen ggü. den 4 Wochen davor</div></div>`:''}
-  </div>`;
-
-  const freq=barChart(weeks.map(w=>({v:w.count,label:'KW'+isoWeek(w.d)})),{label:'Trainings pro Woche'});
-  const kcalC=barChart(weeks.map(w=>({v:w.kcal||0,label:'KW'+isoWeek(w.d)})),{label:'Kalorien pro Woche'});
-  const volC=barChart(weeks.map(w=>({v:Math.round(w.vol/100)/10,label:'KW'+isoWeek(w.d)})),{label:'Volumen pro Woche in Tonnen'});
-  const bwPts=weightLog().map(p=>({date:p.date,v:p.v}));
-  const progList=prog.length?`<div class="prog-list">${prog.map(p=>`<div class="prog-item"><div><b>${exNameH(p.ex)}</b><div class="small muted num">${fmt(p.first)} → ${fmt(p.last)} ${KINDS[p.ex.kind].unit}</div></div><span class="pill ${cls(p.pct)}">${sign(p.pct)} %</span></div>`).join('')}</div>`:
-    `<div class="small muted">Trag jede Übung mindestens zweimal ein, dann siehst du hier, wie sie sich entwickelt.</div>`;
-
-  // einzelne Übung
-  const used=S.exercises.filter(e=>series(e.id).length);
-  if(!used.find(e=>e.id===S.ui.progEx)&&used.length)S.ui.progEx=used[0].id;
-  const ex=exById(S.ui.progEx);let exHtml='';
-  if(ex&&used.length){
-    const sr=series(ex.id);const k=KINDS[ex.kind];const best=Math.max(...sr.map(p=>p.v));const first=sr[0].v,last=sr[sr.length-1].v;
-    const pct=first?(last-first)/first*100:0;const isPR=last===best&&sr.length>1&&sr.slice(0,-1).every(p=>p.v<last);
-    exHtml=`<div class="card section">
-      <div class="ex-head"><div><h3 style="font-size:22px">${esc(exFull(ex))}${isPR?'<span class="prbadge">NEUER REKORD</span>':''}</h3><div class="small muted">${metricName(ex.kind)} in ${k.unit}${ex.kind==='kraft'&&perf()?' (aus Gewicht und Wiederholungen berechnet)':''}</div></div></div>
-      ${sr.length>=2?lineChart(sr,{unit:k.unit,label:metricName(ex.kind)+' '+exFull(ex)}):'<div class="small muted">Noch ein Eintrag mehr, dann erscheint hier die Kurve.</div>'}
-      <div class="tiles" style="grid-template-columns:repeat(3,minmax(0,1fr))">
-        <div class="tile"><div class="v num" style="font-size:24px">${fmt(first)}</div><div class="k">Start</div></div>
-        <div class="tile"><div class="v num" style="font-size:24px;color:var(--pr)">${fmt(best)}</div><div class="k">Bestwert</div></div>
-        <div class="tile"><div class="v num ${cls(pct)}" style="font-size:24px">${sign(pct)}%</div><div class="k">seit Start</div></div>
-      </div>
-      <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Datum</th><th>Sätze</th><th class="r">${ex.kind==='kraft'&&!perf()?'Max':'Wert'} (${k.unit})</th></tr></thead><tbody>
-       ${(()=>{let run=0;const pr=new Set();sr.forEach((p,i)=>{if(p.v>run){if(i>0)pr.add(i);run=p.v}});
-         return sr.map((p,i)=>({p,i})).reverse().map(({p,i})=>{const d=parseD(p.date);return `<tr${pr.has(i)?' class="pr"':''}><td class="num">${d.getDate()}.${d.getMonth()+1}.${String(d.getFullYear()).slice(2)}</td><td>${esc(formatSets(ex.kind,p.entry.sets))}</td><td class="r num">${fmt(p.v)}${pr.has(i)?' <span class="star" title="Neuer Bestwert">★</span>':''}</td></tr>`}).join('')})()}
-      </tbody></table></div>
-      <div class="small muted">★ = neuer Bestwert an diesem Tag</div>
-    </div>`;
-  }
-
-  return `${banner()}${issuesCard()}
-  <section class="section"><h2>Allgemeine Fitness</h2>${tiles}</section>
-  <div class="fold">
-   <button class="fold-h" data-act="fold" data-v="wk" aria-expanded="${!!openFold.wk}"><span>Wochenübersicht</span>${CHEV}</button>
-   ${openFold.wk?`<div class="fold-b fold-stack">
-    <div class="section"><div><b>Trainings pro Woche</b><div class="small muted">Letzte 8 Wochen, die aktuelle Woche ist gelb</div></div>${freq}</div>
-    ${perf()?`<div class="section"><div><b>Bewegtes Gewicht pro Woche</b><div class="small muted">Tonnen, Summe aus Gewicht × Wiederholungen aller Kraftübungen</div></div>${volC}</div>
-    <div class="section"><div><b>Verbrannte Kalorien pro Woche</b><div class="small muted">Geschätzt aus MET-Wert, Körpergewicht und Dauer</div></div>${kcalC}</div>`:''}
-    ${bwPts.length>=2?`<div class="section"><div><b>Körpergewicht</b></div>${lineChart(bwPts,{unit:'kg',label:'Körpergewicht'})}</div>`:''}
-   </div>`:''}
-  </div>
-  <div class="fold">
-   <button class="fold-h" data-act="fold" data-v="se" aria-expanded="${!!openFold.se}"><span>Einzelne Übungen</span>${CHEV}</button>
-   ${openFold.se?`<div class="fold-b fold-stack">
-    <div class="section">
-    ${used.length?`<div class="field"><span class="eyebrow">Übung</span><div class="chips" role="group" aria-label="Übung">${used.map(e=>`<button class="chip" data-act="progEx" data-id="${e.id}" aria-pressed="${e.id===S.ui.progEx}">${esc(exFull(e))}</button>`).join('')}</div></div>${exHtml}`:'<div class="small muted">Noch keine Einträge.</div>'}</div>
-   </div>`:''}
-  </div>`;
-}
-
 /* ---------- Plausibilität: unrealistische Einträge erkennen ---------- */
 const DUR_MAX=600;
 function bwOk(v){v=num(v);return v>=30&&v<=250}
@@ -2072,9 +2043,7 @@ function issuesCard(){
     <div class="small muted">Diese Werte zählen nicht für Kalorien, Bestwerte und Auswertungen, bis du sie korrigierst oder mit „Stimmt so“ bestätigst.</div></div>
     <div class="plist">${rows.slice(0,8).map(({x,is})=>`<div class="pitem"><div class="nm"><b>${dLong(x.date)}</b><span class="small muted">${is.join(' · ')}</span></div><div class="iss-btns"><button class="btn small" data-act="edit" data-id="${x.id}">Bearbeiten</button><button class="btn small ghost" data-act="okIssue" data-id="${x.id}">Stimmt so</button></div></div>`).join('')}</div></div>`}
 
-/* ---------- Analyse (Analysis-Ansicht) ---------- */
-const A_TABS=[['ueb','Übersicht'],['kraft','Kraft'],['ausd','Ausdauer'],['koerper','Körper']];
-const A_RANGES=[['4w','4 Wochen'],['3m','3 Monate'],['1j','1 Jahr'],['all','Alles']];
+/* ---------- Ansicht Analyse: Auswertungen unter Fortschritt → Training ---------- */
 const MON3=['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
 const dayN=s=>{const [y,m,d]=String(s).split('-').map(Number);return Math.round(Date.UTC(y,m-1,d)/864e5)};
 const nDate=n=>{const d=new Date(Math.round(n)*864e5);return d.getUTCDate()+'.'+(d.getUTCMonth()+1)+'.'};
@@ -2082,26 +2051,12 @@ const dmy=s=>{const d=parseD(s);return d.getDate()+'.'+(d.getMonth()+1)+'.'+(d.g
 const dLong=s=>{const d=parseD(s);return WD[d.getDay()]+', '+d.getDate()+'.'+(d.getMonth()+1)+'.'+String(d.getFullYear()).slice(2)};
 const avgOf=a=>a.length?a.reduce((t,v)=>t+v,0)/a.length:0;
 const sgnF=(v,d=1)=>(Math.abs(v)<Math.pow(10,-d)/2?'±':v>0?'+':'−')+fmt(Math.abs(v),d);
-const tabTitle=t=>t==='fortschritt'&&perf()?'Analyse':(TABS.find(x=>x[0]===t)||['',''])[1];
 const inBk=(b,date)=>date>=b.s&&date<=b.e;
 let kcC=null;
 function kcd(x){if(!kcC)return sessKcalDetail(x);let v=kcC.get(x);if(!v){v=sessKcalDetail(x);kcC.set(x,v)}return v}
 function sessMin(x){return durOk(x)?num(x.dur):Math.round(kcd(x).min||0)}
 function paceTxt(p){const s=Math.round(p*60);return Math.floor(s/60)+':'+pad(s%60)}
 function weekStreak(){const td=today(),keys=new Set(S.sessions.filter(s=>s.date<=td).map(s=>ymd(monday(parseD(s.date)))));let n=0;const m=monday(parseD(td));if(!keys.has(ymd(m)))m.setDate(m.getDate()-7);while(keys.has(ymd(m))){n++;m.setDate(m.getDate()-7)}return n}
-function anaRange(){
-  const key=A_RANGES.some(r=>r[0]===S.ui.anaRange)?S.ui.anaRange:'3m';
-  const td=today(),now=parseD(td);let start;const bk=[];
-  if(key==='4w'||key==='3m'){const n=key==='4w'?4:13;const m=monday(now);m.setDate(m.getDate()-7*(n-1));start=ymd(m);
-    for(let i=0;i<n;i++){const a=new Date(m);a.setDate(a.getDate()+7*i);const b=new Date(a);b.setDate(b.getDate()+6);bk.push({s:ymd(a),e:ymd(b),label:'KW'+isoWeek(a)})}}
-  else{let f;if(key==='1j')f=new Date(now.getFullYear(),now.getMonth()-11,1);
-    else{const l=sortedSessions().filter(x=>x.date<=td);const d0=l.length?parseD(l[0].date):now;f=new Date(d0.getFullYear(),d0.getMonth(),1)}
-    start=ymd(f);
-    for(let d=new Date(f);d<=now;d=new Date(d.getFullYear(),d.getMonth()+1,1)){const e=new Date(d.getFullYear(),d.getMonth()+1,0);bk.push({s:ymd(d),e:ymd(e),label:MON3[d.getMonth()]+(d.getMonth()===0&&bk.length?' '+String(d.getFullYear()).slice(2):'')})}}
-  const days=Math.max(1,dayN(td)-dayN(start)+1);
-  return {key,start,end:td,days,weeks:Math.max(1,days/7),bk,weekly:key==='4w'||key==='3m',list:sortedSessions().filter(x=>x.date>=start&&x.date<=td)};
-}
-
 /* Diagramme mit Zeitachse und gestapelte Balken */
 function tChart(series,opt={}){
   const W=340,H=opt.h||180,L=opt.l||42,R=12,T=14,B=26;
@@ -2188,7 +2143,7 @@ function feelCard(R){
     else msg=`Dein Gefühl ist stabil (Ø ${fmt(a,1)} in den letzten 3 Wochen).`}
   else msg=rc.length+bf.length?'Noch zu wenige Bewertungen für einen Trend. Bewerte deine Trainings beim Abschließen.':'Bewerte deine Trainings beim Abschließen, dann siehst du hier, wie sich dein Gefühl entwickelt.';
   const ch=pts.length>=2?tChart([{pts,dots:true}],{min:1,max:5,ticks:[1,2,3,4,5],fy:v=>FEEL[v-1],h:160,label:'Gefühl im Verlauf'}):'';
-  return `<div class="card section"><div><b>Gefühl</b><div class="small muted">Ø Bewertung pro ${R.weekly?'Woche':'Monat'}</div></div>${ch}<div class="small${cls?' trend '+cls:' muted'}">${msg}</div></div>`;
+  return `<div class="card section"><div><b>Gefühl</b><div class="small muted">Ø Bewertung pro ${R.per}</div></div>${ch}<div class="small${cls?' trend '+cls:' muted'}">${msg}</div></div>`;
 }
 function planCard(R){
   const by={},miss={};let P=0,D=0;
@@ -2269,7 +2224,7 @@ function anaKraft(R){
   const ms=muscleCard(R,true);
   // Bewegtes Gewicht
   const vol=R.bk.map(b=>{let v=0;for(const x of R.list)if(inBk(b,x.date))for(const e of x.entries){const ex=exById(e.exId);if(ex&&ex.kind==='kraft')v+=volume(cleanEntry(ex,e),'kraft')}return {label:b.label,parts:[v/1000]}});
-  const vc=vol.some(b=>b.parts[0]>0)?`<div class="card section"><div><b>Bewegtes Gewicht</b><div class="small muted">Tonnen pro ${R.weekly?'Woche':'Monat'}, Summe aus Gewicht × Wiederholungen</div></div>${sBars(vol,{cur:true,label:'Bewegtes Gewicht in Tonnen'})}</div>`:'';
+  const vc=vol.some(b=>b.parts[0]>0)?`<div class="card section"><div><b>Bewegtes Gewicht</b><div class="small muted">Tonnen pro ${R.per}, Summe aus Gewicht × Wiederholungen</div></div>${sBars(vol,{cur:true,label:'Bewegtes Gewicht in Tonnen'})}</div>`:'';
   const any=plH||det||rc||ms||vc;
   if(!any)return '<div class="card empty"><b style="color:var(--ink)">Noch keine Kraftübungen</b>Sobald du Kraft- oder Körpergewichtsübungen einträgst, siehst du hier Bestwerte und Verläufe.</div>';
   return `${plH}${det}${rc}${ms}${vc}${pl.length?'':'<div class="small muted" style="text-align:center">Kein Plateau erkannt.</div>'}`;
@@ -2303,41 +2258,10 @@ function anaAusd(R){
   return `${ds.length>1?`<div class="chips">${ds.map(e=>`<button class="chip" data-act="anaRun" data-id="${e.id}" aria-pressed="${e.id===ex.id}">${esc(exFull(e))}</button>`).join('')}</div>`:''}
    ${tiles}
    <div class="card section"><div><b>Tempo</b><div class="small muted">${rad?'km/h pro Einheit, höher ist schneller':'min/km pro Einheit, weiter oben ist schneller'}</div></div>${pc}</div>
-   <div class="card section"><div><b>Kilometer pro ${R.weekly?'Woche':'Monat'}</b></div>${sBars(kmB,{cur:true,label:'Kilometer'})}</div>
+   <div class="card section"><div><b>Kilometer pro ${R.per}</b></div>${sBars(kmB,{cur:true,label:'Kilometer'})}</div>
    ${rec.length?`<div class="card section"><div class="sec-h"><b>Bestwerte</b><span class="small muted">alle Zeiten</span></div><div class="rec-g">${rec.map(c=>`<div class="rec-c"><span>${c.k}</span><b class="num">${c.v}</b><span>${c.s}</span></div>`).join('')}</div></div>`:''}`;
 }
 
-/* Körper */
-function anaKoerper(R){
-  const pts=weightLog().filter(p=>p.date>=R.start&&p.date<=R.end).map(p=>({t:dayN(p.date),v:p.v}));
-  const av=pts.map(p=>({t:p.t,v:avgOf(pts.filter(q=>q.t>p.t-7&&q.t<=p.t).map(q=>q.v))}));
-  let bwH;
-  if(pts.length>=2){const a0=av[0],a1=av[av.length-1],ch=a1.v-a0.v,wks=(a1.t-a0.t)/7;
-    bwH=`<div class="tiles t3"><div class="tile"><div class="v num">${fmt(a1.v,1)}<small>kg</small></div><div class="k">Wochenschnitt aktuell</div></div>
-     <div class="tile"><div class="v num">${sgnF(ch)}<small>kg</small></div><div class="k">im Zeitraum</div></div>
-     <div class="tile"><div class="v num">${wks>=1?sgnF(ch/wks,2)+'<small>kg</small>':'–'}</div><div class="k">Ø pro Woche</div></div></div>
-     ${tChart([{pts,line:false,dots:true,dcls:'dt',r:3.2},{pts:av,cls:'ln'}],{fy:v=>fmt(v,1),label:'Körpergewicht'})}
-     <div class="legend"><span><i class="lg-dt"></i>gewogen</span><span><i class="lg-ln"></i>Wochenschnitt (7 Tage)</span></div>`}
-  else bwH='<div class="small muted">Trag dein Körpergewicht unter Heute oder beim Training ein. Ab zwei Werten im Zeitraum siehst du hier den Verlauf.</div>';
-  const kb=R.bk.map(b=>{let k=0,a=0;for(const x of R.list)if(inBk(b,x.date)){const p=kcd(x).parts||{};k+=p.kraft||0;a+=p.ausd||0}return {label:b.label,parts:[k,a]}});
-  const K=kb.reduce((t,b)=>t+b.parts[0],0),A=kb.reduce((t,b)=>t+b.parts[1],0),T=K+A;
-  const kc=T?`<div class="tiles t3"><div class="tile"><div class="v num">${fmt(Math.round(T),0)}</div><div class="k">kcal im Zeitraum</div></div>
-     <div class="tile"><div class="v num">${fmt(Math.round(T/R.weeks),0)}</div><div class="k">kcal Ø pro Woche</div></div>
-     <div class="tile"><div class="v num">${Math.round(A/T*100)}<small>%</small></div><div class="k">davon Ausdauer</div></div></div>
-     ${sBars(kb,{cls:['bar','bar2'],label:'Verbrannte Kalorien'})}
-     <div class="legend"><span><i class="lg-k"></i>Kraft</span><span><i class="lg-a"></i>Ausdauer</span></div>`:'<div class="small muted">Für die Kalorien braucht die App dein Körpergewicht.</div>';
-  return `<div class="card section"><div><b>Körpergewicht</b><div class="small muted">Einzelne Messungen und Wochenschnitt, damit Wasserschwankungen nicht täuschen</div></div>${bwH}</div>
-   <div class="card section"><div><b>Verbrannte Kalorien</b><div class="small muted">pro ${R.weekly?'Woche':'Monat'}, aufgeteilt in Kraft und Ausdauer</div></div>${kc}</div>`;
-}
-function viewAnalyse(){
-  if(!S.sessions.length)return `${banner()}<div class="card empty"><b style="color:var(--ink)">Noch nichts auszuwerten</b>Sobald du ein paar Trainings eingetragen hast, siehst du hier deine Auswertungen.<button class="btn primary" data-act="tab" data-v="training">Training eintragen</button></div>`;
-  const tab=A_TABS.some(t=>t[0]===S.ui.anaTab)?S.ui.anaTab:'ueb',R=anaRange();
-  const seg=(act,cur,opts,lbl,cls)=>`<div class="seg${cls?' '+cls:''}" role="group" aria-label="${lbl}">${opts.map(([v,l])=>`<button data-act="${act}" data-v="${v}" aria-pressed="${cur===v}">${l}</button>`).join('')}</div>`;
-  kcC=new WeakMap();
-  try{return `${banner()}<div class="ana-nav">${seg('anaTab',tab,A_TABS,'Bereich')}${seg('anaRange',R.key,A_RANGES,'Zeitraum','sm')}</div>${({ueb:anaUeb,kraft:anaKraft,ausd:anaAusd,koerper:anaKoerper})[tab](R)}`}
-  finally{kcC=null}
-}
-function viewFortschrittTraining(){return perf()?viewAnalyse():viewFortschrittBasic()}
 
 const CATS=['Beine','Brust','Rücken','Schultern','Arme','Bauch & Core','Ausdauer'];
 function allCats(){const extra=[...new Set(S.exercises.map(e=>e.cat).filter(c=>c&&!CATS.includes(c)))].sort((a,b)=>a.localeCompare(b,'de'));return CATS.concat(extra)}
@@ -4281,9 +4205,282 @@ function muscleCard(R,canFine){const fine=!!(canFine&&S.ui.msFine),cnt=msCount(R
   return `<div class="card section">${head}<div class="small muted">Anteil deiner Sätze im Zeitraum</div><div class="hbars">${rows}</div>
     ${hints.map(h=>`<div class="small msnote">${h}</div>`).join('')}${tot<12?'<div class="small muted">Noch wenige Sätze im Zeitraum. Mit mehr Trainings wird der Vergleich aussagekräftiger.</div>':''}</div>`}
 
+/* ======================= Fortschritt: Startseite und Bereiche =======================
+   Die Startseite zeigt jeden Bereich als Karte mit den wichtigsten Werten und einem kleinen Verlauf; ein Tipp öffnet den
+   Bereich als eigene Seite. Ansicht (Essential oder Analyse) und Zeitraum (7, 30, 90 Tage oder Alles) gelten für den ganzen
+   Reiter. „Alles“ beginnt beim ersten Eintrag des Bereichs. Bis 31 Tage gliedern die Diagramme nach Tagen, bis 26 Wochen nach
+   Wochen, sonst nach Monaten; der Zeitraum beginnt dann am Montag der ersten Woche bzw. am Ersten des ersten Monats. */
+const F_RNG=[['7','7 Tage'],['30','30 Tage'],['90','90 Tage'],['all','Alles']];
+const F_AREAS=[['training','fTraining','Training','training',''],['gew','fGewohn','Gewohnheiten','check',''],['ern','fErn','Ernährung','ernaehrung','food'],['koerper','fKoerper','Körper','koerper','body'],['mind','fMind','Schlaf & Stimmung','schlaf','mind']];
+const F_WD=['Mo','Di','Mi','Do','Fr','Sa','So'],F_WDL=['Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag','Sonntag'];
+ICONS.schlaf=SV('<path d="M20 14.2A8.5 8.5 0 0 1 9.8 4a8.5 8.5 0 1 0 10.2 10.2z"/>');
+function fRng(){return F_RNG.some(r=>r[0]===S.ui.frng)?S.ui.frng:'30'}
+function fAreas(){return F_AREAS.filter(a=>!a[4]||mod(a[4]))}
+const fWdi=k=>(parseD(k).getDay()+6)%7;
+const fIn=(b,k)=>k>=b.s&&k<=b.e;
+/* Erster Tag mit Daten im Bereich (ohne Zukunft), sonst null */
+function fFirst(a){const td=today();let f=null;const m=d=>{if(typeof d==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(d)&&d<=td&&(!f||d<f))f=d};
+  if(a==='training')for(const x of S.sessions)m(x.date);
+  else if(a==='gew'){const ids=new Set();for(const h of S.habits){if(h.arch)continue;ids.add(h.id);m(h.created||h.start||h.since)}
+    for(const k in S.days){const H=S.days[k].h;if(H&&Object.keys(H).some(id=>ids.has(id)))m(k)}}
+  else if(a==='ern'){for(const k in S.days)if((S.days[k].food||[]).length)m(k)}
+  else if(a==='koerper'){const W=weightLog();if(W.length)m(W[0].date);const M=measList();if(M.length)m(M[0].date);for(const p of S.photos||[])m(p.date)}
+  else if(a==='mind'){for(const k in S.days){const D=S.days[k],s=D.sleep||{};if(num(s.h)||num(s.q)||num(D.mood)||num(D.breath)||String(D.note||'').trim())m(k)}}
+  else for(const [k] of fAreas())m(fFirst(k));
+  return f}
+/* Abschnitte für Diagramme: Tage, Wochen ab Montag oder Monate ab dem Ersten */
+function fBk(s,e){const n=dayN(e)-dayN(s)+1,L=[];
+  if(n<=31){for(let i=0;i<n;i++){const k=offFrom(s,i),d=parseD(k);L.push({s:k,e:k,label:n<=7?WD[d.getDay()]:d.getDate()+'.'})}return {per:'Tag',bk:L}}
+  if(n<=182){for(let a=monday(parseD(s));ymd(a)<=e;a.setDate(a.getDate()+7)){const z=new Date(a);z.setDate(z.getDate()+6);L.push({s:ymd(a),e:ymd(z),label:'KW'+isoWeek(a)})}return {per:'Woche',bk:L}}
+  const f=parseD(s);
+  for(let d=new Date(f.getFullYear(),f.getMonth(),1);ymd(d)<=e;d=new Date(d.getFullYear(),d.getMonth()+1,1)){const z=new Date(d.getFullYear(),d.getMonth()+1,0);
+    L.push({s:ymd(d),e:ymd(z),label:MON3[d.getMonth()]+(d.getMonth()===0||!L.length?' '+String(d.getFullYear()).slice(2):'')})}
+  return {per:'Monat',bk:L}}
+/* Zeitraum eines Bereichs. dl: alle Tage, prev: gleich lange Spanne davor (nicht bei „Alles“), list/plist: Trainings darin.
+   days, weeks, bk und weekly passen zu den Auswertungen der Ansicht Analyse. */
+function fR(a){const key=fRng(),td=today(),s0=key==='all'?(fFirst(a)||td):offDate(-(+key-1)),B=fBk(s0,td),start=B.bk[0].s,n=dayN(td)-dayN(start)+1,dl=[];
+  for(let i=0;i<n;i++)dl.push(offFrom(start,i));
+  let prev=null;if(key!=='all'){prev=[];for(let i=n;i>=1;i--)prev.push(offFrom(start,-i))}
+  const all=sortedSessions().filter(x=>x.date<=td);
+  return {key,area:a,start,end:td,n,days:n,dl,prev,weeks:Math.max(1,n/7),bk:B.bk,per:B.per,weekly:B.per!=='Monat',
+    list:all.filter(x=>x.date>=start),plist:prev?all.filter(x=>x.date>=prev[0]&&x.date<start):null}}
+function fBkDays(R,b){const o=dayN(R.start),i0=Math.max(0,dayN(b.s)-o),i1=Math.min(R.n-1,dayN(b.e)-o);return i1>=i0?R.dl.slice(i0,i1+1):[]}
+/* Mittelwert je Abschnitt als Punkt in der Mitte des Abschnitts (nur Tage mit Wert) */
+function fBkPts(R,f){const o=[];for(const b of R.bk){const v=fBkDays(R,b).map(f).filter(x=>x>0);
+  if(v.length)o.push({t:Math.round((Math.max(dayN(b.s),dayN(R.start))+Math.min(dayN(b.e),dayN(R.end)))/2),v:avgOf(v)})}return o}
+function fCtl(){const P=perf(),k=fRng();
+  return `<div class="fctl"><div class="seg modesw" role="group" aria-label="Ansicht"><button data-act="mode" data-v="basic" aria-pressed="${!P}">Essential</button><button data-act="mode" data-v="perf" aria-pressed="${P}">Analyse</button></div>
+    <div class="seg sm" role="group" aria-label="Zeitraum">${F_RNG.map(([v,l])=>`<button data-act="frng" data-v="${v}" aria-pressed="${k===v}">${l}</button>`).join('')}</div></div>`}
+
+/* ---------- Kleine Verläufe auf den Karten ---------- */
+function fSpark(vals,opt={}){const n=vals.length;if(vals.filter(v=>v>0).length<2)return '';
+  const W=300,H=34,lo=opt.lo||0,mx=opt.max!=null?opt.max:Math.max(opt.min||0,opt.ref||0,...vals.map(v=>v>0?v:0))||1,bw=W/n,gap=n>40?0.5:Math.min(4,bw*.24);
+  const y=v=>H-Math.max(0,Math.min(1,(v-lo)/((mx-lo)||1)))*(H-2);let b='';
+  vals.forEach((v,i)=>{if(!(v>0))return;const yy=Math.min(H-1.5,y(v));b+=`<rect${i===n-1?' class="cur"':''} x="${(i*bw+gap/2).toFixed(2)}" y="${yy.toFixed(2)}" width="${Math.max(.6,bw-gap).toFixed(2)}" height="${(H-yy).toFixed(2)}"/>`});
+  if(opt.ref&&opt.ref<=mx){const ry=y(opt.ref).toFixed(2);b+=`<line class="ref" x1="0" x2="${W}" y1="${ry}" y2="${ry}"/>`}
+  return `<svg class="spark" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true">${b}</svg>`}
+function fSparkLine(pts){if(pts.length<2)return '';const W=300,H=34,t0=pts[0].t,t1=pts[pts.length-1].t,vs=pts.map(p=>p.v),lo=Math.min(...vs),sp=(Math.max(...vs)-lo)||1;
+  const x=t=>t1===t0?W/2:(t-t0)/(t1-t0)*W,y=v=>3+(1-(v-lo)/sp)*(H-6);
+  return `<svg class="spark" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true"><path class="ln" d="${pts.map((p,i)=>(i?'L':'M')+x(p.t).toFixed(1)+' '+y(p.v).toFixed(1)).join(' ')}"/></svg>`}
+function fKpi(v,k,d){return `<span class="fa-kpi"><b class="num">${v}</b><span class="fa-kl">${k}</span>${d||''}</span>`}
+function fBody(K,sp,no){return `${K.length?`<span class="fa-k" style="--n:${K.length}">${K.join('')}</span>`:''}${sp||''}${no&&no.length?`<span class="fa-n">${no.join(' · ')}</span>`:''}`}
+
+/* ---------- Gemeinsame Werte ---------- */
+function fPrCount(R){let n=0;const best={},hit=new Set(),EX=new Map(S.exercises.map(e=>[e.id,e]));
+  for(const x of sortedSessions()){if(x.date>R.end)break;for(const e of x.entries||[]){const ex=EX.get(e.exId);if(!ex||ex.kind==='distanz')continue;
+    const v=metric(cleanEntry(ex,e),ex.kind);if(!(v>0))continue;const b=best[ex.id];
+    if(b!=null&&v>b&&x.date>=R.start&&!hit.has(ex.id)){hit.add(ex.id);n++}if(b==null||v>b)best[ex.id]=v}}
+  return n}
+function fIssN(){let n=0;for(const x of S.sessions)if(sessIssues(x).length)n++;return n}
+function fHabStat(h,dl){const due=dl.filter(k=>habitDue(h,k)),dn=due.filter(k=>habDone(h,k)).length,rate=due.length?dn/due.length:null;let ex='';
+  if(!due.length)ex='Im Zeitraum war noch kein Tag geplant.';
+  else if(h.kind==='count'||h.kind==='amount')ex='Ø '+fmt(avgOf(due.map(k=>num(habVal(h,k)))),1)+' '+esc(h.unit||'')+' pro Tag';
+  else if(h.kind==='quit'){const rel=dl.filter(k=>habVal(h,k)===-1).length;ex=quitDays(h,today())+' Tage ohne · '+rel+(rel===1?' Rückfall':' Rückfälle')+' im Zeitraum'}
+  return {h,due:due.length,dn,rate,ex}}
+function fFullDays(hs,dl){let n=0,d=0;for(const k of dl){const D=hs.filter(h=>habitDue(h,k));if(!D.length)continue;d++;if(D.every(h=>habDone(h,k)))n++}return {n,due:d}}
+function fAvg7(pts){return pts.map(p=>({t:p.t,v:avgOf(pts.filter(q=>q.t>p.t-7&&q.t<=p.t).map(q=>q.v))}))}
+function fTargetW(){const t=num((S.nutri||{}).target);if(t>0)return t;const g=(S.goals||[]).find(g=>g.type==='weight'&&num(g.target)>0&&!goalState(g).done);return g?num(g.target):null}
+/* Geplantes Tempo laut Tagesbedarf in kg pro Woche (− abnehmen, + zunehmen) */
+function fPlanW(){const r=nCalc();if(r.miss||!r.ri||!r.delta)return null;return (r.goal==='ab'?-1:1)*nRateKg(r)}
+
+/* ---------- Karten der Startseite ---------- */
+function faTraining(R,P){if(!fFirst('training'))return fBody([],'',['Noch keine Trainings. Trag dein erstes Training ein, dann siehst du hier deine Entwicklung.']);
+  const L=R.list,pl=R.plist,h=L.reduce((t,x)=>t+sessMin(x),0)/60;
+  const K=[fKpi(L.length,L.length===1?'Training':'Trainings',pl?dlt(L.length,pl.length,0):''),fKpi(fmt(h,1)+'<small>Std</small>','Trainingszeit',P&&pl?dlt(h,pl.reduce((t,x)=>t+sessMin(x),0)/60,1,' Std'):'')];
+  if(P)K.push(fKpi(fmt(L.length/R.weeks,1),'Ø pro Woche'));
+  const no=[],pr=fPrCount(R),is=fIssN();
+  if(!L.length)no.push('Keine Trainings im Zeitraum');
+  if(pr)no.push(pr===1?'1 neuer Bestwert':pr+' neue Bestwerte');
+  if(is)no.push(`<span class="warn">${is===1?'1 Training':is+' Trainings'} prüfen</span>`);
+  /* Verlauf: bis 31 Tage die Trainingszeit pro Tag (ohne Dauer zählt ein Training wie 20 Minuten), sonst Trainings pro Woche oder Monat */
+  const day=R.per==='Tag';
+  return fBody(K,fSpark(R.bk.map(b=>{const B=L.filter(x=>fIn(b,x.date));return day?B.reduce((t,x)=>t+Math.max(sessMin(x),20),0):B.length}),{min:day?60:R.per==='Woche'?4:12}),no)}
+function faGew(R,P){const hs=S.habits.filter(h=>!h.arch);if(!hs.length)return fBody([],'',['Noch keine Gewohnheiten. Leg welche an, dann siehst du hier, wie oft du sie schaffst.']);
+  const r1=habRate(R.dl),r0=R.prev?habRate(R.prev):null,fd=fFullDays(hs,R.dl);
+  const K=[fKpi(r1==null?'–':Math.round(r1*100)+'<small>%</small>','erledigt',r1!=null&&r0!=null?dlt(Math.round(r1*100),Math.round(r0*100),0,' Pkt.'):''),fKpi(fd.n+'<small>/ '+fd.due+'</small>','Tage, alles erledigt')];
+  const no=[];
+  if(P){const st=hs.map(h=>fHabStat(h,R.dl)).filter(s=>s.rate!=null).sort((a,b)=>b.rate-a.rate);
+    if(st.length>1&&st[0].rate>st[st.length-1].rate)no.push('Am besten: '+esc(st[0].h.name)+' ('+Math.round(st[0].rate*100)+'&nbsp;%), am wenigsten: '+esc(st[st.length-1].h.name)+' ('+Math.round(st[st.length-1].rate*100)+'&nbsp;%)')}
+  return fBody(K,fSpark(R.bk.map(b=>{const v=habRate(fBkDays(R,b));return v==null?0:v}),{max:1}),no)}
+function faErn(R,P){if(!fFirst('ern'))return fBody([],'',['Noch keine Mahlzeiten eingetragen.']);
+  const r=nCalc(),tg=r.miss?null:r.avg.k,lg=R.dl.filter(k=>(dayGet(k).food||[]).length),T=lg.map(k=>sumFood(dayGet(k).food)),ak=T.length?avgOf(T.map(t=>t.k)):null,pk=R.prev?avgKcal(R.prev):null;
+  const K=[fKpi(ak==null?'–':fmt(Math.round(ak),0),'Ø kcal'+(tg?', Ziel '+fmt(r10(tg),0):''),ak!=null&&pk?dlt(Math.round(ak),Math.round(pk),0):''),fKpi(lg.length+'<small>/ '+R.n+'</small>','Tage eingetragen')];
+  if(P)K.push(fKpi(T.length?fmt(Math.round(avgOf(T.map(t=>t.p))),0)+'<small>g</small>':'–','Ø Eiweiß'+(r.miss?'':', Ziel '+fmt(r5(r.avg.p),0))));
+  const no=[];
+  if(!lg.length)no.push('Keine Einträge im Zeitraum');
+  else if(P&&tg){const n=T.filter(t=>Math.abs(t.k-tg)<=tg*.1).length;no.push('Im Zielbereich (±10&nbsp;%): '+n+' von '+lg.length+(lg.length===1?' Tag':' Tagen'))}
+  return fBody(K,fSpark(R.bk.map(b=>{const L=fBkDays(R,b).filter(k=>(dayGet(k).food||[]).length);return L.length?avgOf(L.map(k=>sumFood(dayGet(k).food).k)):0}),{ref:tg||0}),no)}
+function faKoerper(R,P){const all=weightLog();if(!all.length)return fBody([],'',['Trag dein Gewicht unter Heute oder beim Training ein, dann siehst du hier deinen Verlauf.']);
+  const pts=all.filter(p=>p.date>=R.start&&p.date<=R.end).map(p=>({t:dayN(p.date),v:p.v})),av=fAvg7(pts),cur=av.length?av[av.length-1].v:all[all.length-1].v;
+  const ch=av.length>=2?av[av.length-1].v-av[0].v:null,wk=av.length>=2?(av[av.length-1].t-av[0].t)/7:0;
+  const K=[fKpi(fmt(cur,1)+'<small>kg</small>',av.length?'aktuell, Ø 7 Tage':'zuletzt gewogen'),fKpi(ch==null?'–':sgnF(ch)+'<small>kg</small>','im Zeitraum')];
+  if(P)K.push(fKpi(wk>=1?sgnF(ch/wk,2)+'<small>kg</small>':'–','Ø pro Woche'));
+  const no=[],tg=fTargetW();if(!pts.length)no.push('Kein Gewicht im Zeitraum');
+  if(tg)no.push(Math.abs(cur-tg)<0.05?'Zielgewicht erreicht':'Ziel '+fmt(tg,1)+' kg · noch '+fmt(Math.abs(cur-tg),1)+' kg');
+  return fBody(K,fSparkLine(av.length>=2?av:pts),no)}
+function faMind(R,P){if(!fFirst('mind'))return fBody([],'',['Noch keine Check-ins. Trag unter Heute Schlaf und Stimmung ein.']);
+  const s1=avgSleep(R.dl),s0=R.prev?avgSleep(R.prev):null,m1=avgMood(R.dl),m0=R.prev?avgMood(R.prev):null;
+  const K=[fKpi(s1?fmtH(s1)+'<small>h</small>':'–','Ø Schlaf',s1&&s0?dlt(Math.round(s1*60),Math.round(s0*60),0,' Min'):''),fKpi(m1?fmt(m1,1):'–','Ø Stimmung, 1 bis 5',P&&m1&&m0?dlt(m1,m0,1):'')];
+  if(P){const q=R.dl.map(k=>num((dayGet(k).sleep||{}).q)).filter(v=>v>0);K.push(fKpi(q.length?fmt(avgOf(q),1):'–','Ø Schlafqualität'))}
+  const no=[];if(!s1&&!m1)no.push('Keine Check-ins im Zeitraum');
+  if(P){const b=R.dl.reduce((t,k)=>t+num(dayGet(k).breath),0);if(b)no.push('Atemübungen: '+fmt(b,0)+' Min')}
+  return fBody(K,fSpark(R.bk.map(b=>avgSleep(fBkDays(R,b))||0),{lo:4,max:10,ref:7}),no)}
+const FA_CARD={training:faTraining,gew:faGew,ern:faErn,koerper:faKoerper,mind:faMind};
+function fInsCard(R,max){const ins=insights(R.dl),L=max?ins.slice(0,max):ins,more=ins.length-L.length;
+  return `<div class="card section"><div><b>Zusammenhänge</b><div class="small muted">Was im Zeitraum oft zusammen auftrat</div></div>
+    ${L.length?`<div class="inss">${L.map(insRow).join('')}</div>${more?`<div class="small muted">${more===1?'Ein weiterer Zusammenhang':more+' weitere Zusammenhänge'} in der Ansicht Analyse.</div>`:''}<div class="small muted">Das zeigt Zusammenhänge, keine Ursachen. Je mehr Tage du einträgst, desto verlässlicher wird es.</div>`
+      :`<div class="small muted">${mod('mind')?'Sobald du ein paar Tage Schlaf und Stimmung einträgst, erscheinen hier Vergleiche, zum Beispiel deine Stimmung an Trainings- und Ruhetagen.':'Mit dem Modul Schlaf & Mindset siehst du hier, wie Schlaf, Stimmung und Training zusammenhängen.'}</div>`}</div>`}
+function viewFort(){kcC=new WeakMap();try{const P=perf();
+  const cards=fAreas().map(([k,v,t,ic])=>`<button class="card farea" data-act="tab" data-v="${v}"><span class="fa-h">${ICONS[ic]}<span class="fa-t">${t}</span>${CHR}</span>${FA_CARD[k](fR(k),P)}</button>`).join('');
+  return `${banner()}${fCtl()}<div class="fareas">${cards}</div>${fInsCard(fR('ueb'),P?0:2)}`}finally{kcC=null}}
+
+/* ---------- Bereichsseiten ---------- */
+function fPage(a,fn){kcC=new WeakMap();try{return fCtl()+fn(fR(a),perf())}finally{kcC=null}}
+function viewFTraining(){return fPage('training',fpTraining)}
+function viewFGewohn(){return fPage('gew',fpGew)}
+function viewFErn(){return fPage('ern',fpErn)}
+function viewFKoerper(){return fPage('koerper',fpKoerper)}
+function viewFMind(){return fPage('mind',fpMind)}
+
+/* Training */
+function fCal(R){const TD=trainDates(),td=today(),L=R.dl;let h;
+  if(R.n<=7)h=`<div class="fcal w7">${L.map(k=>{const d=parseD(k);return `<span class="fc-c"><span class="fc-l">${WD[d.getDay()]}</span><i class="${TD[k]?'on':''}${k===td?' td':''}">${d.getDate()}</i></span>`}).join('')}</div>`;
+  else h=`<div class="fcal">${F_WD.map(w=>`<span class="fc-l">${w}</span>`).join('')}${'<i class="f"></i>'.repeat(fWdi(L[0]))}${L.map(k=>`<i class="${TD[k]?'on':''}${k===td?' td':''}">${parseD(k).getDate()}</i>`).join('')}</div>`;
+  const dn=L.filter(k=>TD[k]).length,wd=[0,0,0,0,0,0,0];for(const k of L)if(TD[k])wd[fWdi(k)]++;const top=wd.indexOf(Math.max(...wd));
+  return `<div class="card section"><div><b>Trainingstage</b><div class="small muted num">${dn} von ${R.n} Tagen${dn>=3?' · am häufigsten '+F_WDL[top]:''}</div></div>
+    <div role="img" aria-label="Trainingstage: an ${dn} von ${R.n} Tagen trainiert">${h}</div></div>`}
+function fFreqCard(R){const it=R.bk.map(b=>({label:b.label,parts:[R.list.filter(x=>fIn(b,x.date)).length]}));
+  return `<div class="card section"><div><b>Trainings pro ${R.per}</b><div class="small muted">${R.per==='Woche'?'Die aktuelle Woche ist gelb':'Der aktuelle Monat ist gelb'}</div></div>${sBars(it,{cur:true,label:'Trainings pro '+R.per,fy:v=>fmt(v,0),minMax:4})}</div>`}
+function fExCard(R){const m=new Map(),EX=new Map(S.exercises.map(e=>[e.id,e]));
+  for(const x of R.list)for(const e of x.entries||[]){const ex=EX.get(e.exId);if(!ex)continue;const v=metric(cleanEntry(ex,e),ex.kind);if(!(v>0))continue;
+    let o=m.get(ex.id);if(!o)m.set(ex.id,o={ex,pts:[]});o.pts.push({date:x.date,v,entry:e})}
+  const head='<div><b>Deine Übungen</b><div class="small muted">Erster und letzter Wert im Zeitraum. Antippen zeigt den Verlauf.</div></div>';
+  if(!m.size)return `<div class="card section">${head}<div class="small muted">Im Zeitraum gibt es keine Einträge mit Werten.</div></div>`;
+  const rows=[...m.values()].map(o=>{const f=o.pts[0].v,l=o.pts[o.pts.length-1].v;return {...o,first:f,last:l,best:Math.max(...o.pts.map(p=>p.v)),pct:o.pts.length>=2&&f>0?(l-f)/f*100:null,ld:o.pts[o.pts.length-1].date}})
+    .sort((a,b)=>(b.pct!=null)-(a.pct!=null)||(b.pct||0)-(a.pct||0)||(a.ld<b.ld?1:a.ld>b.ld?-1:0));
+  const open=S.ui.fEx,all=!!S.ui.fExAll,vis=all?rows:rows.slice(0,8);
+  if(open&&!vis.some(o=>o.ex.id===open)){const o=rows.find(o=>o.ex.id===open);if(o)vis.push(o)}
+  const sg=n=>(n>0?'+':n<0?'−':'±')+fmt(Math.abs(n),0),cl=n=>n>0.5?'up':n<-0.5?'down':'';
+  return `<div class="card section">${head}<div class="fexl">${vis.map(o=>{const u=KINDS[o.ex.kind].unit,on=o.ex.id===open;
+    return `<div class="fex${on?' open':''}"><button class="fex-r" data-act="fExOpen" data-id="${o.ex.id}" aria-expanded="${on}"><span class="fex-n"><b>${exNameH(o.ex)}</b><span class="small muted num">${o.pts.length>=2?fmt(o.first)+' → '+fmt(o.last):fmt(o.first)} ${u} · ${o.pts.length}×</span></span>${o.pct!=null?`<span class="pill num ${cl(o.pct)}">${sg(o.pct)} %</span>`:''}${CHEV}</button>
+      ${on?`<div class="fex-b">${o.pts.length>=2?lineChart(o.pts,{unit:u,label:metricName(o.ex.kind)+' '+exFull(o.ex)}):'<div class="small muted">Noch ein Eintrag im Zeitraum mehr, dann erscheint hier die Kurve.</div>'}
+        <div class="tiles t3">${tile(fmt(o.first),'Start')}${tile(`<span style="color:var(--pr)">${fmt(o.best)}</span>`,'Bestwert im Zeitraum')}${tile(o.pct==null?'–':`<span class="${cl(o.pct)}">${sg(o.pct)}<small>%</small></span>`,'Veränderung')}</div>
+        <div class="small muted">${esc(metricName(o.ex.kind))}${o.ex.kind==='wdh'?'':' in '+u}</div></div>`:''}</div>`}).join('')}</div>
+    ${rows.length>8?`<button class="btn small ghost" data-act="fExAll">${all?'Weniger anzeigen':'Alle '+rows.length+' Übungen anzeigen'}</button>`:''}</div>`}
+function fKcalCard(R){const kb=R.bk.map(b=>{let k=0,a=0;for(const x of R.list)if(inBk(b,x.date)){const p=kcd(x).parts||{};k+=p.kraft||0;a+=p.ausd||0}return {label:b.label,parts:[k,a]}});
+  const K=kb.reduce((t,b)=>t+b.parts[0],0),A=kb.reduce((t,b)=>t+b.parts[1],0),T=K+A;
+  return `<div class="card section"><div><b>Verbrannte Kalorien</b><div class="small muted">pro ${R.per}, aufgeteilt in Kraft und Ausdauer</div></div>${T?`<div class="tiles t3">${tile(fmt(Math.round(T),0),'kcal im Zeitraum')}${tile(fmt(Math.round(T/R.weeks),0),'kcal Ø pro Woche')}${tile(Math.round(A/T*100)+'<small>%</small>','davon Ausdauer')}</div>
+     ${sBars(kb,{cls:['bar','bar2'],label:'Verbrannte Kalorien'})}<div class="legend"><span><i class="lg-k"></i>Kraft</span><span><i class="lg-a"></i>Ausdauer</span></div>`:'<div class="small muted">Im Zeitraum gibt es keine Trainings mit Kalorien. Dafür braucht die App dein Körpergewicht.</div>'}</div>`}
+const F_ATABS=[['ueb','Übersicht'],['kraft','Kraft'],['ausd','Ausdauer']];
+function fpTraining(R,P){
+  if(!fFirst('training'))return `<div class="card empty"><b style="color:var(--ink)">Noch nichts auszuwerten</b>Sobald du ein paar Trainings eingetragen hast, siehst du hier deine Entwicklung.<button class="btn primary" data-act="tab" data-v="training">Training eintragen</button></div>`;
+  if(P){const tab=F_ATABS.some(t=>t[0]===S.ui.anaTab)?S.ui.anaTab:'ueb';
+    return `<div class="seg" role="group" aria-label="Auswertung">${F_ATABS.map(([v,l])=>`<button data-act="anaTab" data-v="${v}" aria-pressed="${tab===v}">${l}</button>`).join('')}</div>${tab==='kraft'?anaKraft(R):tab==='ausd'?anaAusd(R):anaUeb(R)+fKcalCard(R)}`}
+  const L=R.list,pl=R.plist,h=L.reduce((t,x)=>t+sessMin(x),0)/60,st=weekStreak();
+  return `${issuesCard()}<div class="tiles t3">${tile(L.length,L.length===1?'Training':'Trainings',pl?dlt(L.length,pl.length,0):'')}${tile(fmt(h,1)+'<small>Std</small>','Trainingszeit')}${tile(st+'<small>'+(st===1?'Woche':'Wochen')+'</small>','am Stück mit Training')}</div>
+    ${R.per==='Tag'?fCal(R):fFreqCard(R)}${fExCard(R)}${muscleCard(R,false)}`}
+
+/* Gewohnheiten */
+function fHabRow(s){const p=s.rate==null?null:Math.round(s.rate*100);
+  return `<div class="fhab"><div class="sec-h"><b>${esc(s.h.name)}</b><span class="num"><b>${p==null?'–':p+' %'}</b> <span class="small muted">${s.dn} von ${s.due} ${s.due===1?'Tag':'Tagen'}</span></span></div>
+    <div class="fbar" aria-hidden="true"><i style="width:${p||0}%"></i></div>${s.ex?`<span class="small muted num">${s.ex}</span>`:''}</div>`}
+function fHabGrid(s,R){const h=s.h,td=today();let cells,cols;
+  if(R.n<=92){cols=R.n<=7?7:R.n<=31?Math.ceil(R.n/2):Math.ceil(R.n/5);
+    cells=R.dl.map(k=>{const d=habitDue(h,k),ok=d&&habDone(h,k),part=d&&!ok&&(h.kind==='count'||h.kind==='amount')&&num(habVal(h,k))>0;return `<i class="${!d?'na':ok?'on':part?'part':''}${k===td?' td':''}"></i>`}).join('')}
+  else{const W=[];for(let i=0;i<R.dl.length;i+=7)W.push(R.dl.slice(i,i+7));cols=Math.min(26,W.length);
+    cells=W.map(w=>{const due=w.filter(k=>habitDue(h,k)),dn=due.filter(k=>habDone(h,k)).length;return `<i class="${!due.length?'na':dn===due.length?'on':dn?'part':''}"></i>`}).join('')}
+  return `<div class="card section"><div class="sec-h"><b>${esc(h.name)}</b><span class="num"><b>${s.rate==null?'–':Math.round(s.rate*100)+' %'}</b> <span class="small muted">${s.dn} von ${s.due} ${s.due===1?'Tag':'Tagen'}</span></span></div>
+    <div class="hgrid2" style="grid-template-columns:repeat(${cols},minmax(0,1fr))" role="img" aria-label="${esc(h.name)}: an ${s.dn} von ${s.due} Tagen erledigt">${cells}</div>
+    ${R.n>92?'<div class="small muted">Ein Kästchen pro Woche</div>':''}${s.ex?`<div class="small muted num">${s.ex}</div>`:''}</div>`}
+function fHabWd(hs,R){const due=[0,0,0,0,0,0,0],dn=[0,0,0,0,0,0,0];
+  for(const k of R.dl){const w=fWdi(k);for(const h of hs){if(!habitDue(h,k))continue;due[w]++;if(habDone(h,k))dn[w]++}}
+  if(due.filter(v=>v).length<2)return '';
+  const r=due.map((v,i)=>v?dn[i]/v*100:null),ok=r.map((v,i)=>[v,i]).filter(x=>x[0]!=null).sort((a,b)=>b[0]-a[0]),hi=ok[0],lo=ok[ok.length-1];
+  return `<div class="card section"><div><b>Nach Wochentag</b><div class="small muted">Anteil erledigt, alle Gewohnheiten zusammen</div></div>
+    ${sBars(F_WD.map((l,i)=>({label:l,parts:[r[i]||0]})),{label:'Erledigt nach Wochentag in Prozent',fy:v=>fmt(v,0)+' %',minMax:100})}
+    ${hi[0]-lo[0]>=10?`<div class="small muted">Am besten klappt es am ${F_WDL[hi[1]]} (${Math.round(hi[0])}&nbsp;%), am wenigsten am ${F_WDL[lo[1]]} (${Math.round(lo[0])}&nbsp;%).</div>`:''}</div>`}
+function fpGew(R,P){const hs=S.habits.filter(h=>!h.arch);
+  if(!hs.length)return '<div class="card empty"><b>Noch keine Gewohnheiten</b>Leg welche an, dann siehst du hier, wie oft du sie schaffst.<button class="btn primary" data-act="tab" data-v="gewohnheiten">Gewohnheiten</button></div>';
+  const r1=habRate(R.dl),r0=R.prev?habRate(R.prev):null,fd=fFullDays(hs,R.dl),st=hs.map(h=>fHabStat(h,R.dl));
+  const T=`<div class="tiles">${tile(r1==null?'–':Math.round(r1*100)+'<small>%</small>','erledigt',r1!=null&&r0!=null?dlt(Math.round(r1*100),Math.round(r0*100),0,' Pkt.'):'')}${tile(fd.n+'<small>/ '+fd.due+'</small>','Tage, an denen alles erledigt war')}</div>`;
+  if(!P)return `${T}<div class="card section"><div><b>Deine Gewohnheiten</b><div class="small muted">Anteil der geplanten Tage, an denen du sie geschafft hast</div></div><div class="fhabs">${st.map(fHabRow).join('')}</div></div>`;
+  return `${T}${st.map(s=>fHabGrid(s,R)).join('')}<div class="legend"><span><i class="lg-on"></i>erledigt</span><span><i class="lg-part"></i>teilweise</span><span><i class="lg-na"></i>nicht geplant</span></div>${fHabWd(hs,R)}`}
+
+/* Ernährung */
+function fpErn(R,P){const r=nCalc(),tg=r.miss?null:r.avg.k,ptg=r.miss?null:r.avg.p;
+  const per=R.dl.map(k=>{const f=dayGet(k).food||[];return {k,f,has:f.length>0,t:sumFood(f)}}),lg=per.filter(p=>p.has);
+  if(!lg.length)return '<div class="card empty"><b>Noch keine Einträge im Zeitraum</b>Trag ein paar Mahlzeiten ein, dann siehst du hier deine Durchschnitte.<button class="btn primary" data-act="addMeal">+ Mahlzeit eintragen</button></div>';
+  const av=f=>avgOf(lg.map(p=>p.t[f])),ak=av('k'),ap=av('p'),ac=av('c'),af=av('f'),tot=ap*4+ac*4+af*9||1,pk=R.prev?avgKcal(R.prev):null,day=R.per==='Tag';
+  const T=[tile(fmt(Math.round(ak),0),'Ø kcal pro Tag mit Einträgen'+(tg?', Ziel '+fmt(r10(tg),0):''),pk?dlt(Math.round(ak),Math.round(pk),0):''),tile(lg.length+'<small>/ '+R.n+'</small>','Tage mit Einträgen')];
+  if(P){T.push(tile(tg?lg.filter(p=>Math.abs(p.t.k-tg)<=tg*.1).length+'<small>/ '+lg.length+'</small>':'–','Tage im Zielbereich (±10&nbsp;%)'));T.push(tile(fmt(Math.round(ap),0)+'<small>g</small>','Ø Eiweiß'+(ptg?', Ziel '+fmt(r5(ptg),0)+' g':'')))}
+  const bAvg=(b,f)=>{const L=lg.filter(p=>fIn(b,p.k));return L.length?avgOf(L.map(f)):0};
+  const kc=`<div class="card section"><div><b>Kalorien pro ${R.per}</b><div class="small muted">${day?'':'Ø der Tage mit Einträgen. '}${tg?'Gestrichelt: dein Zielbedarf':'Berechne deinen Tagesbedarf, dann erscheint hier die Ziellinie'}</div></div>
+    ${sBars(R.bk.map((b,i)=>({label:b.label,parts:[day?per[i].t.k:bAvg(b,p=>p.t.k)]})),{label:'Kalorien pro '+R.per,ref:tg||null,fy:v=>fmt(v,0),cur:!day})}</div>`;
+  const mac=`<div class="card section"><div><b>Ø Makros an Tagen mit Einträgen</b></div>
+    <div class="mrow">${[['p','m-ei','Eiweiß',ap,4],['c','m-kh','Kohlenhydr.',ac,4],['f','m-fe','Fett',af,9]].map(([f,c,l,v,kc])=>`<div class="mcell ${c}"><span class="mac-n">${l}</span><b class="num">${fmt(Math.round(v),0)}<small> g</small></b><span class="small muted num">${Math.round(v*kc/tot*100)} % der kcal</span></div>`).join('')}</div></div>`;
+  if(!P)return `<div class="tiles">${T.join('')}</div>${kc}${mac}`;
+  const mv=R.bk.map((b,i)=>{const L=day?(per[i].has?[per[i]]:[]):lg.filter(p=>fIn(b,p.k));return {label:b.label,parts:L.length?[avgOf(L.map(p=>p.t.p*4)),avgOf(L.map(p=>p.t.c*4)),avgOf(L.map(p=>p.t.f*9))]:[0,0,0]}});
+  const mvC=`<div class="card section"><div><b>Makros im Verlauf</b><div class="small muted">kcal aus Eiweiß, Kohlenhydraten und Fett${day?'':', Ø der Tage mit Einträgen'}</div></div>
+    ${sBars(mv,{cls:['m-ei','m-kh','m-fe'],label:'Makros im Verlauf',fy:v=>fmt(v,0),ref:tg||null})}<div class="legend"><span><i class="lg-ei"></i>Eiweiß</span><span><i class="lg-kh"></i>Kohlenhydrate</span><span><i class="lg-fe"></i>Fett</span></div></div>`;
+  const sl={fr:0,mi:0,ab:0,sn:0};for(const p of lg)for(const x of p.f)sl[slotOf(x)]+=num(x.k);const smx=Math.max(...Object.values(sl))||1;
+  const slC=`<div class="card section"><div><b>Mahlzeiten</b><div class="small muted">Ø kcal pro Tag mit Einträgen</div></div>
+    <div class="hbars">${SLOTS.map(([s,l])=>`<div class="hbar cmp"><span>${l}</span><div class="tr"><i class="fill cmp" style="width:${(sl[s]/smx*100).toFixed(1)}%"></i></div><span class="v num">${fmt(Math.round(sl[s]/lg.length),0)}</span></div>`).join('')}</div></div>`;
+  const wd=[[],[],[],[],[],[],[]];for(const p of lg)wd[fWdi(p.k)].push(p.t.k);
+  const wdC=lg.length>=7&&wd.filter(a=>a.length).length>=3?`<div class="card section"><div><b>Nach Wochentag</b><div class="small muted">Ø kcal an Tagen mit Einträgen${tg?', gestrichelt: Zielbedarf':''}</div></div>
+    ${sBars(F_WD.map((l,i)=>({label:l,parts:[wd[i].length?avgOf(wd[i]):0]})),{label:'Kalorien nach Wochentag',ref:tg||null,fy:v=>fmt(v,0)})}</div>`:'';
+  const TD=trainDates(),A=lg.filter(p=>TD[p.k]),B=lg.filter(p=>!TD[p.k]);
+  const trC=A.length&&B.length?`<div class="card section"><div><b>Trainings- und Ruhetage</b><div class="small muted">Ø an Tagen mit Einträgen</div></div>
+    <div class="inss">${insRow({label:'Kalorien',aL:'Training',bL:'Ruhetag',a:avgOf(A.map(p=>p.t.k)),b:avgOf(B.map(p=>p.t.k)),na:A.length,nb:B.length,fv:v=>fmt(Math.round(v),0)+' kcal'})}${insRow({label:'Eiweiß',aL:'Training',bL:'Ruhetag',a:avgOf(A.map(p=>p.t.p)),b:avgOf(B.map(p=>p.t.p)),na:A.length,nb:B.length,fv:v=>fmt(Math.round(v),0)+' g'})}</div></div>`:'';
+  return `<div class="tiles">${T.join('')}</div>${kc}${mvC}${mac}${slC}${wdC}${trC}`}
+
+/* Körper */
+function fpKoerper(R,P){const all=weightLog(),W=all.filter(p=>p.date>=R.start&&p.date<=R.end),pts=W.map(p=>({t:dayN(p.date),v:p.v})),av=fAvg7(pts),tg=fTargetW();
+  let T=[],wH;
+  if(pts.length){const a1=av[av.length-1],ch=pts.length>=2?a1.v-av[0].v:null,wk=pts.length>=2?(a1.t-av[0].t)/7:0;
+    T.push(tile(fmt(a1.v,1)+'<small>kg</small>','aktuell, Ø 7 Tage'),tile(ch==null?'–':sgnF(ch)+'<small>kg</small>','im Zeitraum'));
+    if(P){T.push(tile(wk>=1?sgnF(ch/wk,2)+'<small>kg</small>':'–','Ø pro Woche'));const pw=fPlanW();if(pw!=null)T.push(tile(sgnF(pw,2)+'<small>kg</small>','pro Woche geplant laut Tagesbedarf'))}
+    else if(tg)T.push(tile(fmt(Math.abs(a1.v-tg),1)+'<small>kg</small>',Math.abs(a1.v-tg)<0.05?'Ziel erreicht':'bis zum Ziel ('+fmt(tg,1)+' kg)'))}
+  if(pts.length>=2)wH=`${tChart([{pts,line:false,dots:true,dcls:'dt',r:3.2},{pts:av,cls:'ln'}],{fy:v=>fmt(v,1),label:'Körpergewicht'})}<div class="legend"><span><i class="lg-dt"></i>gewogen</span><span><i class="lg-ln"></i>Ø 7 Tage</span></div>`;
+  else wH=`<div class="small muted">${pts.length?'Ab zwei Messungen im Zeitraum siehst du hier deinen Verlauf.':all.length?'Im Zeitraum ist kein Gewicht eingetragen. Trag es unter Heute oder beim Training ein.':'Trag dein Gewicht unter Heute oder beim Training ein, dann siehst du hier deinen Verlauf.'}</div>`;
+  const wC=`<div class="card section"><div><b>Körpergewicht</b><div class="small muted">Einzelne Messungen und Ø über 7 Tage${tg?', Ziel '+fmt(tg,1)+' kg':''}</div></div>${wH}</div>`;
+  const P2=(S.photos||[]).filter(p=>p.date>=R.start&&p.date<=R.end).sort((a,b)=>a.date<b.date?-1:a.date>b.date?1:0);
+  const ph=P2.length>=2?`<div class="card section"><div><b>Fotos</b><div class="small muted">Erstes und neuestes Foto im Zeitraum</div></div><div class="pcomp">${[P2[0],P2[P2.length-1]].map(p=>`<figure><img src="${photoSrc(p)}" alt="Fortschrittsfoto vom ${dmy(p.date)}" loading="lazy"><figcaption>${dmy(p.date)}</figcaption></figure>`).join('')}</div></div>`:'';
+  const tiles=T.length?`<div class="tiles${T.length===3?' t3':''}">${T.join('')}</div>`:'';
+  if(!P)return `${tiles}${wC}${ph}`;
+  const M=measList().filter(m=>m.date>=R.start&&m.date<=R.end);let mH='<div class="small muted">Im Zeitraum sind keine Maße eingetragen.</div>';
+  if(M.length){const a=M[0],b=M[M.length-1],two=M.length>1;mH=`<div class="tbl-wrap"><table class="tbl"><thead><tr><th>Maß</th><th class="r">${dmy(a.date)}</th>${two?`<th class="r">${dmy(b.date)}</th><th class="r">Δ</th>`:''}</tr></thead><tbody>
+    ${MEAS.filter(([f])=>a.m[f]||b.m[f]).map(([f,l])=>`<tr><td>${l}</td><td class="r num">${a.m[f]?fmt(a.m[f],1):'–'}</td>${two?`<td class="r num">${b.m[f]?fmt(b.m[f],1):'–'}</td><td class="r num">${a.m[f]&&b.m[f]?sgnF(b.m[f]-a.m[f]):'–'}</td>`:''}</tr>`).join('')}</tbody></table></div>`}
+  return `${tiles}${wC}<div class="card section"><div><b>Maße</b><div class="small muted">In cm, erste und letzte Messung im Zeitraum</div></div>${mH}</div>${ph}`}
+
+/* Schlaf & Stimmung */
+function fpMind(R,P){const L=R.dl.map(k=>{const D=dayGet(k);return {k,h:num((D.sleep||{}).h),q:num((D.sleep||{}).q),mo:num(D.mood)}}),hs=L.filter(x=>x.h),qs=L.filter(x=>x.q),ms=L.filter(x=>x.mo),day=R.per==='Tag';
+  if(!hs.length&&!qs.length&&!ms.length)return `<div class="card empty"><b>Noch keine Check-ins im Zeitraum</b>Trag unter Heute Schlaf und Stimmung ein, dann siehst du hier deinen Verlauf.<button class="btn primary" data-act="tab" data-v="heute">Zu Heute</button></div>`;
+  const s1=avgSleep(R.dl),s0=R.prev?avgSleep(R.prev):null,m1=avgMood(R.dl),m0=R.prev?avgMood(R.prev):null;
+  const T=[tile(s1?fmtH(s1)+'<small>h</small>':'–','Ø Schlaf',s1&&s0?dlt(Math.round(s1*60),Math.round(s0*60),0,' Min'):''),tile(m1?fmt(m1,1):'–','Ø Stimmung, 1 bis 5',m1&&m0?dlt(m1,m0,1):'')];
+  if(P)T.push(tile(qs.length?fmt(avgOf(qs.map(x=>x.q)),1):'–','Ø Schlafqualität, 1 bis 5'),tile(fmt(R.dl.reduce((t,k)=>t+num(dayGet(k).breath),0),0)+'<small>Min</small>','Atemübungen'));
+  const bars=hs.length?sBars(R.bk.map((b,i)=>({label:b.label,parts:[day?L[i].h:(avgSleep(fBkDays(R,b))||0)]})),{label:'Schlaf in Stunden',ref:7,fy:v=>fmt(v,0),cur:!day}):'<div class="small muted">Noch keine Schlafdaten im Zeitraum.</div>';
+  const mp=day?ms.map(x=>({t:dayN(x.k),v:x.mo})):fBkPts(R,k=>num(dayGet(k).mood));
+  const mc=mp.length>=2?tChart([{pts:mp,dots:true}],{min:1,max:5,ticks:[1,2,3,4,5],fy:v=>MOOD[v-1],h:170,l:46,label:'Stimmung im Verlauf'}):'<div class="small muted">Ab zwei Einträgen erscheint hier dein Stimmungsverlauf.</div>';
+  const base=`<div class="tiles">${T.join('')}</div>
+    <div class="card section"><div><b>Schlaf</b><div class="small muted">${day?'Stunden pro Nacht':'Ø Stunden pro Nacht, je '+R.per}, gestrichelt: 7 Stunden</div></div>${bars}</div>
+    <div class="card section"><div><b>Stimmung</b><div class="small muted">${day?'pro Tag':'Ø pro '+R.per}</div></div>${mc}</div>`;
+  if(!P)return base;
+  const qp=day?qs.map(x=>({t:dayN(x.k),v:x.q})):fBkPts(R,k=>num((dayGet(k).sleep||{}).q));
+  const qc=`<div class="card section"><div><b>Schlafqualität</b><div class="small muted">${day?'pro Nacht':'Ø pro '+R.per}</div></div>${qp.length>=2?tChart([{pts:qp,dots:true}],{min:1,max:5,ticks:[1,2,3,4,5],fy:v=>SLQ[v-1],h:170,l:54,label:'Schlafqualität im Verlauf'}):'<div class="small muted">Ab zwei Einträgen erscheint hier der Verlauf.</div>'}</div>`;
+  const W=F_WD.map(()=>({h:[],m:[]}));for(const x of L){const w=fWdi(x.k);if(x.h)W[w].h.push(x.h);if(x.mo)W[w].m.push(x.mo)}
+  const wC=hs.length+ms.length>=7?`<div class="card section"><div><b>Nach Wochentag</b><div class="small muted">Ø im Zeitraum</div></div><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Tag</th><th class="r">Schlaf</th><th class="r">Stimmung</th></tr></thead><tbody>
+    ${F_WDL.map((l,i)=>`<tr><td>${l}</td><td class="r num">${W[i].h.length?fmtH(avgOf(W[i].h))+' h':'–'}</td><td class="r num">${W[i].m.length?fmt(avgOf(W[i].m),1):'–'}</td></tr>`).join('')}</tbody></table></div></div>`:'';
+  const nn=R.dl.filter(k=>String(dayGet(k).note||'').trim()).length;
+  const nC=`<div class="card section"><div class="sec-h"><div><b>Journal</b><div class="small muted num">${nn} ${nn===1?'Notiz':'Notizen'} im Zeitraum</div></div><button class="btn small" data-act="tab" data-v="journal">Öffnen</button></div></div>`;
+  return `${base}${qc}${wC}${nC}`}
+
 /* ---------- Aktionen ---------- */
 function progAct(a,el){const ds=el&&el.dataset||{};switch(a){
-  case 'msFine':S.ui.msFine=ds.v==='1';render();return true}
+  case 'msFine':S.ui.msFine=ds.v==='1';render();return true;
+  case 'fExOpen':S.ui.fEx=S.ui.fEx===ds.id?'':ds.id;render();return true;
+  case 'fExAll':S.ui.fExAll=!S.ui.fExAll;render();return true;
+  /* „Verlauf“ beim Gewicht (Ich → Körper) und ähnliche Sprünge: direkt in den Bereich unter Fortschritt */
+  case 'goProg':{const v={training:'fTraining',gew:'fGewohn',ern:'fErn',koerper:'fKoerper',mind:'fMind'}[ds.v];goRoot('fortschritt',v&&modOkView(v)?[v]:[]);render();return true}}
   return false}
 
 /* ---------- Körper ---------- */
@@ -4347,7 +4544,6 @@ function brFinish(away){cancelAnimationFrame(br.raf);if(!br.run)return;br.run=fa
   if(away)syncWake();else render()}
 
 /* ---------- Fortschritt ---------- */
-const F_SECS=[['ueb','Überblick'],['training','Training'],['gew','Gewohnheiten'],['ern','Ernährung','food'],['koerper','Körper','body'],['mind','Schlaf & Stimmung','mind']];
 function tile(v,k,d){return `<div class="tile"><div class="v num">${v}</div><div class="k">${k}</div>${d||''}</div>`}
 function dlt(a,b,d,unit){if(b==null||!isFinite(b)||a==null||!isFinite(a))return '';const x=a-b;return `<span class="dlt num">${Math.abs(x)<Math.pow(10,-d)/2?'±0':(x>0?'+':'−')+fmt(Math.abs(x),d)}${unit||''} ggü. davor</span>`}
 function habRate(days){let due=0,dn=0;for(const h of S.habits){if(h.arch)continue;for(const k of days){if(!habitDue(h,k))continue;due++;if(habDone(h,k))dn++}}return due?dn/due:null}
@@ -4374,65 +4570,6 @@ function insRow(o){const mx=o.mx||Math.max(o.a,o.b)||1;
    <span>${esc(o.aL)}</span><span class="ins-t"><i style="width:${Math.min(100,o.a/mx*100).toFixed(1)}%"></i></span><b class="num">${o.fv(o.a)}</b>
    <span>${esc(o.bL)}</span><span class="ins-t b"><i style="width:${Math.min(100,o.b/mx*100).toFixed(1)}%"></i></span><b class="num">${o.fv(o.b)}</b></div>
    <span class="small muted num">${o.na} gegen ${o.nb} Tage${o.mx===5?' · Skala 1 bis 5':''}</span></div>`}
-function progOverview(days,prev,n){const TD=trainDates(),cntT=L=>L.reduce((t,k)=>t+((TD[k]||[]).length),0),T=[];
-  const t1=cntT(days),t0=cntT(prev);T.push(tile(t1,'Trainings',dlt(t1,t0,0)));
-  const h1=habRate(days),h0=habRate(prev);if(h1!=null)T.push(tile(Math.round(h1*100)+'<small>%</small>','Gewohnheiten erledigt',h0!=null?dlt(Math.round(h1*100),Math.round(h0*100),0,' Pkt.'):''));
-  if(mod('mind')){const s1=avgSleep(days),s0=avgSleep(prev);if(s1)T.push(tile(fmtH(s1)+'<small>h</small>','Ø Schlaf',s0?dlt(Math.round(s1*60),Math.round(s0*60),0,' Min'):''));
-    const m1=avgMood(days),m0=avgMood(prev);if(m1)T.push(tile(fmt(m1,1),'Ø Stimmung, 1 bis 5',m0?dlt(m1,m0,1):''))}
-  if(mod('food')){const k1=avgKcal(days),k0=avgKcal(prev);if(k1)T.push(tile(fmt(Math.round(k1),0),'Ø kcal an Tagen mit Einträgen',k0?dlt(Math.round(k1),Math.round(k0),0):''))}
-  const W=weightLog().filter(p=>p.date>=days[0]);if(W.length>=2)T.push(tile(sgnF(W[W.length-1].v-W[0].v)+'<small>kg</small>','Gewicht im Zeitraum'));
-  const ins=insights(days);
-  return `<div class="tiles fit">${T.join('')}</div>
-   <div class="card section"><div><b>Zusammenhänge</b><div class="small muted">Was in den letzten ${n} Tagen oft zusammen auftrat</div></div>
-    ${ins.length?`<div class="inss">${ins.map(insRow).join('')}</div><div class="small muted">Das zeigt Zusammenhänge, keine Ursachen. Je mehr Tage du einträgst, desto verlässlicher wird es.</div>`
-      :`<div class="small muted">${mod('mind')?'Sobald du ein paar Tage Schlaf und Stimmung einträgst, erscheinen hier Vergleiche, zum Beispiel deine Stimmung an Trainings- und Ruhetagen.':'Mit dem Modul Schlaf & Mindset siehst du hier, wie Schlaf, Stimmung und Training zusammenhängen.'}</div>`}</div>`}
-function progHabits(days,prev,n){const hs=S.habits.filter(h=>!h.arch);
-  if(!hs.length)return '<div class="card empty"><b>Noch keine Gewohnheiten</b>Leg welche an, dann siehst du hier, wie oft du sie schaffst.<button class="btn primary" data-act="tab" data-v="gewohnheiten">Gewohnheiten</button></div>';
-  const cols=n===7?7:n===30?15:18;
-  return hs.map(h=>{const due=days.filter(k=>habitDue(h,k)),dn=due.filter(k=>habDone(h,k)).length,rate=due.length?dn/due.length:null,td=today();
-    const cells=days.map(k=>{const d=habitDue(h,k),ok=d&&habDone(h,k),part=d&&!ok&&(h.kind==='count'||h.kind==='amount')&&num(habVal(h,k))>0;return `<i class="${!d?'na':ok?'on':part?'part':''}${k===td?' td':''}"></i>`}).join('');
-    let ex='';if(!due.length)ex='Im Zeitraum war noch kein Tag geplant.';else if(h.kind==='count'||h.kind==='amount')ex='Ø '+fmt(avgOf(due.map(k=>num(habVal(h,k)))),1)+' '+esc(h.unit||'')+' pro Tag';
-    else if(h.kind==='quit'){const rel=days.filter(k=>habVal(h,k)===-1).length;ex=quitDays(h,td)+' Tage ohne · '+rel+(rel===1?' Rückfall':' Rückfälle')+' im Zeitraum'}
-    return `<div class="card section"><div class="sec-h"><b>${esc(h.name)}</b><span class="num"><b>${rate==null?'–':Math.round(rate*100)+' %'}</b> <span class="small muted">${dn} von ${due.length} Tagen</span></span></div>
-      <div class="hgrid2" style="grid-template-columns:repeat(${cols},minmax(0,1fr))" role="img" aria-label="${esc(h.name)}: an ${dn} von ${due.length} Tagen erledigt">${cells}</div>
-      ${ex?`<div class="small muted num">${ex}</div>`:''}</div>`}).join('')+'<div class="legend"><span><i class="lg-on"></i>erledigt</span><span><i class="lg-part"></i>teilweise</span><span><i class="lg-na"></i>nicht geplant</span></div>'}
-function progFood(days,prev,n){const r=nCalc(),tg=r.miss?null:r.avg.k,per=days.map(k=>({k,f:dayGet(k).food||[]})).map(p=>({k:p.k,has:p.f.length>0,t:sumFood(p.f)})),lg=per.filter(p=>p.has);
-  if(!lg.length)return '<div class="card empty"><b>Noch keine Einträge im Zeitraum</b>Trag ein paar Mahlzeiten ein, dann siehst du hier deine Durchschnitte.<button class="btn primary" data-act="addMeal">+ Mahlzeit eintragen</button></div>';
-  const av=f=>avgOf(lg.map(p=>p.t[f])),ak=av('k'),ap=av('p'),ac=av('c'),af=av('f'),tot=ap*4+ac*4+af*9||1;
-  const bars=sBars(per.map(p=>({label:dm(p.k),parts:[p.t.k]})),{label:'Kalorien pro Tag',ref:tg||null,fy:v=>fmt(v,0)});
-  return `<div class="tiles">${tile(fmt(Math.round(ak),0),'Ø kcal pro Tag mit Einträgen'+(tg?', Ziel '+fmt(r10(tg),0):''))}${tile(lg.length+'<small>/ '+n+'</small>','Tage mit Einträgen')}</div>
-   <div class="card section"><div><b>Kalorien pro Tag</b><div class="small muted">${tg?'Gestrichelt: dein Zielbedarf pro Tag':'Berechne deinen Tagesbedarf, dann erscheint hier die Ziellinie'}</div></div>${bars}</div>
-   <div class="card section"><div><b>Ø Makros an Tagen mit Einträgen</b></div>
-    <div class="mrow">${[['p','m-ei','Eiweiß',ap,4],['c','m-kh','Kohlenhydr.',ac,4],['f','m-fe','Fett',af,9]].map(([f,c,l,v,kc])=>`<div class="mcell ${c}"><span class="mac-n">${l}</span><b class="num">${fmt(Math.round(v),0)}<small> g</small></b><span class="small muted num">${Math.round(v*kc/tot*100)} % der kcal</span></div>`).join('')}</div></div>`}
-function progBody(days,prev,n){const s=days[0],e=days[days.length-1],W=weightLog().filter(p=>p.date>=s&&p.date<=e);let wH;
-  if(W.length>=2){const pts=W.map(p=>({t:dayN(p.date),v:p.v})),av=pts.map(p=>({t:p.t,v:avgOf(pts.filter(q=>q.t>p.t-7&&q.t<=p.t).map(q=>q.v))}));
-    wH=`<div class="tiles t3">${tile(fmt(av[av.length-1].v,1)+'<small>kg</small>','Ø 7 Tage aktuell')}${tile(sgnF(av[av.length-1].v-av[0].v)+'<small>kg</small>','im Zeitraum')}${tile(fmt(Math.min(...W.map(p=>p.v)),1)+'<small>kg</small>','niedrigster Wert')}</div>
-    ${tChart([{pts,line:false,dots:true,dcls:'dt',r:3.2},{pts:av,cls:'ln'}],{fy:v=>fmt(v,1),label:'Körpergewicht'})}
-    <div class="legend"><span><i class="lg-dt"></i>gewogen</span><span><i class="lg-ln"></i>Ø 7 Tage</span></div>`}
-  else wH='<div class="small muted">Ab zwei Messungen im Zeitraum siehst du hier deinen Gewichtsverlauf.</div>';
-  const M=measList().filter(m=>m.date>=s&&m.date<=e);let mH='<div class="small muted">Im Zeitraum sind keine Maße eingetragen.</div>';
-  if(M.length){const a=M[0],b=M[M.length-1],two=M.length>1;mH=`<div class="tbl-wrap"><table class="tbl"><thead><tr><th>Maß</th><th class="r">${dmy(a.date)}</th>${two?`<th class="r">${dmy(b.date)}</th><th class="r">Δ</th>`:''}</tr></thead><tbody>
-    ${MEAS.filter(([f])=>a.m[f]||b.m[f]).map(([f,l])=>`<tr><td>${l}</td><td class="r num">${a.m[f]?fmt(a.m[f],1):'–'}</td>${two?`<td class="r num">${b.m[f]?fmt(b.m[f],1):'–'}</td><td class="r num">${a.m[f]&&b.m[f]?sgnF(b.m[f]-a.m[f]):'–'}</td>`:''}</tr>`).join('')}</tbody></table></div>`}
-  const P=S.photos.slice().sort((x,y)=>x.date<y.date?-1:1);
-  return `<div class="card section"><div><b>Körpergewicht</b><div class="small muted">Einzelne Messungen und Ø über 7 Tage</div></div>${wH}</div>
-   <div class="card section"><div><b>Maße</b><div class="small muted">In cm, erste und letzte Messung im Zeitraum</div></div>${mH}</div>
-   ${P.length>=2?`<div class="card section"><div><b>Erstes und neuestes Foto</b></div><div class="pcomp">${[P[0],P[P.length-1]].map(p=>`<figure><img src="${photoSrc(p)}" alt="Fortschrittsfoto vom ${dmy(p.date)}" loading="lazy"><figcaption>${dmy(p.date)}</figcaption></figure>`).join('')}</div></div>`:''}`}
-function progMind(days,prev,n){const L=days.map(k=>{const D=dayGet(k);return {k,h:num((D.sleep||{}).h),q:num((D.sleep||{}).q),mo:num(D.mood)}}),hs=L.filter(x=>x.h),qs=L.filter(x=>x.q),ms=L.filter(x=>x.mo);
-  const T=[tile(hs.length?fmtH(avgOf(hs.map(x=>x.h)))+'<small>h</small>':'–','Ø Schlaf'),tile(qs.length?fmt(avgOf(qs.map(x=>x.q)),1):'–','Ø Schlafqualität, 1 bis 5'),tile(ms.length?fmt(avgOf(ms.map(x=>x.mo)),1):'–','Ø Stimmung, 1 bis 5'),tile(fmt(days.reduce((t,k)=>t+num(dayGet(k).breath),0),0)+'<small>Min</small>','Atemübungen')];
-  const bars=hs.length?sBars(L.map(x=>({label:dm(x.k),parts:[x.h]})),{label:'Schlaf pro Nacht in Stunden',ref:7,fy:v=>fmt(v,0)}):'<div class="small muted">Noch keine Schlafdaten im Zeitraum.</div>';
-  const mc=ms.length>=2?tChart([{pts:ms.map(x=>({t:dayN(x.k),v:x.mo})),dots:true}],{min:1,max:5,ticks:[1,2,3,4,5],fy:v=>MOOD[v-1],h:170,l:46,label:'Stimmung im Verlauf'}):'<div class="small muted">Ab zwei Einträgen erscheint hier dein Stimmungsverlauf.</div>';
-  const nn=days.filter(k=>(dayGet(k).note||'').trim()).length;
-  return `<div class="tiles">${T.join('')}</div>
-   <div class="card section"><div><b>Schlaf</b><div class="small muted">Stunden pro Nacht, gestrichelt: 7 Stunden</div></div>${bars}</div>
-   <div class="card section"><div><b>Stimmung</b><div class="small muted">${nn} ${nn===1?'Notiz':'Notizen'} im Zeitraum</div></div>${mc}</div>`}
-function viewProgress(){
-  const secs=F_SECS.filter(s=>!s[2]||mod(s[2])),sec=secs.some(s=>s[0]===S.ui.fsec)?S.ui.fsec:'ueb';
-  const chips=`<div class="chips fchips" role="group" aria-label="Bereich">${secs.map(([v,l])=>`<button class="chip" data-act="fsec" data-v="${v}" aria-pressed="${sec===v}">${l}</button>`).join('')}</div>`;
-  if(sec==='training'){const b=banner();let inner='';bannerOff=true;try{inner=viewFortschrittTraining()}finally{bannerOff=false}
-    return b+chips+`<div class="seg modesw" role="group" aria-label="Ansicht"><button data-act="mode" data-v="basic" aria-pressed="${!perf()}">Essential</button><button data-act="mode" data-v="perf" aria-pressed="${perf()}">Analysis</button></div>`+inner}
-  const rg=['7','30','90'].includes(S.ui.frng)?S.ui.frng:'30',n=+rg,days=rangeDays(n),prev=rangeDays(2*n).slice(0,n);
-  const seg=`<div class="seg sm" role="group" aria-label="Zeitraum">${[['7','7 Tage'],['30','30 Tage'],['90','90 Tage']].map(([v,l])=>`<button data-act="frng" data-v="${v}" aria-pressed="${rg===v}">${l}</button>`).join('')}</div>`;
-  return banner()+chips+seg+({ueb:progOverview,gew:progHabits,ern:progFood,koerper:progBody,mind:progMind})[sec](days,prev,n)}
 
 /* ---------- Ich ---------- */
 
@@ -4449,8 +4586,8 @@ function viewIch(){const lw=lastWeight(),na=S.goals.filter(g=>!goalState(g).done
    <div class="grp"><span class="eyebrow">Module ein- und ausschalten</span><div class="card pane">
      ${sw('food','Ernährungstagebuch','Mahlzeiten, Kalorien, Makros')}${sw('mind','Schlaf & Mindset','Check-in, Journal, Atemübung')}${sw('body','Körper & Fotos','Gewicht, Maße, Fortschrittsfotos')}
      <div class="small muted">Training und Gewohnheiten sind immer dabei. Ausgeschaltete Module behalten ihre Daten.</div></div></div>
-   <div class="grp"><span class="eyebrow">Ansicht im Training</span><div class="seg modesw" role="group" aria-label="Ansicht"><button data-act="mode" data-v="basic" aria-pressed="${!perf()}">Essential</button><button data-act="mode" data-v="perf" aria-pressed="${perf()}">Analysis</button></div>
-     <div class="small muted">Analysis zeigt mehr Werte: 1RM, Volumen, Kalorien und die ausführliche Auswertung.</div></div>
+   <div class="grp"><span class="eyebrow">Ansicht in Training und Fortschritt</span><div class="seg modesw" role="group" aria-label="Ansicht"><button data-act="mode" data-v="basic" aria-pressed="${!perf()}">Essential</button><button data-act="mode" data-v="perf" aria-pressed="${perf()}">Analyse</button></div>
+     <div class="small muted">Analyse zeigt mehr Werte: im Training 1RM, Volumen und Kalorien, unter Fortschritt die ausführliche Auswertung aller Bereiche. Umschalten geht auch direkt unter Fortschritt.</div></div>
    <div class="grp"><span class="eyebrow">Daten</span><div class="navlist">${row('daten',ICONS.daten,'Daten & Backup',S.lastBackup?'Letztes Backup '+bkAge():'Noch kein Backup')}</div></div>`}
 
 /* Beispieldaten für Gewohnheiten, Check-ins, Ernährung und Körper.
@@ -4764,13 +4901,13 @@ function wipeAct(a,el){const ds=el&&el.dataset||{};switch(a){
 /* ---------- Navigation: Tab-Leiste, Unterseiten-Stapel je Tab, Übergänge, Zurück-Geste ---------- */
 const ROOTS_ALL=['heute','training','ernaehrung','fortschritt','ich'];
 const RLBL={heute:'Heute',training:'Training',ernaehrung:'Ernährung',fortschritt:'Fortschritt',ich:'Ich'};
-const VTITLE={session:'Training',plaene:'Trainingspläne',uebungen:'Übungen',mahlzeit:'Mahlzeit',verlauf:'Verlauf',uebung:'Übung',exwahl:'Übung wählen',scan:'Barcode scannen',produkt:'Lebensmittel',rezepte:'Rezepte',rezept:'Rezept',rezeptEdit:'Rezept',zutat:'Zutat hinzufügen',bedarf:'Tagesbedarf',gewohnheiten:'Gewohnheiten',ziele:'Ziele',koerper:'Körper',journal:'Journal',atem:'Atemübung',daten:'Daten & Backup',loeschen:'Daten löschen'};
+const VTITLE={session:'Training',plaene:'Trainingspläne',uebungen:'Übungen',mahlzeit:'Mahlzeit',fTraining:'Training',fGewohn:'Gewohnheiten',fErn:'Ernährung',fKoerper:'Körper',fMind:'Schlaf & Stimmung',verlauf:'Verlauf',uebung:'Übung',exwahl:'Übung wählen',scan:'Barcode scannen',produkt:'Lebensmittel',rezepte:'Rezepte',rezept:'Rezept',rezeptEdit:'Rezept',zutat:'Zutat hinzufügen',bedarf:'Tagesbedarf',gewohnheiten:'Gewohnheiten',ziele:'Ziele',koerper:'Körper',journal:'Journal',atem:'Atemübung',daten:'Daten & Backup',loeschen:'Daten löschen'};
 const VLBL={...VTITLE,plaene:'Pläne'};
-const VIEWS={heute:viewHeute,training:viewTrainHub,ernaehrung:viewFood,fortschritt:viewProgress,ich:viewIch,
-  session:viewTraining,plaene:viewPlaene,uebungen:viewExList,mahlzeit:viewMeal,verlauf:viewVerlauf,uebung:viewExEdit,exwahl:viewExPick,scan:viewScan,produkt:viewProduct,rezepte:viewRecipes,rezept:viewRecipe,rezeptEdit:viewRecipeEdit,zutat:viewPick,bedarf:viewBedarf,gewohnheiten:viewHabits,ziele:viewGoals,koerper:viewBody,journal:viewJournal,atem:viewBreath,daten:viewDaten,loeschen:viewWipe};
+const VIEWS={heute:viewHeute,training:viewTrainHub,ernaehrung:viewFood,fortschritt:viewFort,ich:viewIch,
+  session:viewTraining,plaene:viewPlaene,uebungen:viewExList,mahlzeit:viewMeal,fTraining:viewFTraining,fGewohn:viewFGewohn,fErn:viewFErn,fKoerper:viewFKoerper,fMind:viewFMind,verlauf:viewVerlauf,uebung:viewExEdit,exwahl:viewExPick,scan:viewScan,produkt:viewProduct,rezepte:viewRecipes,rezept:viewRecipe,rezeptEdit:viewRecipeEdit,zutat:viewPick,bedarf:viewBedarf,gewohnheiten:viewHabits,ziele:viewGoals,koerper:viewBody,journal:viewJournal,atem:viewBreath,daten:viewDaten,loeschen:viewWipe};
 function roots(){return ROOTS_ALL.filter(r=>r!=='ernaehrung'||mod('food'))}
 function rootLabel(r){return RLBL[r]||''}
-function modOkView(v){return !(['mahlzeit','bedarf','scan','produkt','rezepte','rezept','rezeptEdit','zutat'].includes(v)&&!mod('food'))&&!((v==='journal'||v==='atem')&&!mod('mind'))&&!(v==='koerper'&&!mod('body'))}
+function modOkView(v){return !(['mahlzeit','bedarf','scan','produkt','rezepte','rezept','rezeptEdit','zutat'].includes(v)&&!mod('food'))&&!((v==='journal'||v==='atem')&&!mod('mind'))&&!(v==='koerper'&&!mod('body'))&&!(v==='fErn'&&!mod('food'))&&!(v==='fKoerper'&&!mod('body'))&&!(v==='fMind'&&!mod('mind'))}
 const rootStacks={};
 let curScr=null,navHint=null,wantTop=false,under=[],trans=null,drag=null,noClickUntil=0;
 let histDepth=0,histOK=true;
@@ -4996,7 +5133,6 @@ function act(a,el){
       prefillBw(S.draft);goRoot('training',['session']);break}
     case 'goSession':goRoot('training',['session']);break;
     case 'goFood':foodDay=Math.min(0,dayN(el.dataset.date||today())-dayN(today()));foodEdit=null;goRoot('ernaehrung');break;
-    case 'goProg':S.ui.fsec=el.dataset.v||'ueb';goRoot('fortschritt');break;
     case 'addMeal':mealReset();meal=newMeal(el.dataset.date||today(),el.dataset.sl);push('mahlzeit');break;
     case 'hday':dayOff=Math.min(0,dayOff+ +el.dataset.d);toTop();break;
     case 'sleepH':{const k=hDate(),D=dayMut(k),s=D.sleep||(D.sleep={});s.h=Math.round(Math.min(14,Math.max(1,(num(s.h)||defSleep())+ +el.dataset.d))*4)/4;break}
@@ -5078,7 +5214,6 @@ function act(a,el){
     case 'brStart':br.run=true;br.done=0;br.ph=-1;br.t0=performance.now();render();br.raf=requestAnimationFrame(brLoop);return;
     case 'brStop':brFinish(false);return;
     case 'modTog':{const k=el.dataset.v;if(!S.mods)S.mods={};S.mods[k]=!S.mods[k];toast(({food:'Ernährungstagebuch',mind:'Schlaf & Mindset',body:'Körper & Fotos'}[k]||'Modul')+(S.mods[k]?' ist an':' ist aus'));break}
-    case 'fsec':S.ui.fsec=el.dataset.v;toTop();break;
     case 'frng':S.ui.frng=el.dataset.v;break;
     case 'bkMake':bkMake();return;
     case 'bkShare':bkShare();return;
@@ -5158,7 +5293,7 @@ function act(a,el){
     case 'durEdit':durOpen=!durOpen;break;
     case 'durNudge':{const c=finDur(d);d.dur=Math.min(600,Math.max(1,(c||0)+ +el.dataset.d));d.durSet=true;break}
     case 'backToLive':durOpen=false;d.finishing=false;toTop();break;
-    case 'mode':S.mode=el.dataset.v==='perf'?'perf':'basic';toast(S.mode==='perf'?'Analysis-Ansicht':'Essential-Ansicht');break;
+    case 'mode':S.mode=el.dataset.v==='perf'?'perf':'basic';toast(S.mode==='perf'?'Ansicht Analyse':'Ansicht Essential');break;
     case 'openCal':goRoot('training');openFold.cal=true;break;
     case 'nudge':{const st=d.entries[+el.dataset.e].sets[+el.dataset.s];const key=el.dataset.k||'a';const step=+el.dataset.d;const cur=num(st[key]);
       const reps=Math.abs(step)===1;const lo=el.dataset.lo?+el.dataset.lo:reps?1:2.5,hi=el.dataset.hi?+el.dataset.hi:reps?50:202.5;
@@ -5190,7 +5325,6 @@ function act(a,el){
     case 'fold':openFold[el.dataset.v]=!openFold[el.dataset.v];break;
     case 'okIssue':{const x=S.sessions.find(q=>q.id===el.dataset.id);if(x){for(const e of x.entries||[]){const ex=exById(e.exId);for(const st of e.sets||[])if(setIssue(ex,st))st.ok=1}x.ok=1;toast('Als korrekt bestätigt')}break}
     case 'anaTab':S.ui.anaTab=el.dataset.v;break;
-    case 'anaRange':S.ui.anaRange=el.dataset.v;break;
     case 'anaEx':S.ui.anaEx=el.dataset.id;break;
     case 'anaRun':S.ui.anaRun=el.dataset.id;break;
     case 'anaRel':S.ui.anaRel=el.dataset.v==='1';break;

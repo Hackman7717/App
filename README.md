@@ -32,7 +32,17 @@ Sie läuft als installierbare Web-App (PWA) auf dem iPhone, auf Android und am C
 
 ## Fortschritt
 
-- **Muskelgruppen im Vergleich:** *Fortschritt → Training* in der Ansicht *Analyse* unter *Kraft* zeigt, wie sich deine abgehakten Sätze im Zeitraum auf die Muskelgruppen verteilen, grob nach Kategorie oder fein nach Muskelgruppe. Das ist ein reiner Vergleich ohne Zielwerte, denn für den Muskelaufbau zählt vor allem, wie fordernd die Sätze sind.
+- **Startseite:** *Fortschritt* zeigt jeden Bereich als Karte: Training, Gewohnheiten, Ernährung, Körper sowie Schlaf & Stimmung (die letzten drei mit ihrem Modul). Auf jeder Karte stehen die wichtigsten Werte, der Vergleich mit dem Zeitraum davor und ein kleiner Verlauf. Darunter folgen Zusammenhänge, etwa deine Stimmung an Trainings- und Ruhetagen. Ein Tipp auf eine Karte öffnet den Bereich. Zurück geht es mit dem Pfeil, vom linken Rand wischen oder *Fortschritt* in der Leiste antippen.
+- **Essential und Analyse:** Der Schalter oben gilt für den ganzen Reiter und für das Training. *Essential* zeigt das Wichtigste, *Analyse* mehr Werte und Auswertungen. Umstellen geht auch unter *Ich*.
+- **Zeitraum:** 7, 30 oder 90 Tage oder *Alles*, gleich für alle Bereiche. *Alles* beginnt beim ersten Eintrag des Bereichs. Bis 31 Tage zeigen die Diagramme einzelne Tage, bis etwa ein halbes Jahr Wochen, darüber Monate.
+- **Training:**
+  - *Essential:* Trainingstage als Kalender (bei längeren Zeiträumen Trainings pro Woche oder Monat), deine Übungen mit ihrer Veränderung im Zeitraum (antippen zeigt den Verlauf) und Muskelgruppen im Vergleich.
+  - *Analyse:* *Übersicht* (Belastung, Konstanz, Gefühl, Plan-Treue, verbrannte Kalorien), *Kraft* (Plateaus, 1RM im Verlauf, Bestwerte, Muskelgruppen grob oder fein) und *Ausdauer* (Tempo, Kilometer).
+- **Gewohnheiten:** Essential zeigt den Anteil je Gewohnheit. Analyse zeigt ein Raster je Gewohnheit (über 90 Tage ein Kästchen pro Woche) und den Anteil nach Wochentag.
+- **Ernährung:** Essential zeigt Ø Kalorien mit Ziel, Kalorien pro Tag und Ø Makros. Analyse ergänzt Tage im Zielbereich, Eiweiß, Makros im Verlauf, Mahlzeiten, Wochentage sowie Trainings- und Ruhetage.
+- **Körper:** Essential zeigt das Gewicht mit Ø über 7 Tage, den Abstand zum Zielgewicht und das erste und neueste Foto. Analyse ergänzt Ø pro Woche neben dem geplanten Tempo aus dem Tagesbedarf sowie die Maße.
+- **Schlaf & Stimmung:** Essential zeigt Schlaf und Stimmung. Analyse ergänzt Schlafqualität, Atemübungen, Wochentage und das Journal.
+- **Muskelgruppen im Vergleich:** zeigt, wie sich deine abgehakten Sätze im Zeitraum auf die Muskelgruppen verteilen, in der Ansicht *Analyse* unter *Kraft* auch fein nach Muskelgruppe. Das ist ein reiner Vergleich ohne Zielwerte, denn für den Muskelaufbau zählt vor allem, wie fordernd die Sätze sind.
 
 ## Standardübungen und MET-Werte
 
