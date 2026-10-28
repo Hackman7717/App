@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-title" content="Trainingsbuch">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="format-detection" content="telephone=no">
-<meta name="app-version" content="1.7.0">
+<meta name="app-version" content="1.8.0">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icons/icon-180.png">
 <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
@@ -1005,6 +1005,10 @@ input.wh:focus{outline:none;border-color:var(--accent-fg);box-shadow:inset 0 0 0
 .cis-bars i{flex:1;background:color-mix(in srgb,var(--accent-fg) 38%,var(--soft))}
 .cis-bars i.no{background:var(--soft)}
 .cis-bars i.td{background:var(--accent-fg)}
+/* ---------- 1.8.0 ---------- */
+.fdbprog{display:flex;flex-direction:column;gap:6px;margin-top:2px}
+.fdbprog .pbar{height:10px}
+.fdbhint .row{margin-top:2px}
 .plan.hl{box-shadow:inset 0 0 0 2px var(--accent-fg)}
 @media (prefers-reduced-motion: no-preference){.plan.hl{animation:hlpl 2.8s ease-out forwards}}
 @keyframes hlpl{0%,55%{box-shadow:inset 0 0 0 2px var(--accent-fg)}100%{box-shadow:inset 0 0 0 0 transparent}}
@@ -1273,7 +1277,7 @@ if(!Array.isArray(S.plans))S.plans=S.demo&&S.exercises.some(e=>e.id==='e1')?demo
 /* ---------- Speicher auf dem Gerät ----------
    IndexedDB ist der Hauptspeicher (Daten und Fotos). Eine Kopie der Daten liegt zusätzlich im localStorage,
    damit die App sofort startet. Beim Start gewinnt der neuere Stand. Es gibt keinen Server und kein Konto. */
-const APPV='1.7.0',SCHEMA=3;
+const APPV='1.8.0',SCHEMA=3;
 const cloud={state:'local',deferred:false};
 const store={open:null,timer:null,ok:false,err:false,warned:false,persist:false};
 function idb(){if(store.open)return store.open;
@@ -2720,6 +2724,158 @@ const EAN=(()=>{
   function norm(s){s=String(s||'').replace(/\D/g,'');if(s.length===12)s='0'+s;return s}
   return {decodeLum,scan,check,norm,set maxv(v){MAXV=v}};
 })();
+/* ======================= Lebensmittel-Datenbank auf dem Gerät =======================
+   Auszug aus Open Food Facts mit den Produkten aus Deutschland, die Kalorien haben (Repository Hackman7717/App-Daten, jeden Montag neu
+   gebaut, Lizenz ODbL). Auf Wunsch lädt die App die Datei einmal herunter (gzip, etwa 7 MB) und legt sie gepackt in IndexedDB ab
+   ('fdbData', Beschreibung in 'fdbMeta'). Gesucht wird in einem Web Worker: Datei entpacken, Name und Marke jeder Zeile als Suchtext
+   (klein, ohne Akzente, ß → ss), dann Teilwortsuche über alle Produkte, beliebteste zuerst. Barcodes über die Zeilenanfänge.
+   Updates: höchstens einmal am Tag manifest.json prüfen und eine neue Fassung von selbst laden (abschaltbar).
+   Format „tb1“: erste Zeile #tb1 + Spaltennamen, dann je Produkt code, Name, Marke, Menge, Einheit, kcal, Eiweiß, KH, Fett, Portion, Bild. */
+const FDB_BASES=['../App-Daten/','https://raw.githubusercontent.com/Hackman7717/App-Daten/gh-pages/'];
+const FDB={meta:null,w:null,ready:null,seq:0,pend:new Map(),dl:null,err:'',remote:null,peeked:0,idle:0,n:0,ok:typeof DecompressionStream==='function'&&typeof Worker==='function'};
+const fdbDays=24*3600e3;
+
+/* ---------- Worker (läuft getrennt, als Text in einen Blob gepackt) ---------- */
+function fdbWorker(){
+  let raw='',rOff=null,keys='',kOff=null,n=0;
+  const nz=s=>s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/ß/g,'ss');
+  const IMG='https://images.openfoodfacts.org/images/products/';
+  const ipath=c=>{c=c.padStart(13,'0');return c.slice(0,3)+'/'+c.slice(3,6)+'/'+c.slice(6,9)+'/'+c.slice(9)};
+  const nv=s=>s===''||s==null||!isFinite(+s)?null:+s;
+  function prod(i){const f=raw.slice(rOff[i],rOff[i+1]-1).split('\t'),k=f[10]||'';
+    return {code:f[0],n:f[1],b:f[2],q:f[3],u:f[4]==='ml'?'ml':'g',k:nv(f[5]),p:nv(f[6]),c:nv(f[7]),f:nv(f[8]),sv:nv(f[9]),svt:'',
+      img:k?IMG+(k.includes('/')?k:ipath(f[0])+'/'+k)+'.jpg':'',src:'off',de:true}}
+  async function load(buf){
+    const txt=await new Response(new Blob([buf]).stream().pipeThrough(new DecompressionStream('gzip'))).text();
+    if(!txt.startsWith('#tb1\t'))throw new Error('Unbekanntes Format');
+    const first=txt.indexOf('\n')+1;let cnt=0;
+    for(let p=first;p<txt.length;){const e=txt.indexOf('\n',p);if(e<0)break;cnt++;p=e+1}
+    rOff=new Uint32Array(cnt+1);const parts=new Array(cnt);let p=first;
+    for(let i=0;i<cnt;i++){rOff[i]=p;const t1=txt.indexOf('\t',p),t2=txt.indexOf('\t',t1+1),t3=txt.indexOf('\t',t2+1),e=txt.indexOf('\n',p);
+      parts[i]=txt.slice(t1+1,t2)+'|'+txt.slice(t2+1,t3);p=e+1}
+    rOff[cnt]=p;raw=txt;n=cnt;keys=nz(parts.join('\n'));
+    kOff=new Uint32Array(cnt+1);let q=0;
+    for(let i=0;i<cnt;i++){kOff[i]=q;const e=keys.indexOf('\n',q);q=e<0?keys.length+1:e+1}
+    kOff[cnt]=keys.length+1;return {n}}
+  function lineOf(off,pos){let lo=0,hi=n-1;while(lo<hi){const m=(lo+hi+1)>>1;if(off[m]<=pos)lo=m;else hi=m-1}return lo}
+  const WB=/[^\p{L}\p{N}]/u;
+  function search(q,limit){
+    const W=nz(q).split(/\s+/).map(w=>w.replace(/^[^\p{L}\p{N}]+|[^\p{L}\p{N}%]+$/gu,'')).filter(Boolean);
+    if(!W.length||!n)return [];
+    const a=W.slice().sort((x,y)=>y.length-x.length)[0],hits=[];let pos=0;
+    while(hits.length<800){const p=keys.indexOf(a,pos);if(p<0)break;const i=lineOf(kOff,p),line=keys.slice(kOff[i],kOff[i+1]-1);
+      if(W.every(w=>line.includes(w)))hits.push(i);pos=kOff[i+1]}
+    /* Wertung je Suchwort: ganzes Wort 4, Wortanfang 2, irgendwo 1 (Marke zählt mit, „ja!“ passt also zu „ja“), +1 wenn es als ganzes
+       Wort im Namen steht; Name beginnt mit dem ersten Wort: +3 als ganzes Wort, +1 als Anfang. Gleiche Wertung: beliebtere Produkte
+       (weiter oben in der Datei) zuerst. */
+    const isB=(s,i)=>i<0||i>=s.length||WB.test(s[i]);
+    const wsc=(line,w)=>{let best=0,k=line.indexOf(w);while(k>=0&&best<4){const v=isB(line,k-1)?(isB(line,k+w.length)?4:2):1;if(v>best)best=v;k=line.indexOf(w,k+1)}return best};
+    const score=i=>{const line=keys.slice(kOff[i],kOff[i+1]-1),bar=line.lastIndexOf('|'),name=bar<0?line:line.slice(0,bar);let s=0;
+      for(const w of W){s+=wsc(line,w);if(wsc(name,w)===4)s+=1}
+      if(name.startsWith(W[0]))s+=isB(name,W[0].length)?3:1;return s};
+    return hits.map((i,r)=>({i,r,s:score(i)})).sort((x,y)=>y.s-x.s||x.r-y.r).slice(0,limit).map(o=>prod(o.i))}
+  function byCode(code){code=String(code||'').replace(/\D/g,'');if(!code||!n)return null;
+    const C=[code];if(code.length===13&&code[0]==='0')C.push(code.slice(1));if(code.length===12)C.push('0'+code);
+    for(const c of C){const p=raw.indexOf('\n'+c+'\t');if(p>=0)return prod(lineOf(rOff,p+1))}return null}
+  self.onmessage=async e=>{const d=e.data;
+    try{const r=d.t==='load'?await load(d.buf):d.t==='search'?search(String(d.q||''),d.limit||40):d.t==='code'?byCode(d.code):null;self.postMessage({id:d.id,r})}
+    catch(err){self.postMessage({id:d.id,err:String(err&&err.message||err)})}}}
+
+/* ---------- Worker steuern ---------- */
+function fdbStop(){clearTimeout(FDB.idle);if(FDB.w)try{FDB.w.terminate()}catch(e){}FDB.w=null;FDB.ready=null;
+  for(const cb of FDB.pend.values())cb.rej(new Error('beendet'));FDB.pend.clear()}
+function fdbCall(t,a,tr){const w=FDB.w;if(!w)return Promise.reject(new Error('beendet'));const id=++FDB.seq;
+  return new Promise((res,rej)=>{FDB.pend.set(id,{res,rej});w.postMessage({id,t,...a},tr||[])})}
+function fdbStart(){if(FDB.ready)return FDB.ready;if(!FDB.ok)return Promise.reject(new Error('nicht unterstützt'));
+  const url=URL.createObjectURL(new Blob(['('+fdbWorker.toString()+')()'],{type:'text/javascript'}));let w;
+  try{w=new Worker(url)}catch(e){URL.revokeObjectURL(url);return Promise.reject(e)}
+  FDB.w=w;w.onmessage=e=>{const d=e.data,cb=FDB.pend.get(d.id);if(!cb)return;FDB.pend.delete(d.id);if(d.err!=null)cb.rej(new Error(d.err));else cb.res(d.r)};
+  w.onerror=()=>fdbStop();
+  const t0=Date.now();
+  FDB.ready=kvGet('fdbData').then(buf=>{if(!buf)throw new Error('Keine Daten auf dem Gerät');return fdbCall('load',{buf},[buf])})
+    .then(r=>{URL.revokeObjectURL(url);FDB.n=r.n;FDB.loadMs=Date.now()-t0;return r},e=>{URL.revokeObjectURL(url);fdbStop();throw e});
+  return FDB.ready}
+/* Nach 10 Minuten ohne Suche den Worker beenden, das gibt den Speicher (etwa 60 MB) wieder frei */
+function fdbTouch(){clearTimeout(FDB.idle);FDB.idle=setTimeout(fdbStop,10*60000)}
+async function fdbSearch(q){if(!FDB.meta||!FDB.ok)return null;await fdbStart();fdbTouch();return fdbCall('search',{q,limit:40})}
+async function fdbCode(code){if(!FDB.meta||!FDB.ok)return null;await fdbStart();fdbTouch();return fdbCall('code',{code})}
+
+/* ---------- Laden, Aktualisieren, Entfernen ---------- */
+function fdbUrl(base,f){return new URL(f,new URL(base,location.href)).href}
+async function fdbManifest(){let last=null;
+  for(const base of FDB_BASES){try{const r=await fetch(fdbUrl(base,'manifest.json?t='+Date.now()),{cache:'no-store'});if(!r.ok)throw new Error('http '+r.status);
+      const m=await r.json();if(!m||m.format!=='tb1'||!m.file||!(m.n>0))throw new Error('format');FDB.remote={m,base};return FDB.remote}
+    catch(e){last=e}}
+  throw last||new Error('nicht erreichbar')}
+/* Größe für die Anzeige holen, ohne zu laden (einmal pro Sitzung) */
+function fdbPeek(){if(FDB.remote||FDB.peeked||navigator.onLine===false)return;FDB.peeked=1;fdbManifest().then(()=>softRender(),()=>{})}
+function fdbErrText(e){const s=String(e&&(e.name||'')+' '+(e.message||e));
+  return /Quota|quota|space/i.test(s)?'Auf dem iPhone ist nicht genug Speicher frei.':navigator.onLine===false?'Keine Internetverbindung.':
+    /beschädigt|unvollständig/.test(s)?'Die Datei kam unvollständig an. Versuch es noch einmal, am besten im WLAN.':'Laden hat nicht geklappt. Versuch es später noch einmal.'}
+async function fdbDownload(o){o=o||{};if(FDB.dl||!FDB.ok)return;FDB.err='';FDB.dl={got:0,total:0};fdbProgress(true);
+  try{const {m,base}=o.man||await fdbManifest();FDB.dl.total=m.bytes||0;fdbProgress(true);
+    const r=await fetch(fdbUrl(base,m.file),{cache:'no-store'});if(!r.ok||!r.body)throw new Error('http '+r.status);
+    const rd=r.body.getReader(),parts=[];let got=0,t=0;
+    for(;;){const {done,value}=await rd.read();if(done)break;parts.push(value);got+=value.length;FDB.dl.got=got;if(Date.now()-t>200){t=Date.now();fdbProgress()}}
+    if(m.bytes&&got!==m.bytes)throw new Error('unvollständig');
+    const buf=new Uint8Array(got);let at=0;for(const p of parts){buf.set(p,at);at+=p.length}
+    if(m.sha256&&window.crypto&&crypto.subtle){const h=[...new Uint8Array(await crypto.subtle.digest('SHA-256',buf))].map(x=>x.toString(16).padStart(2,'0')).join('');
+      if(h!==m.sha256)throw new Error('beschädigt')}
+    await kvSet('fdbData',buf.buffer);
+    const meta={v:m.v,file:m.file,n:m.n,bytes:got,at:Date.now(),chk:Date.now()};await kvSet('fdbMeta',meta);
+    const upd=!!FDB.meta;FDB.meta=meta;fdbStop();FDB.dl=null;
+    toast(upd?'Lebensmittel-Datenbank aktualisiert, Stand '+fdbDate(meta.v):fmtN(meta.n)+' Produkte geladen. Die Suche findet sie jetzt sofort.');softRender()}
+  catch(e){FDB.dl=null;FDB.err=o.silent?'':fdbErrText(e);if(!o.silent)softRender()}}
+async function fdbRemove(){fdbStop();FDB.meta=null;FDB.err='';
+  try{await tx('kv','readwrite',st=>st.delete('fdbData'));await tx('kv','readwrite',st=>st.delete('fdbMeta'))}catch(e){}
+  toast('Lebensmittel-Datenbank entfernt');softRender()}
+/* Einmal am Tag nach einer neuen Fassung schauen, wenn schon Daten da sind und Updates an sind */
+async function fdbAuto(){const m=FDB.meta;if(!m||FDB.dl||!FDB.ok||S.fdbAuto===false||navigator.onLine===false)return;
+  if(Date.now()-(m.chk||0)<fdbDays*0.8)return;m.chk=Date.now();kvSet('fdbMeta',m).catch(()=>{});
+  try{const r=await fdbManifest();if(r.m.file!==m.file)fdbDownload({silent:true,man:r})}catch(e){}}
+function fdbInit(){if(!FDB.ok)return;
+  kvGet('fdbMeta').then(m=>{if(m&&m.file&&m.n){FDB.meta=m;try{if(['daten','mahlzeit','zutat'].includes(curView()))softRender()}catch(e){}}},()=>{});
+  setTimeout(fdbAuto,8000);document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')setTimeout(fdbAuto,2500)})}
+fdbInit();
+
+/* ---------- Anzeige ---------- */
+const fmtN=v=>Number(v||0).toLocaleString('de-DE');
+function fdbMB(b){return fmt(num(b)/1e6,1)+' MB'}
+function fdbDate(v){const p=String(v||'').split('-');return p.length===3?(+p[2])+'.'+(+p[1])+'.'+p[0]:String(v||'')}
+function fdbProgHtml(){const d=FDB.dl||{got:0,total:0},pct=d.total?Math.min(100,Math.round(d.got/d.total*100)):0;
+  return `<div class="fdbprog" id="fdbProg"><div class="pbar" aria-hidden="true"><i style="width:${pct}%"></i></div>
+    <div class="small muted num" role="status">${d.total?`${fdbMB(d.got)} von ${fdbMB(d.total)}`:'Verbinde …'}</div></div>`}
+/* Fortschritt ohne neu zu zeichnen: nur Balken und Text austauschen */
+function fdbProgress(full){const el=document.getElementById('fdbProg');if(full||!el){softRender();return}el.outerHTML=fdbProgHtml()}
+function fdbSize(){const r=FDB.remote&&FDB.remote.m;return r?fdbMB(r.bytes):'etwa 7 MB'}
+/* Karte unter Ich → Daten & Backup */
+function fdbCard(){fdbPeek();const m=FDB.meta,rm=FDB.remote&&FDB.remote.m;let body;
+  if(!FDB.ok)body='<div class="small muted">Dieses Gerät kann die Datei nicht entpacken. Nötig ist iOS 16.4 oder neuer.</div>';
+  else if(FDB.dl)body=`<div class="small">${m?'Neue Fassung wird geladen …':'Wird geladen …'}</div>${fdbProgHtml()}`;
+  else if(!m)body=`<div class="small">Alle Produkte aus Deutschland mit Nährwerten aufs Handy laden. Dann findet die Suche sofort und ohne Internet, und Barcodes werden auch offline erkannt.</div>
+    <button class="btn primary block" data-act="fdbGet">Laden (${fdbSize()})</button><div class="small muted">Am besten im WLAN. Daten von Open Food Facts, Lizenz ODbL.</div>`;
+  else{const newer=rm&&rm.file!==m.file,on=S.fdbAuto!==false;
+    body=`<div class="small num">${fmtN(m.n)} Produkte · Stand ${fdbDate(m.v)} · ${fdbMB(m.bytes)}</div>
+    <div class="ci-row"><div class="ci-l"><b>Updates automatisch laden</b><span class="small muted">Jede Woche kommt eine neue Fassung (${fdbSize()})</span></div>
+     <button class="switch${on?' on':''}" data-act="fdbAuto" role="switch" aria-checked="${on}" aria-label="Updates automatisch laden"><span></span></button></div>
+    <div class="row"><button class="btn small" data-act="fdbGet">${newer?'Update laden ('+fdbSize()+')':'Nach Update suchen'}</button><button class="btn small ghost" data-act="fdbDel">${confirmKey==='fdbDel'?'Wirklich entfernen?':'Entfernen'}</button></div>`}
+  return `<div class="card pane" id="fdbCard"><div class="pane-h"><span class="eyebrow">Lebensmittel-Datenbank</span></div>${body}${FDB.err?`<div class="err">${esc(FDB.err)}</div>`:''}</div>`}
+/* Hinweis in der Suche, solange keine Daten auf dem Gerät sind (mit „Später“ für 14 Tage weg) */
+function fdbHint(){if(!FDB.ok||FDB.meta||(num(S.fdbHintT)&&Date.now()-num(S.fdbHintT)<14*fdbDays&&!FDB.dl))return '';
+  return `<div class="card pane fdbhint"><div class="pane-h"><span class="eyebrow">Schneller suchen</span></div>
+    ${FDB.dl?fdbProgHtml():`<div class="small">Lade die Produkte aus Deutschland aufs Handy (${fdbSize()}). Dann findet die Suche sofort und ohne Internet.</div>
+    <div class="row"><button class="btn small primary" data-act="fdbGet">Laden</button><button class="btn small ghost" data-act="fdbLater">Später</button></div>`}
+    ${FDB.err?`<div class="err">${esc(FDB.err)}</div>`:''}</div>`}
+function fdbAct(a,el,ck){switch(a){
+  case 'fdbGet':if(!FDB.meta){fdbDownload();return true}
+    FDB.err='';fdbManifest().then(r=>{if(r.m.file!==FDB.meta.file)fdbDownload({man:r});else{toast('Du hast schon den neuesten Stand ('+fdbDate(FDB.meta.v)+')');softRender()}},
+      e=>{FDB.err=fdbErrText(e);softRender()});return true;
+  case 'fdbAuto':S.fdbAuto=S.fdbAuto===false;render();return true;
+  case 'fdbDel':fdbRemove();return true;
+  case 'fdbPick':{const m=fctx(),p=m&&m.fdb&&m.fdb.items[+el.dataset.i];if(p)openProduct(p,{to:fto()});return true}
+  case 'foodGo':foodGo();return true;
+  case 'fdbLater':S.fdbHintT=Date.now();render();return true}
+  return false}
 /* ======================= Ernährung: Barcode-Scan und Lebensmittelsuche mit Open Food Facts =======================
    Gefundene und selbst angelegte Produkte merkt sich die App in S.products. Damit gehen sie auch offline. */
 const SCAN_IC=SV('<path d="M3.5 7.5v-4h4M16.5 3.5h4v4M20.5 16.5v4h-4M7.5 20.5h-4v-4"/><path d="M7.5 8v8M10.5 8v8M13.5 8v8M16.5 8v8"/>');
@@ -2870,11 +3026,18 @@ function favList(){if(!S.favs.length)return '';
   return `<div class="card pane"><div class="pane-h"><span class="eyebrow">Favoriten</span><span class="small muted">Antippen trägt ein</span></div><div class="flist">${S.favs.map((x,i)=>`<div class="frow fav"><button class="fn" data-act="favAdd" data-i="${i}"><b>${esc(x.n)}</b><span class="num">${num(x.g)?fmt(num(x.g),1)+' '+(x.u||'g')+' · ':''}${fmt(Math.round(num(x.k)),0)} kcal · ${foodLine(x)}</span></button><button class="iconbtn" data-act="favDel" data-i="${i}" aria-label="${esc(x.n)} aus den Favoriten entfernen">✕</button></div>`).join('')}</div></div>`}
 function foodResHtml(){const m=fctx();if(!m)return '';const q=m.q.trim(),forRec=m===pick;
   if(!q){const rec=S.products.slice().sort((a,b)=>b.used-a.used).slice(0,15),fv=forRec?'':favList();
-    return fv+(rec.length?`<div class="card pane"><div class="pane-h"><span class="eyebrow">Zuletzt verwendet</span></div><div class="flist">${rec.map(p=>prodRow(p,'prodOpen',`data-id="${p.id}"`)).join('')}</div></div>`
+    return fdbHint()+fv+(rec.length?`<div class="card pane"><div class="pane-h"><span class="eyebrow">Zuletzt verwendet</span></div><div class="flist">${rec.map(p=>prodRow(p,'prodOpen',`data-id="${p.id}"`)).join('')}</div></div>`
       :(fv?'':`<div class="card empty"><b>Scannen oder suchen</b>${forRec?'Such die Zutat oder scanne den Barcode auf der Verpackung. Was du einmal gefunden hast, findet die App danach auch ohne Internet.':'Scanne den Barcode auf der Verpackung oder such nach einem Lebensmittel. Was du einträgst, merkt sich die App und findet es danach auch ohne Internet.'}</div>`))}
   const o=m.off,same=o.q===q,rl=forRec?[]:recMatches(q);let on='';
   /* Produkte aus früheren Suchen nicht doppelt zeigen, wenn sie ohnehin in der Trefferliste stehen */
   const shown=new Set(same&&o.status==='done'?o.items.map(p=>p.code):[]),loc=localMatches(q).filter(p=>p.id||!shown.has(p.code));
+  /* Produkte aus Deutschland (Datenbank auf dem Gerät): sofort beim Tippen, ohne Internet */
+  let db='';if(FDB.meta&&q.length>=2){const f=m.fdb&&m.fdb.q===q?m.fdb:null;if(!f)fdbQuery(m);
+    const own=new Set(loc.map(p=>p.code).filter(Boolean)),L=f&&f.st==='done'?f.items.map((p,i)=>[p,i]).filter(([p])=>!own.has(p.code)).slice(0,25):[];
+    db=`<div class="card pane"><div class="pane-h"><span class="eyebrow">Produkte aus Deutschland</span>${f&&f.st==='done'&&f.items.length?`<span class="small muted num">${f.items.length>=40?'40+':f.items.length} Treffer</span>`:''}</div>
+      ${!f||f.st==='loading'?`<div class="busy" role="status"><i aria-hidden="true"></i><span>${FDB.ready?'Suche …':'Produktdaten werden geöffnet …'}</span></div>`
+       :f.st==='error'?`<div class="small muted">Die Produktdaten auf dem Gerät lassen sich gerade nicht öffnen. Open Food Facts geht trotzdem.</div>`
+       :L.length?`<div class="flist">${L.map(([p,i])=>prodRow(p,'fdbPick',`data-i="${i}"`)).join('')}</div>`:f.items.length?'':`<div class="small muted">Keine Treffer in den Produkten aus Deutschland.</div>`}</div>`}
   if(!same||o.status==='idle')on=`<button class="btn block" data-act="offSearch">„${esc(q)}“ bei Open Food Facts suchen</button>`;
   else if(o.status==='loading')on=`<div class="busy" role="status"><i aria-hidden="true"></i><span>${esc(offBusyText(o))}</span></div>`;
   else if(o.status==='offline')on='<div class="small muted">Keine Internetverbindung. Gefunden wird gerade nur, was auf diesem Gerät gespeichert ist.</div>';
@@ -2883,11 +3046,11 @@ function foodResHtml(){const m=fctx();if(!m)return '';const q=m.q.trim(),forRec=
   else{on=o.items.length?`<div class="flist">${o.items.map((p,i)=>prodRow(p,'offPick',`data-i="${i}"`)).join('')}</div>`:'<div class="small muted">Keine Treffer. Versuch ein anderes Wort oder scanne den Barcode.</div>';
     on+=`<div class="small muted offsrc">${o.at?`Gespeichertes Ergebnis von ${esc(whenTxt(o.at))} · <button class="lnk inl" data-act="offSearch" data-force="1">Neu suchen</button>`:o.src==='sal'?'Gefunden mit der Schnellsuche von Open Food Facts':'Gefunden mit der klassischen Suche von Open Food Facts'}</div>`}
   return `${rl.length?`<div class="card pane"><div class="pane-h"><span class="eyebrow">Rezepte</span></div><div class="flist">${rl.map(recRow).join('')}</div></div>`:''}
-   ${loc.length?`<div class="card pane"><div class="pane-h"><span class="eyebrow">Auf diesem Gerät</span></div><div class="flist">${loc.map(p=>p.id?prodRow(p,'prodOpen',`data-id="${p.id}"`):prodRow(p,'seenPick',`data-code="${esc(p.code)}"`)).join('')}</div></div>`:''}
-   <div class="card pane"><div class="pane-h"><span class="eyebrow">Open Food Facts</span></div>${on}
+   ${loc.length?`<div class="card pane"><div class="pane-h"><span class="eyebrow">${FDB.meta?'Zuletzt verwendet':'Auf diesem Gerät'}</span></div><div class="flist">${loc.map(p=>p.id?prodRow(p,'prodOpen',`data-id="${p.id}"`):prodRow(p,'seenPick',`data-code="${esc(p.code)}"`)).join('')}</div></div>`:''}
+   ${db}<div class="card pane"><div class="pane-h"><span class="eyebrow">Open Food Facts</span></div>${on}
     <div class="small muted">Nicht dabei? <button class="lnk inl" data-act="prodNew">Eigenes Produkt anlegen</button></div></div>`}
 function resUpdate(){const el=document.getElementById('foodRes');if(el)el.innerHTML=foodResHtml();else if(curView()==='mahlzeit'||curView()==='zutat')softRender()}
-function searchBlock(m,to){return `<div class="fsearch"><input class="in" type="search" id="foodQ" enterkeyhint="search" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${to==='rec'?'Zutat suchen, z. B. Haferflocken':'Lebensmittel suchen, z. B. Skyr'}" value="${esc(m.q)}" aria-label="${to==='rec'?'Zutat suchen':'Lebensmittel suchen'}"><button class="btn primary" data-act="offSearch">Suchen</button></div>
+function searchBlock(m,to){return `<div class="fsearch"><input class="in" type="search" id="foodQ" enterkeyhint="search" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${to==='rec'?'Zutat suchen, z. B. Haferflocken':'Lebensmittel suchen, z. B. Skyr'}" value="${esc(m.q)}" aria-label="${to==='rec'?'Zutat suchen':'Lebensmittel suchen'}"><button class="btn primary" data-act="foodGo">Suchen</button></div>
    <button class="btn block scanbtn" data-act="scanOpen" data-date="${m.date}"${to==='rec'?' data-to="rec"':''}>${SCAN_IC}<span>Barcode scannen</span></button>
    <div id="foodRes" class="foodres">${foodResHtml()}</div>
    <div class="small muted offnote">Suche und Barcode fragen Open Food Facts an, eine freie Lebensmittel-Datenbank. Daten unter der Lizenz ODbL.</div>`}
@@ -2930,6 +3093,20 @@ function offSearchRun(o){o=o||{};const m=fctx();if(!m)return;const q=m.q.trim();
       e=>{if(m.off!==st)return;
         m.off=e&&e.kind==='limit'?{q,status:'wait',items:[],until:e.until}:{q,status:navigator.onLine===false||(e&&e.kind==='offline')?'offline':'error',items:[]};
         if(fctx()===m){resUpdate();offTick()}})}
+/* Suchen-Taste: Mit Datenbank auf dem Gerät stehen die Treffer schon da, dann nur die Tastatur schließen.
+   Ohne Datenbank oder ohne Treffer dort fragt die App wie bisher Open Food Facts. */
+function foodGo(){const m=fctx();if(!m)return;const q=m.q.trim(),f=m.fdb;
+  if(FDB.meta&&q.length>=2&&f&&f.q===q&&(f.st==='loading'||f.items.length)){const a=document.activeElement;if(a&&a.id==='foodQ')a.blur();
+    if(f.st==='loading')f.go=true;return}
+  offSearchRun()}
+/* Datenbank beim Tippen fragen (kurz gewartet, damit nicht jeder Buchstabe eine Suche auslöst) */
+let fdbT=0;
+function fdbQuery(m){if(!FDB.meta||!m)return;const q=m.q.trim();if(q.length<2){m.fdb=null;return}
+  if(m.fdb&&m.fdb.q===q)return;m.fdb={q,st:'loading',items:[]};clearTimeout(fdbT);
+  fdbT=setTimeout(()=>{if(m.q.trim()!==q)return;const t0=performance.now();
+    fdbSearch(q).then(items=>{if(!m.fdb||m.fdb.q!==q)return;const go2=m.fdb.go;m.fdb={q,st:'done',items:items||[],ms:Math.round(performance.now()-t0)};
+        if(fctx()===m)resUpdate();if(go2&&!m.fdb.items.length&&fctx()===m)offSearchRun({auto:true})},
+      ()=>{if(m.fdb&&m.fdb.q===q){m.fdb={q,st:'error',items:[]};if(fctx()===m)resUpdate()}})},120)}
 /* Jede Sekunde: Hinweis „rechnet frisch“ nach 6 s klassischer Suche, Countdown beim Limit, danach sucht die App von selbst */
 function offTick(){if(offTimer)return;offTimer=setInterval(()=>{const m=fctx(),o=m&&m.off,v=curView();
   if(!o||(v!=='mahlzeit'&&v!=='zutat')||(o.status!=='wait'&&o.status!=='loading')){clearInterval(offTimer);offTimer=0;return}
@@ -3049,6 +3226,9 @@ async function lookupCode(code){if(!scan)return;code=EAN.norm(code);scan.code=co
   if(local){openProduct(local,{replace:true,date:scan.date,to:scan.to});return}
   const seen=OFFC.d&&OFFC.d.p[code];
   if(seen&&seen.n&&seen.k!=null){openProduct(saveProduct(seen),{replace:true,date:scan.date,to:scan.to});return}
+  if(FDB.meta){let p=null;try{p=await fdbCode(code)}catch(e){}
+    if(!scan||scan.code!==code||curView()!=='scan')return;
+    if(p&&p.n&&p.k!=null){openProduct(saveProduct(p),{replace:true,date:scan.date,to:scan.to});return}}
   const r=await offProduct(code,()=>{if(scan&&scan.code===code){scan.slow=true;scanMsg()}});
   if(!scan||scan.code!==code||curView()!=='scan')return;scan.slow=false;
   if(r.ok){openProduct(saveProduct(r.p),{replace:true,date:scan.date,to:scan.to});return}
@@ -3131,7 +3311,7 @@ function foodAct(a,el,ck){if(recAct(a,el,ck))return true;switch(a){
   return false}
 function foodInput(T){const id=T.id,ds=T.dataset||{};
   if(recInput(T))return true;
-  if(id==='foodQ'){const m=fctx();if(m){m.q=T.value;offAuto(m);const el=document.getElementById('foodRes');if(el)el.innerHTML=foodResHtml()}return true}
+  if(id==='foodQ'){const m=fctx();if(m){m.q=T.value;offAuto(m);fdbQuery(m);const el=document.getElementById('foodRes');if(el)el.innerHTML=foodResHtml()}return true}
   if(id==='prodG'){if(prod&&prod.p){prod.g=T.value;const el=document.getElementById('prodTot');if(el)el.innerHTML=totHtml(prodTotals(prod.p,num(T.value)))}return true}
   if(ds.pf){if(prod&&prod.form)prod.form[ds.pf]=T.value;return true}
   if(ds.pk){if(pick&&pick.res)pick.res[ds.pk]=T.value;return true}
@@ -3148,7 +3328,7 @@ function foodChange(T){const id=T.id;
   if(id==='prodG'){if(prod&&prod.p)prod.g=num(T.value);return true}
   return false}
 function foodKey(e){const t=e.target;if(e.key!=='Enter'||!t)return false;
-  if(t.id==='foodQ'){e.preventDefault();offSearchRun();return true}
+  if(t.id==='foodQ'){e.preventDefault();foodGo();return true}
   if(t.id==='scanCode'){e.preventDefault();act('scanLookup',t);return true}
   if(t.id==='prodG'||t.id==='rvAmt'||/^(exQ|exPQ|exN|exMet|exCatN|teH|teM|teS|durH|durM)$/.test(t.id)||(t.dataset&&(t.dataset.ri||t.dataset.rf==='por'||t.dataset.rf==='w'||t.dataset.f==='set'||t.dataset.f==='bw'))){e.preventDefault();t.blur();return true}
   return false}
@@ -3979,6 +4159,7 @@ function viewDaten(){const p=bk.pending;
    <label class="btn block filebtn">Backup-Datei laden<input type="file" id="bkFile" hidden></label>
    <button class="btn ghost block" data-act="toggleImport">Backup-Text einfügen</button>
    ${showImport?`<textarea class="in" id="importBox" placeholder="Backup-Text hier einfügen">${esc(importText)}</textarea><button class="btn danger" data-act="import">${confirmKey==='import'?'Aktuelle Daten wirklich ersetzen?':'Wiederherstellen'}</button>`:''}</div>
+  ${fdbCard()}
   <div class="card pane"><div class="pane-h"><span class="eyebrow">Speicher</span></div>
    <div class="small" id="syncNote2">${syncText()}</div>
    <div class="small muted">${store.persist?'Das System hat den Speicher der App als dauerhaft markiert.':'Bei Platzmangel darf das System den Speicher leeren. Ein regelmäßiges Backup schützt dich davor.'}</div>
@@ -4335,7 +4516,7 @@ function toastUndo(msg){const h=document.getElementById('toastHost');h.innerHTML
 function toast(msg){const h=document.getElementById('toastHost');h.innerHTML=`<div class="toast" role="status">${esc(msg)}</div>`;clearTimeout(toastTimer);toastTimer=setTimeout(()=>h.innerHTML='',2200)}
 
 /* ---------- Aktionen ---------- */
-const NEEDS_CONFIRM=new Set(['loadDemo','clearDemo','delSession','resetDraft','import']);
+const NEEDS_CONFIRM=new Set(['loadDemo','clearDemo','delSession','resetDraft','import','fdbDel']);
 function act(a,el){
   userActed=true;
   if(a==='back'){navBack();return}
@@ -4349,7 +4530,7 @@ function act(a,el){
   const key=IDC.includes(a)?a+':'+el.dataset.id:a==='delEntry'?'delEntry:'+el.dataset.e:a;
   if((NEEDS_CONFIRM.has(a)||IDC.includes(a)||a==='delEntry')&&confirmKey!==key){confirmKey=key;flash='';render();return}
   const prevCK=confirmKey;confirmKey=null;if(a!=='saveSession'&&a!=='addEx'&&a!=='prodSave')flash='';
-  if(foodAct(a,el,prevCK)||wipeAct(a,el)||trainAct(a,el,prevCK)||heuteAct(a,el))return;
+  if(fdbAct(a,el,prevCK)||foodAct(a,el,prevCK)||wipeAct(a,el)||trainAct(a,el,prevCK)||heuteAct(a,el))return;
   const d=S.draft;
   if(['nudge','tStart','tStop','tReset','tEdit'].includes(a)&&d){const en=d.entries[+el.dataset.e];const st=en&&en.sets[+el.dataset.s];if(st&&st.done)return}
   switch(a){

@@ -1,7 +1,8 @@
 /* Offline-Betrieb: Alle Dateien der App liegen im Cache. Neue Versionen werden im Hintergrund geladen
    und erst übernommen, wenn du in der App auf „Jetzt aktualisieren“ tippst. */
-const VERSION = '1.7.0';
+const VERSION = '1.8.0';
 const CACHE = 'trainingsbuch-' + VERSION;
+const SCOPE = new URL(self.registration.scope).pathname;
 const FILES = [
   './', './index.html', './manifest.webmanifest',
   './icons/icon-180.png', './icons/icon-192.png', './icons/icon-512.png', './icons/icon-maskable-512.png', './icons/favicon-32.png',
@@ -20,7 +21,8 @@ self.addEventListener('fetch', e => {
   const r = e.request;
   if (r.method !== 'GET') return;
   const url = new URL(r.url);
-  if (url.origin !== self.location.origin) return;
+  // Nur Dateien der App selbst. Andere Pfade derselben Adresse (z. B. /App-Daten/ mit der Lebensmittel-Datenbank) gehen am Cache vorbei.
+  if (url.origin !== self.location.origin || !url.pathname.startsWith(SCOPE)) return;
   if (r.mode === 'navigate') {
     e.respondWith(caches.match('./index.html').then(m => m || fetch(r)));
     return;
