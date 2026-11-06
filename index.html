@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-title" content="Trainingsbuch">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="format-detection" content="telephone=no">
-<meta name="app-version" content="1.11.0">
+<meta name="app-version" content="1.12.0">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icons/icon-180.png">
 <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
@@ -990,21 +990,22 @@ input.wh:focus{outline:none;border-color:var(--accent-fg);box-shadow:inset 0 0 0
 .splan svg{width:20px;height:20px;flex:none}
 .sess.sel .splan{opacity:1;transform:none;pointer-events:auto}
 @media (prefers-reduced-motion: reduce){.splan{transition:none}}
-.ci-row span.val{display:inline-flex;align-items:baseline;justify-content:center;min-width:88px;min-height:44px;padding:9px 8px 0;border:1px solid var(--line);color:var(--ink);
-  font-family:var(--f-display);font-size:25px;font-weight:800;line-height:1}
-.ci-row span.val small{font-size:14px;font-weight:700;color:var(--muted);margin-left:3px}
-.cis-ok{display:inline-flex;align-items:center;gap:6px;color:var(--good)}
+.cis-ok{display:inline-flex;align-items:center;gap:6px;color:var(--good);min-width:0}
 .cis-ok svg{width:16px;height:16px;flex:none}
-.cisum{justify-content:space-between}
-.cis-row{display:flex;align-items:center;justify-content:space-between;gap:14px;border-top:1px solid var(--line);padding-top:4px}
-.cis-l{display:flex;flex-direction:column;gap:2px;min-width:0}
-.cis-l .small{font-size:12.5px;line-height:1.3}
-.cis-l b{font-family:var(--f-display);font-size:24px;font-weight:800;line-height:1;letter-spacing:.01em}
-.cis-l b small{font-size:14px;font-weight:700;color:var(--muted);margin-left:5px;letter-spacing:0}
-.cis-bars{flex:none;display:flex;align-items:flex-end;gap:4px;width:126px;height:48px}
-.cis-bars i{flex:1;background:color-mix(in srgb,var(--accent-fg) 38%,var(--soft))}
-.cis-bars i.no{background:var(--soft)}
-.cis-bars i.td{background:var(--accent-fg)}
+/* 1.12.0: Check-in und Check-out */
+.ci-acts{display:flex;align-items:center;gap:16px;flex:none}
+.cidone .pane-h{min-height:20px}
+.ci-sep{border-top:1px solid var(--line);margin:2px -16px 0}
+.ci-res{margin-top:-4px;font-size:13.5px}
+.ci-res:empty{display:none}
+.ci-res b{color:var(--ink);font-weight:700}
+input.tval{-webkit-appearance:none;appearance:none;box-sizing:border-box;width:96px;min-width:96px;min-height:44px;height:44px;margin:0;padding:0 6px;border:1px solid var(--line-2);border-radius:0;
+  background:var(--field);color:var(--ink);font-family:var(--f-display);font-size:25px;font-weight:800;line-height:42px;text-align:center;font-variant-numeric:tabular-nums}
+input.tval:focus{outline:none;border-color:var(--accent-fg);box-shadow:inset 0 0 0 1px var(--accent-fg)}
+input.tval::-webkit-date-and-time-value{text-align:center;margin:0}
+input.tval::-webkit-calendar-picker-indicator{display:none}
+input.tval::-webkit-datetime-edit{padding:0}
+.ci-row button.val.ph{min-width:96px}
 /* ---------- 1.8.0 ---------- */
 .fdbprog{display:flex;flex-direction:column;gap:6px;margin-top:2px}
 .fdbprog .pbar{height:10px}
@@ -1526,7 +1527,7 @@ if(!Array.isArray(S.plans))S.plans=S.demo&&S.exercises.some(e=>e.id==='e1')?demo
 /* ---------- Speicher auf dem Gerät ----------
    IndexedDB ist der Hauptspeicher (Daten und Fotos). Eine Kopie der Daten liegt zusätzlich im localStorage,
    damit die App sofort startet. Beim Start gewinnt der neuere Stand. Es gibt keinen Server und kein Konto. */
-const APPV='1.11.0',SCHEMA=3;
+const APPV='1.12.0',SCHEMA=3;
 const cloud={state:'local',deferred:false};
 const store={open:null,timer:null,ok:false,err:false,warned:false,persist:false};
 function idb(){if(store.open)return store.open;
@@ -2415,9 +2416,10 @@ function nNotes(r){const o=[],diff=r.target-r.kg;
   if(r.diet==='keto')o.push(`<p>Höchstens etwa ${KETO_C} g Kohlenhydrate am Tag. Eiweiß bleibt auf deinem Sportniveau, die frei werdenden Kalorien kommen aus Fett.</p><p>Laut Studien bleibt die Kraft meist erhalten, Ausdauer- und Sprintleistung sinken dagegen häufig, vor allem in den ersten Wochen. Bei gleichen Kalorien und gleichem Eiweiß bringt ketogen keinen zusätzlichen Fettverlust.</p>`);
   if(r.diet==='highcarb')o.push(`<p>Fett ist auf 20 % der Kalorien gesenkt, der Rest geht in Kohlenhydrate. Das sind bei dir etwa ${fmt(r.avg.c/r.kg,1)} g pro kg Körpergewicht.</p><p>Richtwerte der Sporternährung: 3–5 g/kg bei leichtem Training, 5–7 g/kg bei etwa 1 Stunde täglich, 6–10 g/kg bei 1–3 Stunden. Sinnvoll vor allem bei viel Ausdauer- oder Intervalltraining.</p>`);
   return o}
-let nView='ziel';
+/* Wahl „Zielbedarf“ oder „Heute“: gespeichert in S.nutri.view, damit Heute und Tagebuch nach einem Neustart gleich rechnen */
+function nViewGet(){const v=S.nutri&&S.nutri.view;return v==='heute'?'heute':'ziel'}
 function nutriOut(){
-  const r=nCalc();
+  const r=nCalc();let nView=nViewGet();
   if(r.miss)return `<div class="card empty"><b style="color:var(--ink)">${r.miss.length===1?'Noch eine Angabe fehlt':'Noch '+r.miss.length+' Angaben fehlen'}</b>Trag unter „Deine Angaben“ ${listJoin(r.miss)} ein, dann rechnet die App deinen Tagesbedarf aus.</div>`;
   const a=r.avg,g=N_GOALS.find(x=>x[0]===r.goal)[1],dn=N_DIETS.find(x=>x[0]===r.diet)[1];
   const typeTxt={kaum:'wenig Training',kraft:'Krafttraining',ausdauer:'Ausdauertraining'}[r.type];
@@ -2663,14 +2665,17 @@ function goalForm(){const g=goalEdit,ty=g.type||'weight',lw=lastWeight();
 /* ---------- Heute ---------- */
 let dayOff=0,bannerOff=false;
 function hDate(){return offDate(dayOff)}
-function defSleep(){const ks=Object.keys(S.days).sort().reverse();for(const k of ks){const s=S.days[k].sleep;if(s&&num(s.h))return num(s.h)}return 7.5}
-function scaleHtml(act,cur,labels,lbl){return `<div class="scale" role="group" aria-label="${lbl}">${labels.map((l,i)=>`<button data-act="${act}" data-v="${i+1}" aria-pressed="${cur===i+1}"><b>${i+1}</b><span>${l}</span></button>`).join('')}</div>`}
+function scaleHtml(act,cur,labels,lbl,k){return `<div class="scale" role="group" aria-label="${lbl}">${labels.map((l,i)=>`<button data-act="${act}" data-v="${i+1}"${k?` data-k="${k}"`:''} aria-pressed="${cur===i+1}"><b>${i+1}</b><span>${l}</span></button>`).join('')}</div>`}
+/* Übrig = Ziel (gerundet wie angezeigt) minus Gegessenes; Training steckt schon im Ziel und zählt nicht noch einmal */
+function kcalRest(t,tg){return r10(tg.k)-Math.round(t.k)}
 function foodCardToday(k){
-  const items=dayGet(k).food||[],t=sumFood(items),r=nCalc(),tg=r.miss?null:foodTarget(r,k);
+  const items=dayGet(k).food||[],t=sumFood(items),r=nCalc(),tg=r.miss?null:foodTarget(r,k),rest=tg?kcalRest(t,tg):0;
   return `<div class="card pane"><div class="pane-h"><span class="eyebrow">Ernährung</span><button class="lnk" data-act="goFood" data-date="${k}">Tagebuch</button></div>
-   <div class="kc-big"><b class="num">${fmt(Math.round(t.k),0)}</b><span>${tg?'von '+fmt(r10(tg.k),0)+' kcal':'kcal gegessen'}</span></div>
-   ${tg?`<div class="pbar${t.k>tg.k*1.05?' over':''}" aria-hidden="true"><i style="width:${Math.min(100,t.k/tg.k*100).toFixed(1)}%"></i></div>`:''}
-   <div class="small muted num">${items.length} ${items.length===1?'Eintrag':'Einträge'} · Eiweiß ${fmt(Math.round(t.p),0)} g${tg?' von '+fmt(r5(tg.p),0)+' g':''}</div>
+   ${tg?`<div class="kc-big"><b class="num">${fmt(Math.abs(rest),0)}</b><span>${rest<0?'kcal drüber':'kcal übrig'}</span></div>
+   <div class="pbar${t.k>tg.k*1.05?' over':''}" aria-hidden="true"><i style="width:${Math.min(100,t.k/tg.k*100).toFixed(1)}%"></i></div>
+   <div class="small muted num">${fmt(Math.round(t.k),0)} von ${fmt(r10(tg.k),0)} kcal gegessen · Eiweiß ${fmt(Math.round(t.p),0)} von ${fmt(r5(tg.p),0)} g</div>`
+   :`<div class="kc-big"><b class="num">${fmt(Math.round(t.k),0)}</b><span>kcal gegessen</span></div>
+   <div class="small muted num">${items.length} ${items.length===1?'Eintrag':'Einträge'} · Eiweiß ${fmt(Math.round(t.p),0)} g</div>`}
    <div class="addrow"><button class="btn" data-act="addMeal" data-date="${k}">+ Mahlzeit eintragen</button><button class="btn scanq" data-act="scanOpen" data-date="${k}" aria-label="Barcode scannen">${SCAN_IC}</button></div></div>`;
 }
 function weightCtl(k,label){const w=num(dayGet(k).w),lw=weightAt(k)||lastWeight();
@@ -2683,7 +2688,7 @@ function noteCard(k){const D=dayGet(k);return `<div class="card pane"><div class
   <textarea class="in jnote" id="dayNote" data-note="${k}" maxlength="4000" rows="3" placeholder="Was lief gut? Was beschäftigt dich?">${esc(D.note||'')}</textarea></div>`}
 function breathRow(k){const m=num(dayGet(k).breath);return `<div class="navlist"><button class="navrow" data-act="tab" data-v="atem">${ICONS.atem}<span class="nr-t"><b>Atemübung</b><span>${m?'An diesem Tag '+m+' Min geübt':'Box-Atmung, 4-7-8 oder ruhig atmen'}</span></span>${CHR}</button></div>`}
 function viewHeute(){const k=hDate(),P=[banner(),wipeCard(),updCard(),installCard(),bkCard()];
-  if(mod('mind'))P.push(checkinCard(k));
+  if(mod('mind'))P.push(checkinCard());
   P.push(trainCardToday(k),habitsCard(k));
   if(mod('food'))P.push(foodCardToday(k));
   if(mod('body'))P.push(bodyCardToday(k));
@@ -2714,7 +2719,7 @@ function viewTrainHub(){
 /* ---------- Ernährungstagebuch ---------- */
 let foodDay=0,foodEdit=null,meal=null,SMP=null,SMP_IMG=false,SMP_OFF=false,AST=null,DL=null;
 function sumFood(a){const t={k:0,p:0,c:0,f:0};for(const x of a||[]){t.k+=num(x.k);t.p+=num(x.p);t.c+=num(x.c);t.f+=num(x.f)}return t}
-function foodTarget(r,k){return nView==='heute'&&k===today()?r.heute:r.avg}
+function foodTarget(r,k){return nViewGet()==='heute'&&k===today()?r.heute:r.avg}
 function foodLine(x){return fmt(Math.round(num(x.p)),0)+' g E · '+fmt(Math.round(num(x.c)),0)+' g KH · '+fmt(Math.round(num(x.f)),0)+' g F'}
 function favHas(x){const n=(x.n||'').trim().toLowerCase();return S.favs.some(f=>(f.n||'').toLowerCase()===n)}
 function recentFoods(){const seen=new Set(),o=[];
@@ -2723,18 +2728,18 @@ function recentFoods(){const seen=new Set(),o=[];
   return o}
 function foodRow(x,k){
   if(foodEdit&&foodEdit.id===x.id){const e=foodEdit;return `<div class="fedit"><label class="field"><span class="eyebrow">Name</span><input class="in" id="fe-n" data-fe="n" maxlength="60" value="${esc(e.n||'')}"></label>${feSlots(e)}
-    ${e.per?`<label class="field"><span class="eyebrow">Menge in ${e.u||'g'}</span><input class="in num" id="fe-g" data-fe="g" inputmode="decimal" value="${esc(e.g??'')}"></label>`:''}
+    ${e.per?`<label class="field"><span class="eyebrow">Menge in g/ml</span><input class="in num" id="fe-g" data-fe="g" inputmode="decimal" value="${esc(e.g??'')}"></label>`:''}
     ${e.pp&&!e.per?`<label class="field"><span class="eyebrow">Portionen</span><input class="in num" id="fe-por" data-fe="por" inputmode="decimal" value="${esc(String(e.por??'').replace('.',','))}"></label>`:''}
     <div class="f4">${[['k','kcal'],['p','Eiweiß'],['c','KH'],['f','Fett']].map(([f,l])=>`<label>${l}<input class="in num" id="fe-${f}" data-fe="${f}" inputmode="decimal" value="${esc(e[f]??'')}"></label>`).join('')}</div>
     <div class="row"><button class="btn small danger" data-act="foodDel" data-id="${x.id}" data-date="${k}">${confirmKey==='foodDel:'+x.id?'Wirklich löschen?':'Löschen'}</button><button class="btn small ghost" data-act="foodFav" data-id="${x.id}" data-date="${k}">${favHas(x)?'★ Favorit':'☆ Favorit'}</button><button class="btn small primary" data-act="foodSave" data-id="${x.id}" data-date="${k}">Speichern</button></div></div>`}
-  return `<button class="frow" data-act="foodEdit" data-id="${x.id}" data-date="${k}"><span class="ft num">${esc(x.t||'')}</span><span class="fn"><b>${esc(x.n||'Eintrag')}</b><span class="num">${x.g?fmt(x.g,1)+' '+(x.u||'g')+' · ':x.por?porTxt(x.por)+' · ':''}${foodLine(x)}</span></span><span class="fk num">${fmt(Math.round(num(x.k)),0)}</span></button>`}
+  return `<button class="frow" data-act="foodEdit" data-id="${x.id}" data-date="${k}"><span class="ft num">${esc(x.t||'')}</span><span class="fn"><b>${esc(x.n||'Eintrag')}</b><span class="num">${x.g?fmt(x.g,1)+' g/ml · ':x.por?porTxt(x.por)+' · ':''}${foodLine(x)}</span></span><span class="fk num">${fmt(Math.round(num(x.k)),0)}</span></button>`}
 function viewFood(){
   const k=offDate(foodDay),items=(dayGet(k).food||[]).slice().sort((a,b)=>(a.t||'')<(b.t||'')?-1:1),t=sumFood(items),r=nCalc(),tg=r.miss?null:foodTarget(r,k);
   const mac=(cls,lbl,v,tv)=>`<div class="mcell ${cls}"><span class="mac-n">${lbl}</span><b class="num">${fmt(Math.round(v),0)}<small>${tv?' / '+fmt(r5(tv),0)+' g':' g'}</small></b>${tv?`<div class="pbar" aria-hidden="true"><i style="width:${Math.min(100,v/tv*100).toFixed(1)}%"></i></div>`:''}</div>`;
-  const rest=tg?tg.k-t.k:0;
+  const rest=tg?kcalRest(t,tg):0;
   return `<div class="daynav"><button class="iconbtn" data-act="foodDay" data-d="-1" aria-label="Vorheriger Tag">‹</button><b>${dayTitle(k)}</b><button class="iconbtn" data-act="foodDay" data-d="1" aria-label="Nächster Tag"${foodDay>=0?' disabled':''}>›</button></div>
    <div class="card pane">
-    <div class="kc-big"><b class="num">${fmt(Math.round(t.k),0)}</b><span>${tg?'von '+fmt(r10(tg.k),0)+' kcal · '+(rest>=0?'noch '+fmt(r10(rest),0):fmt(r10(-rest),0)+' drüber'):'kcal gegessen'}</span></div>
+    <div class="kc-big"><b class="num">${fmt(Math.round(t.k),0)}</b><span>${tg?'von '+fmt(r10(tg.k),0)+' kcal · '+(rest>=0?'noch '+fmt(rest,0):fmt(-rest,0)+' drüber'):'kcal gegessen'}</span></div>
     ${tg?`<div class="pbar${t.k>tg.k*1.05?' over':''}" aria-hidden="true"><i style="width:${Math.min(100,t.k/tg.k*100).toFixed(1)}%"></i></div>`:''}
     <div class="mrow">${mac('m-ei','Eiweiß',t.p,tg&&tg.p)}${mac('m-kh','Kohlenhydr.',t.c,tg&&tg.c)}${mac('m-fe','Fett',t.f,tg&&tg.f)}</div>
     ${tg?'':'<button class="lnk" data-act="tab" data-v="bedarf">Tagesbedarf berechnen</button>'}
@@ -3016,7 +3021,9 @@ function localMatches(q){const W=words(q);if(!W.length)return [];const hit=p=>{c
   /* dazu Produkte aus früheren Suchen (mit Nährwerten), die neuesten zuerst */
   return own.concat(Object.values(OFFC.d.p).filter(p=>p.k!=null&&p.code&&!have.has(p.code)&&hit(p)).sort((a,b)=>b.t-a.t).slice(0,10-own.length))}
 function prodTotals(p,g){g=Math.max(0,num(g));const f=g/100;return {k:Math.round(num(p.k)*f),p:rnd1(num(p.p)*f),c:rnd1(num(p.c)*f),f:rnd1(num(p.f)*f)}}
-function per100(p){return 'pro 100 '+(p.u||'g')+': '+fmt(num(p.k),0)+' kcal · '+fmt(num(p.p),1)+' g E · '+fmt(num(p.c),1)+' g KH · '+fmt(num(p.f),1)+' g F'}
+/* Mengen stehen überall als g/ml (Wunsch vom 06.11.2026). Die Einheit je Produkt (u) bleibt in den Daten, wird aber nicht angezeigt. */
+const GML='g/ml';
+function per100(p){return 'pro 100 g/ml: '+fmt(num(p.k),0)+' kcal · '+fmt(num(p.p),1)+' g E · '+fmt(num(p.c),1)+' g KH · '+fmt(num(p.f),1)+' g F'}
 
 /* ---------- Open Food Facts ---------- */
 async function offGet(url,ms){const ctl=new AbortController(),t=setTimeout(()=>ctl.abort(),ms||9000);
@@ -3159,10 +3166,10 @@ function favChips(k){const F=Array.isArray(S.favs)?S.favs:[];
 function feSlots(e){return slotRow(SLOT_N[e.sl]?e.sl:slotOf(e),'feSlot')}
 function newMeal(k,sl){return {date:k||today(),sl:SLOT_N[sl]?sl:slotNow(),mode:'find',q:'',off:{q:'',status:'idle',items:[]},res:null,fav:false,added:[],err:''}}
 function mealReset(){meal=null}
-function prodRow(p,act,attr){const kc=p.k!=null?fmt(num(p.k),0)+' kcal/100 '+(p.u||'g'):'Nährwerte fehlen';
+function prodRow(p,act,attr){const kc=p.k!=null?fmt(num(p.k),0)+' kcal/100 g/ml':'Nährwerte fehlen';
   return `<button class="frow prow" data-act="${act}" ${attr}>${p.img?`<img class="pthumb" src="${esc(p.img)}" alt="" loading="lazy" referrerpolicy="no-referrer">`:`<span class="pthumb ph" aria-hidden="true">${p.src==='own'?'●':''}</span>`}<span class="fn"><b>${esc(p.n)}</b><span class="num">${esc([p.b,kc].filter(Boolean).join(' · '))}</span></span>${CHR}</button>`}
 function favList(){if(!S.favs.length)return '';
-  return `<div class="card pane"><div class="pane-h"><span class="eyebrow">Favoriten</span><span class="small muted">Antippen trägt ein</span></div><div class="flist">${S.favs.map((x,i)=>`<div class="frow fav"><button class="fn" data-act="favAdd" data-i="${i}"><b>${esc(x.n)}</b><span class="num">${num(x.g)?fmt(num(x.g),1)+' '+(x.u||'g')+' · ':''}${fmt(Math.round(num(x.k)),0)} kcal · ${foodLine(x)}</span></button><button class="iconbtn" data-act="favDel" data-i="${i}" aria-label="${esc(x.n)} aus den Favoriten entfernen">✕</button></div>`).join('')}</div></div>`}
+  return `<div class="card pane"><div class="pane-h"><span class="eyebrow">Favoriten</span><span class="small muted">Antippen trägt ein</span></div><div class="flist">${S.favs.map((x,i)=>`<div class="frow fav"><button class="fn" data-act="favAdd" data-i="${i}"><b>${esc(x.n)}</b><span class="num">${num(x.g)?fmt(num(x.g),1)+' g/ml · ':''}${fmt(Math.round(num(x.k)),0)} kcal · ${foodLine(x)}</span></button><button class="iconbtn" data-act="favDel" data-i="${i}" aria-label="${esc(x.n)} aus den Favoriten entfernen">✕</button></div>`).join('')}</div></div>`}
 function foodResHtml(){const m=fctx();if(!m)return '';const q=m.q.trim(),forRec=m===pick;
   if(!q){const rec=S.products.slice().sort((a,b)=>b.used-a.used).slice(0,15),fv=forRec?'':favList();
     return fdbHint()+fv+(rec.length?`<div class="card pane"><div class="pane-h"><span class="eyebrow">Zuletzt verwendet</span></div><div class="flist">${rec.map(p=>prodRow(p,'prodOpen',`data-id="${p.id}"`)).join('')}</div></div>`
@@ -3257,9 +3264,9 @@ function offTick(){if(offTimer)return;offTimer=setInterval(()=>{const m=fctx(),o
 
 /* ---------- Produkt: Menge wählen und eintragen, eigene Produkte anlegen ---------- */
 function defAmount(p){return num(p.lastG)>0?num(p.lastG):num(p.sv)>0?num(p.sv):100}
-/* Packungsgröße aus der Mengenangabe, z. B. „500 g“ oder „1 l“ (nur wenn die Einheit zum Produkt passt) */
-function packG(p){const m=String(p.q||'').trim().match(/^(\d+(?:[.,]\d+)?)\s*(kg|g|l|ml|cl|dl)\.?$/i);if(!m)return 0;const u=m[2].toLowerCase(),v=num(m[1])*{kg:1000,g:1,l:1000,ml:1,cl:10,dl:100}[u];
-  return ((u==='kg'||u==='g')?'g':'ml')===(p.u||'g')&&v>0&&v<=5000?Math.round(v):0}
+/* Packungsgröße aus der Mengenangabe, z. B. „500 g“, „1 l“ oder „1 Liter“ (g und ml zählen gleich, Mengen stehen als g/ml) */
+function packG(p){const m=String(p.q||'').trim().match(/^(\d+(?:[.,]\d+)?)\s*(kg|g|l|ml|cl|dl|liter|ltr)\.?$/i);if(!m)return 0;const u=m[2].toLowerCase(),v=num(m[1])*{kg:1000,g:1,l:1000,liter:1000,ltr:1000,ml:1,cl:10,dl:100}[u];
+  return v>0&&v<=5000?Math.round(v):0}
 function openProduct(p,o){o=o||{};const local=p.code?S.products.find(x=>x.code===p.code):p.id?S.products.find(x=>x.id===p.id):null;
   const q={...(local&&!o.fresh?local:p)},to=o.to==='rec'?'rec':'day';
   prod={p:q,g:to==='rec'?100:defAmount(q),fav:false,edit:false,to,date:o.date||(meal&&meal.date)||today(),sl:ctxSl(o)};
@@ -3271,10 +3278,10 @@ function openOwnForm(base,o){o=o||{};const b=base||{};
 function totHtml(T){return `<div class="kc-big"><b class="num">${fmt(T.k,0)}</b><span>kcal</span></div>
   <div class="mrow">${[['m-ei','Eiweiß',T.p],['m-kh','Kohlenhydr.',T.c],['m-fe','Fett',T.f]].map(([c,l,v])=>`<div class="mcell ${c}"><span class="mac-n">${l}</span><b class="num">${fmt(v,1)}<small> g</small></b></div>`).join('')}</div>`}
 function viewProduct(){if(!prod)return '<div class="card empty"><b>Kein Produkt gewählt</b>Geh zurück und such ein Lebensmittel.</div>';if(prod.edit)return ownForm();
-  const p=prod.p,u=p.u||'g',g=num(prod.g),own=p.src==='own'&&S.products.some(x=>x.id===p.id),rec=prod.to==='rec';
-  const opts=[],pk=rec?packG(p):0;if(pk)opts.push([pk,'Packung · '+fmt(pk,0)+' '+u]);
-  if(num(p.sv)>0&&num(p.sv)!==pk)opts.push([num(p.sv),'1 Portion · '+fmt(num(p.sv),1)+' '+u]);
-  for(const v of rec?[50,100,200,500,1000]:[50,100,150,200,250])if(!opts.some(o=>o[0]===v))opts.push([v,fmt(v,0)+' '+u]);
+  const p=prod.p,u=GML,g=num(prod.g),own=p.src==='own'&&S.products.some(x=>x.id===p.id),rec=prod.to==='rec';
+  const opts=[],pk=rec?packG(p):0;if(pk)opts.push([pk,'Packung · '+fmt(pk,0)]);
+  if(num(p.sv)>0&&num(p.sv)!==pk)opts.push([num(p.sv),'1 Portion · '+fmt(num(p.sv),1)]);
+  for(const v of rec?[50,100,200,500,1000]:[50,100,150,200,250])if(!opts.some(o=>o[0]===v))opts.push([v,fmt(v,0)]);
   return `<div class="card pane prodcard"><div class="prod-h">${p.img?`<img class="pimg" src="${esc(p.img)}" alt="" referrerpolicy="no-referrer">`:''}<div class="prod-t"><b>${esc(p.n)}</b>${p.b||p.q?`<span class="small muted">${esc([p.b,p.q].filter(Boolean).join(' · '))}</span>`:''}</div></div>
     <div class="small muted num">${per100(p)}</div></div>
    <div class="card pane"><div class="pane-h"><span class="eyebrow">Menge in ${u}</span></div>
@@ -3292,9 +3299,9 @@ function ownForm(){const f=prod.form,why=prod.why;
    ${why==='notfound'?'<div class="infobox">Dieses Produkt kennt Open Food Facts noch nicht. Trag die Werte von der Packung ein, dann merkt sich die App das Produkt.</div>':why==='incomplete'?'<div class="infobox">Bei Open Food Facts fehlen Name oder Nährwerte. Ergänze sie von der Packung.</div>':''}
    <label class="field"><span class="eyebrow">Name</span><input class="in" id="pf-n" data-pf="n" maxlength="80" value="${esc(f.n)}" placeholder="z. B. Haferdrink Barista"></label>
    <label class="field"><span class="eyebrow">Marke (optional)</span><input class="in" id="pf-b" data-pf="b" maxlength="40" value="${esc(f.b)}"></label>
-   <div class="field"><span class="eyebrow">Nährwerte pro 100</span><div class="seg sm" role="group" aria-label="Einheit">${[['g','g (fest)'],['ml','ml (flüssig)']].map(([v,l])=>`<button data-act="prodUnit" data-v="${v}" aria-pressed="${f.u===v}">${l}</button>`).join('')}</div></div>
+   <div class="field"><span class="eyebrow">Nährwerte pro 100 g/ml</span></div>
    <div class="f4">${[['k','kcal'],['p','Eiweiß g'],['c','KH g'],['f','Fett g']].map(([k,l])=>`<label>${l}<input class="in num" id="pf-${k}" data-pf="${k}" inputmode="decimal" value="${esc(f[k])}"></label>`).join('')}</div>
-   <label class="field"><span class="eyebrow">Eine Portion in ${f.u} (optional)</span><input class="in num" id="pf-sv" data-pf="sv" inputmode="decimal" value="${esc(f.sv)}" placeholder="z. B. 30"></label>
+   <label class="field"><span class="eyebrow">Eine Portion in g/ml (optional)</span><input class="in num" id="pf-sv" data-pf="sv" inputmode="decimal" value="${esc(f.sv)}" placeholder="z. B. 30"></label>
    ${f.code?`<div class="small muted num">Barcode ${esc(f.code)}</div>`:''}
   </div>${flash?`<div class="err">${flash}</div>`:''}
   <button class="btn primary block big" data-act="prodSave">Speichern</button></section>`}
@@ -3426,7 +3433,6 @@ function foodAct(a,el,ck){if(recAct(a,el,ck))return true;switch(a){
   case 'prodNew':{const m=fctx();openOwnForm({n:m&&m.mode!=='manual'?m.q.trim():m&&m.res?String(m.res.n||'').trim():''},{to:fto()});return true}
   case 'prodStep':{if(!prod)return true;const g=num(prod.g),d=+el.dataset.d,st=g<20?1:g<100?5:10;prod.g=Math.max(0,Math.round((g+d*st)/st)*st);render();return true}
   case 'prodAmt':if(prod){prod.g=num(el.dataset.v);render()}return true;
-  case 'prodUnit':if(prod&&prod.form){prod.form.u=el.dataset.v==='ml'?'ml':'g';render()}return true;
   case 'prodEditVals':if(prod&&prod.p){const p=prod.p;prod.form={id:p.src==='own'?p.id:'',code:p.code,n:p.n,b:p.b,u:p.u||'g',k:p.k??'',p:p.p??'',c:p.c??'',f:p.f??'',sv:p.sv??'',img:p.img||''};prod.edit=true;prod.back=true;prod.why='';flash='';render()}return true;
   case 'prodSave':{const f=prod&&prod.form;if(!f)return true;const n=String(f.n||'').trim();
     if(!n){flash='Gib dem Produkt einen Namen.';render();return true}
@@ -3622,21 +3628,21 @@ function rvShare(r){const v=num(rv.v),w=recWt(r).w;return rv.mode==='g'&&w>0?v/w
 function rvTotHtml(r){return totHtml(rTot(recSum(r),rvShare(r)))}
 function viewRecipe(){const r=rv&&recById(rv.id);if(!r)return '<div class="card empty"><b>Kein Rezept gewählt</b>Geh zurück und wähl ein Rezept.</div>';
   const t=recSum(r),P=recPor(r),pp=rTot(t,1/P),W=recWt(r),w=W.w,byG=rv.mode==='g'&&w>0,v=num(rv.v),ps=w>0?Math.round(w/P):0;
-  const opts=byG?[[ps,'1 Portion '+(W.est?'≈ ':'· ')+fmt(ps,0)+' g']].concat([200,250,300,400].filter(x=>x!==ps).map(x=>[x,x+' g'])):[[.5,'½'],[1,'1'],[1.5,'1½'],[2,'2'],[3,'3']];
+  const opts=byG?[[ps,'1 Portion '+(W.est?'≈ ':'· ')+fmt(ps,0)]].concat([200,250,300,400].filter(x=>x!==ps).map(x=>[x,String(x)])):[[.5,'½'],[1,'1'],[1.5,'1½'],[2,'2'],[3,'3']];
   const dr=!!(S.recDraft&&S.recDraft.id===r.id&&recDirty());
   return `${dr?`<div class="infobox">An diesem Rezept gibt es nicht gespeicherte Änderungen. <button class="lnk inl" data-act="recResume">Weiter bearbeiten</button></div>`:''}
-   <div class="card pane prodcard"><div class="prod-h"><span class="pimg rthumb" aria-hidden="true">${ICONS.rezepte}</span><div class="prod-t"><b>${esc(r.n)}</b><span class="small muted">Ergibt ${porTxt(P)}${w?(W.est?' · Zutaten ':' · fertig ')+fmt(w,0)+' g':''}</span></div></div>
+   <div class="card pane prodcard"><div class="prod-h"><span class="pimg rthumb" aria-hidden="true">${ICONS.rezepte}</span><div class="prod-t"><b>${esc(r.n)}</b><span class="small muted">Ergibt ${porTxt(P)}${w?(W.est?' · Zutaten '+fmt(w,0)+' g/ml':' · fertig '+fmt(w,0)+' g'):''}</span></div></div>
     <div class="small muted num">pro Portion: ${kLine(pp)}</div></div>
    <div class="card pane"><div class="pane-h"><span class="eyebrow">Menge</span></div>
-    ${w>0?`<div class="seg sm" role="group" aria-label="Menge angeben in"><button data-act="rvMode" data-v="por" aria-pressed="${!byG}">Portionen</button><button data-act="rvMode" data-v="g" aria-pressed="${byG}">Gramm</button></div>`:''}
-    <div class="amt"><button class="nudge" data-act="rvStep" data-d="-1" aria-label="Weniger">−</button><input class="hin num amt-in" type="text" inputmode="decimal" autocomplete="off" id="rvAmt" value="${vIn(v)}" aria-label="${byG?'Menge in Gramm':'Anzahl Portionen'}"><span class="amt-u" id="rvU">${byG?'g':v===1?'Portion':'Portionen'}</span><button class="nudge plus" data-act="rvStep" data-d="1" aria-label="Mehr">+</button></div>
+    ${w>0?`<div class="seg sm" role="group" aria-label="Menge angeben in"><button data-act="rvMode" data-v="por" aria-pressed="${!byG}">Portionen</button><button data-act="rvMode" data-v="g" aria-pressed="${byG}">g/ml</button></div>`:''}
+    <div class="amt"><button class="nudge" data-act="rvStep" data-d="-1" aria-label="Weniger">−</button><input class="hin num amt-in" type="text" inputmode="decimal" autocomplete="off" id="rvAmt" value="${vIn(v)}" aria-label="${byG?'Menge in g/ml':'Anzahl Portionen'}"><span class="amt-u" id="rvU">${byG?'g/ml':v===1?'Portion':'Portionen'}</span><button class="nudge plus" data-act="rvStep" data-d="1" aria-label="Mehr">+</button></div>
     <div class="sugg amts${byG?'':' pors'}">${opts.map(([x,l])=>`<button data-act="rvAmt" data-v="${x}" aria-pressed="${v===x}"${byG?'':` aria-label="${porTxt(x)}"`}>${esc(l)}</button>`).join('')}</div>
-    ${byG&&W.est?`<div class="small muted">Gerechnet mit dem Gewicht der Zutaten, zusammen ${fmt(w,0)} g. Wiegst du das fertige Essen und trägst es im Rezept ein, wird es genauer.</div>`:''}
+    ${byG&&W.est?`<div class="small muted">Gerechnet mit der Menge der Zutaten, zusammen ${fmt(w,0)} g/ml. Wiegst du das fertige Essen und trägst es im Rezept ein, wird es genauer.</div>`:''}
     <div id="rvTot">${rvTotHtml(r)}</div>
     ${slotRow(rv.sl)}
     <button class="btn primary block big" data-act="recEat">${eatLbl(rv.date,rv.sl)}</button></div>
    <div class="card pane"><div class="pane-h"><span class="eyebrow">Zutaten <span class="cnt">${r.items.length}</span></span><span class="small muted">für ${porTxt(P)}</span></div>
-    <div class="flist">${r.items.map(x=>`<div class="frow"><span class="fn"><b>${esc(x.n)}</b><span class="num">${x.per?fmt(num(x.g),1)+' '+(x.u||'g')+' · ':''}${fmt(Math.round(ingRaw(x).k),0)} kcal</span></span></div>`).join('')}</div></div>
+    <div class="flist">${r.items.map(x=>`<div class="frow"><span class="fn"><b>${esc(x.n)}</b><span class="num">${x.per?fmt(num(x.g),1)+' g/ml · ':''}${fmt(Math.round(ingRaw(x).k),0)} kcal</span></span></div>`).join('')}</div></div>
    ${r.note?`<div class="card pane"><div class="pane-h"><span class="eyebrow">Zubereitung</span></div><div class="rnote">${esc(r.note)}</div></div>`:''}
    <div class="row"><button class="btn small ghost" data-act="recEdit" data-id="${esc(r.id)}">${confirmKey==='recEdit:'+r.id?'Anderen Entwurf verwerfen?':'Rezept bearbeiten'}</button></div>`}
 
@@ -3644,7 +3650,7 @@ function viewRecipe(){const r=rv&&recById(rv.id);if(!r)return '<div class="card 
 function recTotHtml(R){const t=recSum(R),P=num(R.por)>0?num(R.por):1;
   return totHtml(rTot(t,1/P))+`<div class="small muted num rtot-all">Ganzes Rezept: ${kLine(rTot(t,1))}</div>`}
 function recTotUpd(){const el=document.getElementById('recTot');if(el&&S.recDraft)el.innerHTML=recTotHtml(S.recDraft)}
-function ingRow(x,i){const v=rTot(ingRaw(x),1),del=confirmKey==='recIngDel:'+x.id,u=x.u||'g';
+function ingRow(x,i){const v=rTot(ingRaw(x),1),del=confirmKey==='recIngDel:'+x.id,u=GML;
   return `<div class="ingrow" id="ing-${i}"><span class="fn"><b>${esc(x.n)}</b><span class="num" id="ingv-${i}">${kLine(v)}</span></span>
    ${x.per?`<span class="ing-a"><input class="hin num ingv" id="ri-${i}" data-ri="${i}" type="text" inputmode="decimal" autocomplete="off" value="${vIn(x.g)}" aria-label="Menge ${esc(x.n)} in ${u}"><span>${u}</span></span>`:'<span class="ing-fix">feste Werte</span>'}
    <button class="${del?'btn small danger':'iconbtn'}" data-act="recIngDel" data-id="${esc(x.id)}" aria-label="${del?'Wirklich entfernen':esc(x.n)+' entfernen'}">${del?'Entfernen?':'✕'}</button></div>`}
@@ -3660,7 +3666,7 @@ function viewRecipeEdit(){const R=S.recDraft;if(!R)return '<div class="card empt
    <div class="addrow"><button class="btn" data-act="recIngAdd">+ Zutat hinzufügen</button><button class="btn scanq" data-act="scanOpen" data-to="rec" aria-label="Zutat per Barcode scannen">${SCAN_IC}</button></div></div>
   <div class="card pane"><div class="pane-h"><span class="eyebrow">Pro Portion</span></div><div id="recTot">${recTotHtml(R)}</div></div>
   <div class="card section">
-   <label class="field"><span class="eyebrow">Gewicht fertig gekocht in g (optional)</span><input class="in num" id="recW" data-rf="w" type="text" inputmode="decimal" autocomplete="off" value="${vIn(R.w)}" placeholder="z. B. 1400"><span class="small muted">Nach Gramm eintragen geht immer. Ohne diese Angabe rechnet die App mit dem Gewicht der Zutaten. Gewogen ist es genauer, etwa wenn Nudeln oder Reis beim Kochen Wasser aufnehmen.</span></label>
+   <label class="field"><span class="eyebrow">Gewicht fertig gekocht in g (optional)</span><input class="in num" id="recW" data-rf="w" type="text" inputmode="decimal" autocomplete="off" value="${vIn(R.w)}" placeholder="z. B. 1400"><span class="small muted">Nach g/ml eintragen geht immer. Ohne diese Angabe rechnet die App mit dem Gewicht der Zutaten. Gewogen ist es genauer, etwa wenn Nudeln oder Reis beim Kochen Wasser aufnehmen.</span></label>
    <label class="field"><span class="eyebrow">Zubereitung (optional)</span><textarea class="in jnote" id="recNote" data-rf="note" maxlength="4000" rows="4" placeholder="Schritte, Zeiten, Tipps">${esc(R.note||'')}</textarea></label></div>
   ${flash?`<div class="err">${flash}</div>`:''}
   <button class="btn primary block big" data-act="recSave">Rezept speichern</button>
@@ -4128,37 +4134,71 @@ function trainChange(T){const id=T.id;
   if(id==='durH'||id==='durM'){durFromInputs();return true}
   const d=T.dataset||{};if(d.f==='set'||d.xf||d.ap||d.vi!=null||id==='exQ'||id==='exPQ')return true;
   return false}
-/* ======================= Heute: Check-in mit Übersicht, Training mit Kategorien =======================
-   Check-in: Die Schlafdauer ändert sich nur noch über − und +. Ein Tipp auf den Wert übernimmt ihn nur, solange noch nichts
-   eingetragen ist (vorher hat ein Tipp den Wert gelöscht). Sind Schlaf, Schlafqualität und Stimmung ausgefüllt, zeigt die Karte
-   eine Übersicht in derselben Größe mit den letzten sieben Tagen. „Ändern“ öffnet die Eingabe wieder. */
-let ciEdit=null;
-function ciDone(k){const D=dayGet(k),sl=D.sleep||{};return num(sl.h)>0&&num(sl.q)>0&&num(D.mood)>0}
-function days7(k){const d=parseD(k),out=[];for(let i=6;i>=0;i--){const x=new Date(d);x.setDate(d.getDate()-i);out.push(ymd(x))}return out}
-function ciBars(vals,max,lbl){const n=vals.length;
-  return `<div class="cis-bars" role="img" aria-label="${esc(lbl)}">${vals.map((v,i)=>`<i class="${i===n-1?'td':''}${v>0?'':' no'}" style="height:${v>0?Math.max(8,Math.min(100,v/max*100)).toFixed(0):6}%"></i>`).join('')}</div>`}
-function ciSummary(k){const D=dayGet(k),sl=D.sleep||{},h=num(sl.h),q=num(sl.q),mo=num(D.mood),ds=days7(k);
-  const hs=ds.map(x=>num((dayGet(x).sleep||{}).h)),qs=ds.map(x=>num((dayGet(x).sleep||{}).q)),ms=ds.map(x=>num(dayGet(x).mood));
-  const avg=a=>{const v=a.filter(x=>x>0);return v.length>1?v.reduce((t,x)=>t+x,0)/v.length:0};
-  const ah=avg(hs),aq=avg(qs),am=avg(ms),hmax=Math.max(9,...hs);
-  const row=(lbl,big,sub,bars)=>`<div class="cis-row"><div class="cis-l"><span class="eyebrow">${lbl}</span><b>${big}</b><span class="small muted num">${sub}</span></div>${bars}</div>`;
-  return `<div class="card pane cisum" data-date="${k}"><div class="pane-h"><span class="eyebrow cis-ok">${ICONS.check}Check-in erledigt</span><button class="lnk" data-act="ciEdit" data-date="${k}">Ändern</button></div>
-   ${row('Schlaf',`<span class="num">${fmtH(h)}</span><small>h</small>`,ah?'Ø 7 Tage '+fmtH(ah)+' h':'Noch kein Vergleich',ciBars(hs,hmax,'Schlafdauer der letzten 7 Tage'))}
-   ${row('Schlafqualität',`${esc(SLQ[q-1]||'')}<small class="num">${q}/5</small>`,aq?'Ø 7 Tage '+fmt(aq,1):'Noch kein Vergleich',ciBars(qs,5,'Schlafqualität der letzten 7 Tage'))}
-   ${row('Stimmung',`${esc(MOOD[mo-1]||'')}<small class="num">${mo}/5</small>`,am?'Ø 7 Tage '+fmt(am,1):'Noch kein Vergleich',ciBars(ms,5,'Stimmung der letzten 7 Tage'))}</div>`}
-function checkinCard(k){return ciDone(k)&&ciEdit!==k?ciSummary(k):ciEditor(k)}
-/* Die Übersicht bekommt genau die Höhe, die die Eingabe an dieser Stelle hätte: unsichtbar messen, dann als Mindesthöhe setzen */
-function ciFit(){const s=document.querySelector('#main .cisum'),m=s&&s.parentNode;if(!m)return;
-  const t=document.createElement('template');t.innerHTML=ciEditor(s.dataset.date).trim();const e=t.content.firstElementChild;if(!e)return;
-  e.style.cssText='position:absolute;left:0;top:0;margin:0;width:'+s.getBoundingClientRect().width+'px;visibility:hidden;pointer-events:none';
-  m.appendChild(e);const h=e.getBoundingClientRect().height;e.remove();s.style.minHeight=h>0?Math.round(h)+'px':''}
-function ciEditor(k){
-  const D=dayGet(k),sl=D.sleep||{},h=num(sl.h),q=num(sl.q),mo=num(D.mood),done=h&&q&&mo;
-  return `<div class="card pane cicard"><div class="pane-h"><span class="eyebrow">Check-in</span>${ciEdit===k?`<button class="lnk" data-act="ciClose">${done?'Fertig':'Schließen'}</button>`:''}</div>
-    <div class="ci-row"><div class="ci-l"><b>Schlaf</b><span class="small muted">${h?'Stunden in der Nacht davor, mit − und + ändern':'Wert antippen zum Übernehmen'}</span></div>
-     <div class="goalc"><button class="nudge" data-act="sleepH" data-d="-0.25" aria-label="15 Minuten weniger">−</button>${h?`<span class="val num" aria-label="Schlafdauer ${fmtH(h)} Stunden">${fmtH(h)}<small>h</small></span>`:`<button class="val num ph" data-act="sleepSet" aria-label="Schlafdauer ${fmtH(defSleep())} Stunden eintragen">${fmtH(defSleep())}<small>h</small></button>`}<button class="nudge" data-act="sleepH" data-d="0.25" aria-label="15 Minuten mehr">+</button></div></div>
-    <div class="field"><span class="eyebrow">Schlafqualität</span>${scaleHtml('sleepQ',q,SLQ,'Schlafqualität')}</div>
-    <div class="field"><span class="eyebrow">Stimmung</span>${scaleHtml('mood',mo,MOOD,'Stimmung')}</div></div>`}
+/* ======================= Heute: Check-in und Check-out (1.12.0), Training mit Kategorien =======================
+   Check-in morgens ab 3 Uhr: Aufgestanden und Schlafqualität. Check-out ab 17 Uhr, frühestens nach dem Check-in: Stimmung des
+   Tages und Einschlafzeit. Bis 3 Uhr nachts gilt der Check-out noch für den Vortag. An früheren Tagen (‹) stehen beide zum
+   Nachtragen.
+   Die Einschlafzeit gehört zur Nacht, die am nächsten Morgen endet: Sie steht im Schlaf-Eintrag des Folgetags (sleep.bed),
+   dort auch die Aufstehzeit (sleep.wake). Die Dauer sleep.h rechnet die App daraus (über Mitternacht, auf 5 Minuten gerundet);
+   alle Auswertungen nutzen weiter sleep.h. Fehlt die Einschlafzeit (kein Check-out am Vorabend), fragt der Check-in sie mit ab.
+   Erledigt bleibt nur eine Zeile: „Check-in erledigt“ mit „Verlauf“ (Fortschritt → Schlaf & Stimmung) und „Ändern“.
+   Alte Einträge mit Dauer ohne Uhrzeiten gelten weiter als erledigt. */
+const CI_FROM=3,CO_FROM=17,CI_STEP=15,SLEEP_MIN=60,SLEEP_MAX=960;
+let ciEdit=null,ciKeyLast='';
+function tMin(s){const m=/^(\d{1,2}):(\d{2})/.exec(String(s||''));if(!m)return null;const h=+m[1],mi=+m[2];return h<24&&mi<60?h*60+mi:null}
+function tStr(m){m=((Math.round(m)%1440)+1440)%1440;return pad(Math.floor(m/60))+':'+pad(m%60)}
+function sleepMin(s){const b=tMin(s&&s.bed),w=tMin(s&&s.wake);return b==null||w==null?null:(w-b+1440)%1440}
+function sleepOk(m){return m!=null&&m>=SLEEP_MIN&&m<=SLEEP_MAX}
+/* Dauer aus beiden Uhrzeiten, auf 5 Minuten gerundet; ohne beide Uhrzeiten bleibt eine alte Dauer stehen */
+function sleepSync(k){const s=S.days[k]&&S.days[k].sleep;if(!s||!s.bed||!s.wake)return;const m=sleepMin(s);if(sleepOk(m))s.h=Math.round(m/5)*5/60;else delete s.h}
+function ciDone(k){const s=dayGet(k).sleep||{};return num(s.h)>0&&num(s.q)>0}
+function coDone(k){const n=dayGet(offFrom(k,1)).sleep||{};return num(dayGet(k).mood)>0&&(!!n.bed||(num(n.h)>0&&!n.wake))}
+/* Welcher Tag dran ist: vor 3 Uhr noch der Vortag (nur Check-out), ab 17 Uhr kommt der Check-out dazu */
+function ciCtx(){if(dayOff!==0)return {k:hDate(),ph:'past'};const h=new Date().getHours();
+  return h<CI_FROM?{k:offDate(-1),ph:'night'}:{k:today(),ph:h>=CO_FROM?'eve':'day'}}
+function ciKey(){const c=ciCtx();return c.ph+c.k}
+function ciNightOpen(){const c=ciCtx();return c.ph==='night'&&ciEdit!==c.k&&!coDone(c.k)}
+function ciNightToast(was){const c=ciCtx();if(was&&coDone(c.k))toast('Check-out für gestern gespeichert')}
+/* Übliche Zeit: Mittel (Median) der letzten 14 Einträge; Einschlafzeiten um 12 Stunden gedreht, damit 23:30 und 0:30 nah beieinander liegen */
+function usualT(f){const v=[],bed=f==='bed';for(const k of Object.keys(S.days).sort().reverse()){const s=S.days[k].sleep,m=s?tMin(s[f]):null;if(m!=null){v.push(bed?(m+720)%1440:m);if(v.length>=14)break}}
+  if(!v.length)return bed?'23:00':'07:00';v.sort((a,b)=>a-b);return tStr(Math.round((v[(v.length-1)>>1]-(bed?720:0))/5)*5)}
+/* Vorschlag für den laufenden Tag: aufgestanden nicht nach jetzt, eingeschlafen nicht vor jetzt */
+function ciSug(f,live){const u=usualT(f);if(!live)return u;const d=new Date(),n=d.getHours()*60+d.getMinutes();
+  if(f==='wake')return n<tMin(u)?tStr(Math.floor(n/5)*5):u;
+  return (n+720)%1440>(tMin(u)+720)%1440?tStr(Math.ceil(n/5)*5):u}
+function ciTime(rk,f,lbl,when,sug){const v=(dayGet(rk).sleep||{})[f]||'',a=`data-k="${rk}" data-f="${f}" data-sug="${sug}"`;
+  return `<div class="ci-row"><div class="ci-l"><b>${lbl}</b><span class="small muted">${v?when:when+' · Vorschlag antippen'}</span></div>
+   <div class="goalc"><button class="nudge" data-act="ciT" ${a} data-d="-1" aria-label="${lbl}: eine Viertelstunde früher">−</button>${v
+    ?`<input class="tval num" type="time" step="300" data-ct="${f}" data-k="${rk}" value="${esc(v)}" aria-label="${lbl}, Uhrzeit">`
+    :`<button class="val num ph" data-act="ciTSet" ${a} aria-label="${lbl} ${sug} übernehmen">${sug}</button>`}<button class="nudge" data-act="ciT" ${a} data-d="1" aria-label="${lbl}: eine Viertelstunde später">+</button></div></div>`}
+function ciResHtml(k){const s=dayGet(k).sleep||{},m=sleepMin(s);
+  if(m==null)return num(s.h)>0?`Schlaf <b class="num">${fmtH(s.h)} h</b>`:'';
+  return sleepOk(m)?`Schlaf <b class="num">${fmtH(Math.round(m/5)*5/60)} h</b> · eingeschlafen ${esc(s.bed)}`:`<span class="lnk-bad">${fmtH(m/60)} h Schlaf? Prüf die Uhrzeiten.</span>`}
+function ciResUpd(k){const el=document.getElementById('cires-'+k);if(el)el.innerHTML=ciResHtml(k)}
+function ciHead(t,right){return `<div class="pane-h"><span class="eyebrow">${t}</span>${right||''}</div>`}
+function ciInBody(k,c,ed){const s=dayGet(k).sleep||{},live=c.ph==='day'||c.ph==='eve';
+  const rows=[ciTime(k,'wake','Aufgestanden',live?'heute früh':'am Morgen',ciSug('wake',live))];
+  if(ed||!s.bed)rows.push(ciTime(k,'bed','Eingeschlafen',s.bed?'in der Nacht davor':'kein Check-out am Abend davor',ciSug('bed',false)));
+  return `${rows.join('')}<div class="ci-res small muted" id="cires-${k}">${ciResHtml(k)}</div>
+   <div class="field"><span class="eyebrow">Schlafqualität</span>${scaleHtml('sleepQ',num(s.q),SLQ,'Schlafqualität',k)}</div>`}
+function coBody(k,c){const live=c.ph==='eve'||c.ph==='night';
+  return `<div class="field"><span class="eyebrow">Stimmung</span>${scaleHtml('mood',num(dayGet(k).mood),MOOD,'Stimmung',k)}</div>
+   ${ciTime(offFrom(k,1),'bed','Einschlafen',live?'heute Nacht':'in der Nacht danach',ciSug('bed',live))}`}
+function ciDoneRow(k,both){return `<div class="pane-h"><span class="eyebrow cis-ok">${ICONS.check}${both?'Check-in und -out erledigt':'Check-in erledigt'}</span><span class="ci-acts"><button class="lnk" data-act="goProg" data-v="mind">Verlauf</button><button class="lnk" data-act="ciEdit" data-date="${k}">Ändern</button></span></div>`}
+function checkinCard(){const c=ciCtx(),k=c.k,ci=ciDone(k),co=coDone(k),ed=ciEdit===k,coOn=c.ph!=='day',coT=c.ph==='night'?'Check-out · gestern':'Check-out';
+  ciKeyLast=c.ph+k;
+  /* Nachts nur der offene Check-out von gestern; erledigt verschwindet die Karte bis 3 Uhr */
+  if(c.ph==='night'&&!ed)return ci&&!co?`<div class="card pane cicard">${ciHead(coT)}${coBody(k,c)}</div>`:'';
+  if(ed)return `<div class="card pane cicard">${ciHead('Check-in','<button class="lnk" data-act="ciClose">Fertig</button>')}${ciInBody(k,c,true)}${coOn?`<div class="ci-sep"></div>${ciHead(coT)}${coBody(k,c)}`:''}</div>`;
+  if(!ci)return `<div class="card pane cicard">${ciHead('Check-in')}${ciInBody(k,c,false)}${c.ph==='past'&&!co?`<div class="ci-sep"></div>${ciHead('Check-out')}${coBody(k,c)}`:''}</div>`;
+  if(!coOn||co)return `<div class="card pane cidone">${ciDoneRow(k,coOn&&co)}</div>`;
+  return `<div class="card pane cicard">${ciDoneRow(k,false)}<div class="ci-sep"></div>${ciHead(coT)}${coBody(k,c)}</div>`}
+/* Uhrzeit im Feld: beim Tippen speichern und die Dauer daneben aktualisieren, neu gezeichnet wird erst nach dem Verlassen des Felds */
+function ciTimeInput(T){const k=T.dataset.k,f=T.dataset.ct,v=String(T.value||'').slice(0,5);if(!k||(f!=='bed'&&f!=='wake')||tMin(v)==null)return;
+  const D=dayMut(k),s=D.sleep||(D.sleep={});s[f]=tStr(tMin(v));sleepSync(k);save();ciResUpd(k)}
+/* Um 3 und um 17 Uhr (und um Mitternacht) wechselt die Karte, auch wenn die App offen bleibt */
+setInterval(()=>{try{if(document.visibilityState==='visible'&&curView()==='heute'&&dayOff===0&&ciKeyLast&&ciKey()!==ciKeyLast&&!typing())render()}catch(e){}},30000);
+document.addEventListener('visibilitychange',()=>{try{if(document.visibilityState==='visible'&&curView()==='heute'&&ciKeyLast&&ciKey()!==ciKeyLast)softRender()}catch(e){}});
 
 /* Training auf „Heute“: Kategorien statt Übungsnamen */
 function trainCardToday(k){
@@ -4175,7 +4215,14 @@ function trainCardToday(k){
 
 function heuteAct(a,el){const ds=el&&el.dataset||{};switch(a){
   case 'ciEdit':ciEdit=ds.date||hDate();render();return true;
-  case 'ciClose':ciEdit=null;render();return true}
+  case 'ciClose':ciEdit=null;render();return true;
+  /* − und + springen auf die nächste Viertelstunde, ohne Eintrag ausgehend vom Vorschlag; ein Tipp auf den Vorschlag übernimmt ihn */
+  case 'ciT':case 'ciTSet':{const k=ds.k,f=ds.f;if(!k||(f!=='bed'&&f!=='wake'))return true;const D=dayMut(k),s=D.sleep||(D.sleep={}),co0=ciNightOpen();
+    if(a==='ciTSet'){if(!s[f]&&tMin(ds.sug)!=null)s[f]=ds.sug}
+    else{const v=tMin(s[f])!=null?tMin(s[f]):tMin(ds.sug);if(v==null)return true;const st=CI_STEP;s[f]=tStr(+ds.d>0?Math.floor(v/st)*st+st:Math.ceil(v/st)*st-st)}
+    sleepSync(k);dayTidy(k);ciNightToast(co0);render();return true}
+  case 'sleepQ':{const k=ds.k||hDate(),D=dayMut(k),s=D.sleep||(D.sleep={}),v=+ds.v;if(num(s.q)===v)delete s.q;else s.q=v;dayTidy(k);render();return true}
+  case 'mood':{const k=ds.k||hDate(),D=dayMut(k),v=+ds.v,co0=ciNightOpen();if(num(D.mood)===v)delete D.mood;else D.mood=v;dayTidy(k);ciNightToast(co0);render();return true}}
   return false}
 /* ======================= Fortschritt ======================= */
 /* ---------- Muskelgruppen im Vergleich ----------
@@ -4602,8 +4649,8 @@ function demoLife(sessions){
   const trained=new Set(sessions.map(s=>s.date));
   const notes=['Gut geschlafen, das Training lief locker.','Viel Stress bei der Arbeit, abends lange spazieren gewesen.','Die Kniebeugen fühlten sich heute schwer an.','Früh ins Bett, morgen ist Beintag.','Entspannter Tag, viel gelesen.','Neuer Bestwert beim Bankdrücken.','Wenig geschlafen und entsprechend müde.'];
   for(let i=41;i>=0;i--){const k=D(-i),x=day(k),tr=trained.has(k),wd=parseD(k).getDay();
-    const sl=Math.round((6+R()*2.4+(wd===0||wd===6?.5:0))*4)/4;
-    x.sleep={h:sl,q:Math.max(1,Math.min(5,Math.round(sl-3.9+R()*1.6)))};
+    const sl=Math.round((6+R()*2.4+(wd===0||wd===6?.5:0))*4)/4,wk=(wd===0||wd===6?480:395)+((i*7)%9)*5;
+    x.sleep={bed:tStr(wk-sl*60),wake:tStr(wk),h:sl,q:Math.max(1,Math.min(5,Math.round(sl-3.9+R()*1.6)))};
     const h={h1:Math.min(9,Math.round(4+R()*5))};
     if(R()<.7)h.h2=Math.round((10+R()*20)/5)*5;
     if(i===17)h.h3=-1;
@@ -5080,7 +5127,7 @@ function render(){
   }
   navHint=null;
   try{document.body.classList.toggle('sheet',!!sc.sheet)}catch(e){}
-  paint(sc,prev,mode,html);scanSync();chipSync();ciFit();
+  paint(sc,prev,mode,html);scanSync();chipSync();
   curScr=sc;wantTop=false;
   syncWake();restTick();
   if(pendingScroll){const el=document.getElementById(pendingScroll);pendingScroll=null;if(el)el.scrollIntoView({block:'center',behavior:'smooth'})}
@@ -5106,7 +5153,7 @@ function act(a,el){
   if(a==='selSess'){const on=!el.classList.contains('sel');document.querySelectorAll('.sess.sel').forEach(x=>{x.classList.remove('sel');x.querySelectorAll('.spen,.splan').forEach(b=>b.tabIndex=-1)});
     if(on){el.classList.add('sel');el.querySelectorAll('.spen,.splan').forEach(b=>b.tabIndex=0)}return}
   if(a==='calToggle'&&el.classList.contains('goalbox')){openFold.cal=!openFold.cal;render();return}
-  if(a==='nView'){nView=el.dataset.v||(nView==='heute'?'ziel':'heute');const o=document.getElementById('nutriOut');if(o)o.innerHTML=nutriOut();return}
+  if(a==='nView'){const n=nut(),v=el.dataset.v||(nViewGet()==='heute'?'ziel':'heute');n.view=v==='heute'?'heute':'ziel';save();const o=document.getElementById('nutriOut');if(o)o.innerHTML=nutriOut();return}
   if(a==='info'){const b=document.getElementById(el.dataset.id);if(b){b.hidden=!b.hidden;try{el.setAttribute('aria-expanded',String(!b.hidden));el.classList.toggle('on',!b.hidden)}catch(e){}}return}
   const IDC=['delEx','delPlan','delHab','delGoal','photoDel','foodDel','habRelapse','prodDel','recDel','recIngDel','recDiscard','wipeGo','wipeFinal','exDel'];
   const key=IDC.includes(a)?a+':'+el.dataset.id:a==='delEntry'?'delEntry:'+el.dataset.e:a;
@@ -5135,10 +5182,6 @@ function act(a,el){
     case 'goFood':foodDay=Math.min(0,dayN(el.dataset.date||today())-dayN(today()));foodEdit=null;goRoot('ernaehrung');break;
     case 'addMeal':mealReset();meal=newMeal(el.dataset.date||today(),el.dataset.sl);push('mahlzeit');break;
     case 'hday':dayOff=Math.min(0,dayOff+ +el.dataset.d);toTop();break;
-    case 'sleepH':{const k=hDate(),D=dayMut(k),s=D.sleep||(D.sleep={});s.h=Math.round(Math.min(14,Math.max(1,(num(s.h)||defSleep())+ +el.dataset.d))*4)/4;break}
-    case 'sleepSet':{const k=hDate(),D=dayMut(k),s=D.sleep||(D.sleep={});if(!num(s.h))s.h=defSleep();dayTidy(k);break}
-    case 'sleepQ':{const k=hDate(),D=dayMut(k),s=D.sleep||(D.sleep={}),v=+el.dataset.v;if(num(s.q)===v)delete s.q;else s.q=v;dayTidy(k);break}
-    case 'mood':{const k=hDate(),D=dayMut(k),v=+el.dataset.v;if(num(D.mood)===v)delete D.mood;else D.mood=v;dayTidy(k);break}
     case 'habTog':{const h=S.habits.find(x=>x.id===el.dataset.id);if(h){const k=hDate();habSet(h,k,habDone(h,k)?0:1)}break}
     case 'habInc':{const h=S.habits.find(x=>x.id===el.dataset.id);if(h){const k=hDate();habSet(h,k,Math.max(0,Math.round((Math.max(0,num(habVal(h,k)))+ +el.dataset.d)*100)/100))}break}
     case 'habRelapse':{const h=S.habits.find(x=>x.id===el.dataset.id);if(h){const k=today();h.prevSince=h.since||null;h.since=k;if(!h.start)h.start=k;habSet(h,k,-1);toast('Eingetragen. Ab morgen zählt es neu.')}break}
@@ -5339,6 +5382,7 @@ document.addEventListener('input',e=>{
   userActed=true;
   if(e.target.dataset&&e.target.dataset.nf){nutriInput(e.target);return}
   {const T=e.target,ds=T.dataset||{};if(trainInput(T)||foodInput(T))return;
+   if(ds.ct){ciTimeInput(T);return}
    if(ds.hab){const h=S.habits.find(x=>x.id===ds.hab);if(h){const v=String(T.value).trim();habSet(h,hDate(),v===''?0:Math.max(0,Math.min(100000,num(v))));save()}return}
    if(ds.note){const k=ds.note,D=dayMut(k);D.note=String(T.value).slice(0,4000);dayTidy(k);save();return}
    if(ds.hf){if(habEdit)habEdit[ds.hf]=T.value;return}
@@ -5362,7 +5406,7 @@ document.addEventListener('input',e=>{
 });
 document.addEventListener('change',e=>{const id=e.target.id;
   {const T=e.target,ds=T.dataset||{};if(trainChange(T)||foodChange(T))return;
-   if(ds.hab||ds.goalv||ds.w){userActed=true;softRender();return}
+   if(ds.hab||ds.goalv||ds.w||ds.ct){if(ds.ct)ciTimeInput(T);userActed=true;softRender();return}
    if(ds.gf){if(goalEdit)goalEdit[ds.gf]=T.value;if(T.tagName==='SELECT')render();return}
    if(ds.hf){if(habEdit)habEdit[ds.hf]=T.value;return}
    if(id==='mealFav'){if(meal)meal.fav=T.checked;return}
@@ -5381,7 +5425,7 @@ document.addEventListener('error',e=>{const t=e.target;if(t&&t.tagName==='IMG')t
 /* App-Gefühl: Antippen sichtbar machen, Tastatur blendet die Tab-Leiste aus, nur der Inhalt lässt sich ziehen */
 document.addEventListener('touchstart',()=>{},{passive:true});
 document.addEventListener('touchmove',e=>{const t=e.target;if(e.cancelable&&t&&t.closest&&!t.closest('main.scr'))e.preventDefault()},{passive:false});
-const isText=el=>!!el&&(el.tagName==='TEXTAREA'||(el.tagName==='INPUT'&&!/^(date|checkbox|radio|range|button|submit)$/i.test(el.type||'')));
+const isText=el=>!!el&&(el.tagName==='TEXTAREA'||(el.tagName==='INPUT'&&!/^(date|time|checkbox|radio|range|button|submit)$/i.test(el.type||'')));
 const coarse=(()=>{try{return matchMedia('(pointer: coarse)').matches}catch(e){return false}})();
 document.addEventListener('focusin',e=>{if(coarse&&isText(e.target))document.body.classList.add('kb')});
 document.addEventListener('focusout',()=>setTimeout(()=>{if(!isText(document.activeElement))document.body.classList.remove('kb')},60));
