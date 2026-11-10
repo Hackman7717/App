@@ -1,4 +1,4 @@
-"""Tests für Version 1.12.0: Check-in und Check-out mit Uhrzeiten, übrige Kalorien, g/ml überall.
+"""Tests für Version 1.12.0 (Erwartungen ab 1.13.0 an die Symbole angepasst): Check-in und Check-out mit Uhrzeiten, übrige Kalorien, g/ml überall.
 Aufruf: python3 pwa_112_test.py  (App unter http://127.0.0.1:8765/App/, Lebensmittel-Datenbank unter /App-Daten/)"""
 import os
 import sys
@@ -51,7 +51,7 @@ def run():
         t = card(p)
         check('A1 Check-in offen', 'CHECK-IN' in t and 'AUFGESTANDEN' in t and 'SCHLAFQUALITÄT' in t, t)
         check('A1 kein Check-out am Morgen', 'CHECK-OUT' not in t and 'STIMMUNG' not in t, t)
-        check('A1 Einschlafzeit nachfragen ohne Check-out', 'EINGESCHLAFEN' in t and 'kein Check-out am Abend davor' in t, t)
+        check('A1 Einschlafzeit nachfragen ohne Check-out', 'EINGESCHLAFEN' in t and 'kein Check-out am Abend davor' in (p.locator('#main [data-act=ciTSet][data-f=bed]').get_attribute('aria-label') or ''), t)
         check('A1 Vorschläge 07:00 und 23:00', p.locator('#main [data-act=ciTSet][data-f=wake]').inner_text() == '07:00'
               and p.locator('#main [data-act=ciTSet][data-f=bed]').inner_text() == '23:00', t)
         shot(p, 't_A1_checkin_leer', full=False)
@@ -60,11 +60,11 @@ def run():
         d = S(p)['days']['2026-11-06']['sleep']
         check('A2 Uhrzeiten gespeichert', d.get('wake') == '07:00' and d.get('bed') == '23:15', d)
         check('A2 Dauer 7:45', abs(d.get('h', 0) - 7.75) < 1e-9, d)
-        check('A2 Ergebnis angezeigt', 'Schlaf 7:45 h · eingeschlafen 23:15' in card(p), card(p))
+        check('A2 Ergebnis angezeigt (1.13: Balken)', '7:45 h' in card(p) and p.locator('#main .cicard .slb').count() == 1, card(p))
         check('A2 noch nicht eingeklappt', 'ERLEDIGT' not in card(p), card(p))
         tap(p, '[data-act=sleepQ][data-v="4"]')
         t = card(p)
-        check('A3 eingeklappt', 'CHECK-IN ERLEDIGT' in t and 'VERLAUF' in t and 'ÄNDERN' in t and 'SCHLAFQUALITÄT' not in t, t)
+        check('A3 eingeklappt', 'Check-in erledigt' in t and p.locator('#main .cidone [data-act=goProg]').count() == 1 and p.locator('#main .cidone [data-act=ciEdit]').count() == 1 and 'SCHLAFQUALITÄT' not in t, t)
         check('A3 keine 7-Tage-Balken', p.locator('#main .cis-bars').count() == 0)
         h_card = p.locator('#main .cidone').bounding_box()['height']
         check('A3 eine Zeile hoch', h_card < 70, h_card)
@@ -77,7 +77,7 @@ def run():
         p.clock.fast_forward(31000)
         p.wait_for_timeout(150)
         t = card(p)
-        check('A5 ab 17 Uhr Check-out (ohne Antippen)', 'CHECK-OUT' in t and 'STIMMUNG' in t and 'EINSCHLAFEN' in t and 'CHECK-IN ERLEDIGT' in t, t)
+        check('A5 ab 17 Uhr Check-out (ohne Antippen)', 'CHECK-OUT' in t and 'STIMMUNG' in t and 'EINSCHLAFEN' in t and 'Check-in erledigt' in t, t)
         check('A5 Vorschlag Einschlafen = üblich 23:15', p.locator('#main [data-act=ciTSet][data-f=bed]').inner_text() == '23:15')
         shot(p, 't_A5_checkout', full=False)
         tap(p, '[data-act=mood][data-v="4"]')
@@ -87,11 +87,11 @@ def run():
         check('A6 Stimmung am Tag', st['days']['2026-11-06'].get('mood') == 4, st['days']['2026-11-06'])
         check('A6 Einschlafzeit beim Folgetag', st['days'].get('2026-11-07', {}).get('sleep', {}).get('bed') == '23:15', st['days'].get('2026-11-07'))
         t = card(p)
-        check('A6 beides erledigt, eine Zeile', 'CHECK-IN UND -OUT ERLEDIGT' in t and 'STIMMUNG' not in t, t)
+        check('A6 beides erledigt, eine Zeile', 'Check-in und Check-out erledigt' in t and 'STIMMUNG' not in t, t)
         shot(p, 't_A6_beides', full=False)
         tap(p, '[data-act=ciEdit]')
         t = card(p)
-        check('A7 Ändern zeigt beides', 'AUFGESTANDEN' in t and 'EINGESCHLAFEN' in t and 'in der Nacht davor' in t and 'CHECK-OUT' in t
+        check('A7 Ändern zeigt beides', 'AUFGESTANDEN' in t and 'EINGESCHLAFEN' in t and 'in der Nacht davor' in (p.locator('#main .cicard input.tval[data-ct=bed]').first.get_attribute('aria-label') or '') and 'CHECK-OUT' in t
               and 'EINSCHLAFEN' in t and 'FERTIG' in t, t)
         shot(p, 't_A7_aendern', full=False)
         # Uhrzeit direkt eintippen (iOS-Zeitrad): Einschlafen 23:40 → Folgetag
@@ -109,7 +109,7 @@ def run():
         d = S(p)['days']['2026-11-06']['sleep']
         check('A7 Dauer 7:47 → 7:45', abs(d['h'] - 7.75) < 1e-9, d)
         tap(p, '[data-act=ciClose]')
-        check('A8 Fertig klappt ein', 'CHECK-IN UND -OUT ERLEDIGT' in card(p), card(p))
+        check('A8 Fertig klappt ein', 'Check-in und Check-out erledigt' in card(p), card(p))
 
         # ---------- B: nächster Morgen ----------
         at(p, T(2026, 11, 7, 6, 40))
@@ -119,7 +119,7 @@ def run():
         tap(p, '[data-act=ciTSet][data-f=wake]')
         d = S(p)['days']['2026-11-07']['sleep']
         check('B2 Dauer über Mitternacht (23:40 → 6:40 = 7:00)', abs(d.get('h', 0) - 7.0) < 1e-9, d)
-        check('B2 Ergebnis', 'Schlaf 7:00 h · eingeschlafen 23:40' in card(p), card(p))
+        check('B2 Ergebnis', '7:00 h' in card(p) and p.locator('#main .cicard .slb').count() == 1, card(p))
         # − und + springen auf Viertelstunden
         tap(p, '[data-act=ciT][data-f=wake][data-d="1"]')
         check('B3 + → 06:45', S(p)['days']['2026-11-07']['sleep']['wake'] == '06:45')
@@ -127,7 +127,7 @@ def run():
         tap(p, '[data-act=ciT][data-f=wake][data-d="-1"]')
         check('B3 −− → 06:15', S(p)['days']['2026-11-07']['sleep']['wake'] == '06:15')
         tap(p, '[data-act=sleepQ][data-v="3"]')
-        check('B4 erledigt', 'CHECK-IN ERLEDIGT' in card(p), card(p))
+        check('B4 erledigt', 'Check-in erledigt' in card(p), card(p))
         # Verlauf → Fortschritt · Schlaf & Stimmung
         tap(p, '[data-act=goProg][data-v=mind]')
         p.wait_for_timeout(400)
@@ -176,7 +176,7 @@ def run():
         check('D2 Stimmung beim 5.11.', S(p)['days']['2026-11-05'].get('mood') == 5)
         ev(p, "dayOff=-2;render()")  # 6.11.: alles erledigt
         p.wait_for_timeout(150)
-        check('D3 erledigter Tag eingeklappt', 'CHECK-IN UND -OUT ERLEDIGT' in card(p), card(p))
+        check('D3 erledigter Tag eingeklappt', 'Check-in und Check-out erledigt' in card(p), card(p))
         ev(p, "dayOff=0;render()")
         errs = list(p.errs)
         check('A–D ohne Fehler', not errs, errs)
@@ -188,13 +188,13 @@ def run():
             const d=S.days['2026-11-06'];d.mood=3;render()})()""")
         p.wait_for_timeout(150)
         t = card(p)
-        check('E1 alte Einträge: Check-in erledigt, Check-out braucht Einschlafzeit', 'CHECK-IN ERLEDIGT' in t and 'EINSCHLAFEN' in t, t)
+        check('E1 alte Einträge: Check-in erledigt, Check-out braucht Einschlafzeit', 'Check-in erledigt' in t and 'EINSCHLAFEN' in t, t)
         ev(p, "dayOff=-1;render()")
         p.wait_for_timeout(150)
-        check('E2 alter Tag mit Stimmung und alter Dauer danach: erledigt', 'CHECK-IN UND -OUT ERLEDIGT' in card(p), card(p))
+        check('E2 alter Tag mit Stimmung und alter Dauer danach: erledigt', 'Check-in und Check-out erledigt' in card(p), card(p))
         tap(p, '[data-act=ciEdit]')
         t = card(p)
-        check('E3 alte Dauer bleibt sichtbar', 'Schlaf ' in p.locator('#main .ci-res').first.inner_text(), t)
+        check('E3 alte Dauer bleibt sichtbar', '7:30 h' in p.locator('#main .ci-res').first.inner_text(), t)
         ev(p, "dayOff=0;ciEdit=null;render()")
         check('E ohne Fehler', not p.errs, p.errs)
         p.context.close()
@@ -207,7 +207,7 @@ def run():
         txt = p.locator('#main .card:has([data-act=goFood])').inner_text().replace('\n', ' | ')
         tg = ev(p, "r10(foodTarget(nCalc(),today()).k)")
         check('F1 übrig = Ziel − gegessen', f"{tg - 612:,}".replace(',', '.') + ' | kcal übrig' in txt, (txt, tg))
-        check('F1 Zeile gegessen', f"612 von {tg:,} kcal gegessen".replace(',', '.') in txt, txt)
+        check('F1 Zeile gegessen (1.13: an den Enden des Balkens)', '612 gegessen' in txt and f"Ziel {tg:,}".replace(',', '.') in txt, txt)
         shot(p, 't_F1_kcal', full=False)
         ev(p, "S.days[today()].food.push({id:'b',t:'12:00',n:'Pizza',k:3000,p:100,c:300,f:120,sl:'mi'});render()")
         p.wait_for_timeout(100)
@@ -230,7 +230,7 @@ def run():
         check('F4 nach Neustart noch „Heute“', ev(p, "nViewGet()") == 'heute')
         tgh = ev(p, "r10(nCalc().heute.k)")
         txt = p.locator('#main .card:has([data-act=goFood])').inner_text().replace('\n', ' | ')
-        check('F4 Heute-Karte rechnet mit „Heute“', f"von {tgh:,} kcal".replace(',', '.') in txt, (txt, tgh))
+        check('F4 Heute-Karte rechnet mit „Heute“', f"Ziel {tgh:,}".replace(',', '.') in txt, (txt, tgh))
         check('F ohne Fehler', not p.errs, p.errs)
         p.context.close()
 
@@ -294,7 +294,8 @@ def run():
         ev(p, "S.days[today()].mood=4;dayMut(offFrom(today(),1)).sleep={bed:'23:30'};render()")
         p.wait_for_timeout(150)
         hd = p.locator('#main .cidone .pane-h')
-        check('I1 eine Zeile bei 375 px', hd.count() == 1 and hd.bounding_box()['height'] < 30, hd.bounding_box() if hd.count() else None)
+        tops = [round(b['y']) for b in (x.bounding_box() for x in p.locator('#main .cidone .cdv, #main .cidone .iconbtn').all()) if b]
+        check('I1 eine Zeile bei 375 px', hd.count() == 1 and hd.bounding_box()['height'] < 44 and max(tops) - min(tops) < 12, (hd.bounding_box() if hd.count() else None, tops))
         p.locator('#main .cidone').scroll_into_view_if_needed()
         shot(p, 't_I1_375', full=False)
         c.close()
