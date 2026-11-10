@@ -14,9 +14,25 @@ Sie läuft als installierbare Web-App (PWA) auf dem iPhone, auf Android und am C
 
 ## Heute
 
-- **Check-in:** Schlaf, Schlafqualität und Stimmung. Die Schlafdauer änderst du nur mit − und +. Ein Tipp auf den Wert übernimmt den Vorschlag, solange noch nichts eingetragen ist, danach ändert ein Tipp nichts mehr.
-- **Übersicht:** Ist alles ausgefüllt, ist der Check-in erledigt. Die Karte zeigt dann in derselben Größe die Werte des Tages, den Durchschnitt und die letzten sieben Tage als Balken. *Ändern* öffnet die Eingabe wieder.
-- **Training:** Die Karte nennt die trainierten Kategorien, etwa *Beine · Brust · Bauch & Core*, darunter Plan, Dauer, Zahl der Übungen und Gefühl.
+- **Check-in morgens (ab 3 Uhr):** Aufstehzeit und Schlafqualität. Die Schlafdauer rechnet die App aus Einschlaf- und Aufstehzeit und zeigt sie als Balken bis 10 Stunden mit einem Strich bei 7 Stunden.
+- **Check-out abends (ab 17 Uhr):** Stimmung des Tages und Einschlafzeit. Bis 3 Uhr nachts zählt er noch für den Vortag.
+- **Erledigt:** Die Karte schrumpft auf eine Zeile mit den Werten selbst: Schlafdauer, Akku für die Schlafqualität, Gesicht für die Stimmung, Einschlafzeit. Daneben führen zwei Symbole zum Verlauf und zum Ändern.
+- **Training:** Das Wochenziel als Kästchen, die trainierten Kategorien als kleine Körperkarten, darunter Dauer, Zahl der Übungen und Gefühl.
+- **Ernährung:** Übrige Kalorien groß, darunter der Balken mit „gegessen“ und „Ziel“ an den Enden und die drei Makros als Balken.
+- **Körper:** Gewicht mit − und +, darunter der Verlauf der letzten 30 Tage als Linie und ein Pfeil für die Veränderung.
+
+## Symbole statt Erklärtext (1.13.0)
+
+Die App zeigt Zustände, statt sie zu beschreiben. Alle Symbole sind eigene SVG-Zeichnungen im Stil der App (keine Emoji-Zeichen).
+
+- **Skalen:** Stimmung und Trainingsgefühl als Gesichter, Schlafqualität als Akku (voll = erholt). Auch an den Achsen der Diagramme unter *Fortschritt*.
+- **Kategorien:** Jede Kategorie hat eine kleine Körperkarte, in der der trainierte Bereich hervorgehoben ist (Beine, Brust, Rücken, Schultern, Arme, Bauch & Core), Ausdauer ein Herz mit Puls. Zu sehen bei Filtern, Übungen, Plänen, Vorschlägen und Muskelgruppen.
+- **Mahlzeiten:** Sonnenaufgang, Sonne, Mond und Apfel für Frühstück, Mittag, Abend und Snacks.
+- **Gewohnheiten:** Ein Symbol je Gewohnheit, passend zum Namen (Wasser, Lesen, Lernen …) oder selbst gewählt; bei Abstinenz durchgestrichen. Die Arten wählst du über eine kleine Vorschau, so wie sie unter *Heute* aussehen.
+- **Maße:** Eine Figur mit Messlinie zeigt, wo gemessen wird.
+- **Veränderung:** Pfeile statt „+5 ggü. davor“; gestrichelte Linien stehen als Legende unter dem Diagramm.
+- **Erklärungen** liegen hinter dem *i*, Gebrauchsanweisungen sind durch kleine Bildfolgen ersetzt (etwa „1 → Häkchen“ beim ersten Satz).
+- Beim Antippen von Häkchen, Skalen und Gewohnheiten springt der Knopf kurz auf (nicht bei „Bewegung reduzieren“).
 
 ## Training
 
@@ -27,7 +43,7 @@ Sie läuft als installierbare Web-App (PWA) auf dem iPhone, auf Android und am C
 - **Übung hinzufügen:** Unter *+ Übung* schlägt die App Übungen aus denselben Kategorien vor wie die Übungen, die schon im Training sind (*Passend*). Jede Übung erscheint einmal, mit der Variante, die du zuletzt genommen hast. Zuerst kommt, was du oft machst, sonst die übliche Reihenfolge im Studio. Eine andere Kategorie wählst du per Chip, alles andere über *Alle Übungen …*, dort direkt mit der Variante. Fehlt eine Übung, legst du sie dort an und sie landet direkt im Training. Genauso in Trainingsplänen und bei Zielen.
 - **Variante wechseln:** Im Training steht die Variante als Knopf unter dem Namen der Übung, im Plan genauso. Ist noch kein Satz abgehakt, übernimmt die App die Werte vom letzten Mal mit dieser Variante. Zwischen Gewicht × Wdh. und nur Wiederholungen bleiben die Wiederholungen erhalten.
 - **Als Trainingsplan speichern:** Beim Abschließen mit dem Schalter *Als Trainingsplan speichern*. Der Name ist vorgeschlagen, etwa *Brust und Arme* oder ab vier Kategorien *Ganzkörper*, und lässt sich ändern. Gespeichert werden die erledigten Übungen mit ihrer Zahl an Sätzen. Gibt es den Plan schon, legt die App keinen zweiten an. *Ansehen* im Hinweis springt zum Plan.
-- **Verlauf:** Alle Trainings, nach Monaten. Ein Training antippen, dann mit dem Stift bearbeiten oder mit dem Plan-Symbol als Trainingsplan speichern.
+- **Verlauf:** Alle Trainings, nach Monaten, mit Gefühl, Dauer und Körpergewicht als Symbol. Ein Training antippen, dann mit dem Stift bearbeiten oder mit dem Plan-Symbol als Trainingsplan speichern.
 - Die App kommt ohne Auswahllisten (Dropdowns) aus: Auswahl per Kacheln, Chips oder Zahlenfeld.
 
 ## Fortschritt

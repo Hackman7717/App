@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-title" content="Trainingsbuch">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="format-detection" content="telephone=no">
-<meta name="app-version" content="1.12.0">
+<meta name="app-version" content="1.13.0">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icons/icon-180.png">
 <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
@@ -1128,6 +1128,243 @@ body.mdrag,body.mdrag *{-webkit-user-select:none;user-select:none}
 .legend .lg-kh{background:var(--m-kh)}
 .legend .lg-fe{background:var(--m-fe)}
 
+
+/* Heute */
+.ci-lt{flex-direction:row;align-items:center;gap:8px}
+.ci-lt > svg{width:21px;height:21px;flex:none;color:var(--accent-fg)}
+.ci-lt b{white-space:nowrap}
+.scale.sc-ic button{gap:3px;min-height:56px}
+.scale.sc-ic button svg{width:26px;height:26px;flex:none;color:var(--accent-fg)}
+.scale.sc-ic button[aria-pressed="true"] svg{color:var(--accent-ink)}
+.slb{display:flex;align-items:center;gap:8px;width:100%}
+.slb > svg{width:20px;height:20px;flex:none;color:var(--accent-fg)}
+.slb > b{flex:none;font-family:var(--f-display);font-size:19px;font-weight:800;color:var(--ink)}
+.slb-t{position:relative;flex:1;height:8px;background:var(--soft)}
+.slb-t i{display:block;height:100%;background:var(--accent)}
+.slb-t em{position:absolute;left:70%;top:-3px;bottom:-3px;width:2px;margin-left:-1px;background:var(--ink);opacity:.45}
+.ci-res{margin-top:-2px}
+.ci-warn{display:inline-flex;align-items:center;gap:6px;font-weight:600}
+.ci-warn svg{width:17px;height:17px;flex:none}
+.cdr{display:flex;align-items:center;gap:12px;min-width:0;overflow:hidden}
+.cdr > svg{width:18px;height:18px;flex:none;color:var(--good)}
+.cdv{display:inline-flex;align-items:center;gap:4px;flex:none;font-family:var(--f-display);font-size:18px;font-weight:800;line-height:1;color:var(--ink)}
+.cdv svg{width:21px;height:21px;flex:none;color:var(--accent-fg)}
+.ci-acts{gap:4px}
+.ci-acts .iconbtn{width:38px;height:36px;color:var(--accent-fg);border-color:var(--line)}
+.ci-acts .iconbtn svg{width:19px;height:19px}
+.hrow{gap:10px}
+.hic{flex:none;width:24px;height:24px;color:var(--accent-fg)}
+.hic svg{display:block;width:24px;height:24px}
+.hrow.done .hic{color:var(--good)}
+.hrow.rel .hic{color:var(--bad)}
+.sugg:not(.amts) button{display:inline-flex;align-items:center;gap:6px}
+.sugg button svg{width:17px;height:17px;flex:none}
+.gname{display:flex;align-items:center;gap:8px;min-width:0}
+.gname svg{width:20px;height:20px;flex:none;color:var(--accent-fg)}
+.gitem.done .gname svg{color:var(--good)}
+.wkl{display:inline-flex;align-items:center;gap:8px}
+.tdone b .catics svg{width:20px;height:20px}
+.tmeta{display:flex;flex-wrap:wrap;align-items:center;gap:2px 12px}
+.tmeta > span{display:inline-flex;align-items:center;gap:4px}
+.tmeta svg{width:15px;height:15px;flex:none}
+.kcbar{display:flex;flex-direction:column;gap:4px}
+.kcb-l{display:flex;justify-content:space-between;gap:10px}
+.mrow.mini{gap:8px}
+.mrow.mini .mcell{border-top-width:3px;padding-top:5px;gap:2px}
+.mrow.mini .mcell b{font-size:19px}
+.mrow.mini .mcell b small{font-size:12px}
+.mrow.mini .pbar{height:5px}
+.addrow .btn svg{width:17px;height:17px;flex:none}
+.btn:not(.scanbtn):not(.scanq) > svg:first-child:not(.ic-play):not(.ic-stop){width:17px;height:17px;flex:none}
+.wtrend{display:flex;align-items:center;gap:14px;width:100%;padding:0;border:0;background:none;color:inherit;text-align:left;cursor:pointer}
+.wtrend .spark{flex:1;min-width:0;height:30px}
+.wtr{flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:1px;font-size:12px;color:var(--muted)}
+.wtr-d{display:inline-flex;align-items:center;gap:4px;font-family:var(--f-display);font-size:18px;font-weight:800;color:var(--ink)}
+.wtr-d svg{width:16px;height:16px;flex:none}
+.bkst{display:flex;flex-wrap:wrap;gap:6px 16px}
+.bkst .sn svg{width:16px;height:16px}
+.bkst .warn{color:var(--pr);font-weight:700}
+.isteps2{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.isteps2 > span{display:inline-flex;align-items:center;gap:6px;font-weight:700}
+.isteps2 svg{width:18px;height:18px;flex:none}
+.isteps2 > svg{width:16px;height:16px;color:var(--muted)}
+
+/* Training */
+.restset .rs-l{flex-direction:row;align-items:center;gap:8px}
+.restset .rs-l svg{width:21px;height:21px;flex:none;color:var(--accent-fg)}
+.restset.off .rs-l{opacity:.6}
+.chk svg{width:20px;height:20px}
+.step{display:inline-flex;align-items:center;gap:5px}
+.step svg{width:14px;height:14px;flex:none}
+.ex-head .eyebrow.exey{display:flex;align-items:center;gap:6px}
+.exey svg{width:18px;height:18px;flex:none;color:var(--accent-fg)}
+.exey i{font-style:normal;opacity:.6}
+.last{display:flex;flex-wrap:wrap;gap:3px 12px}
+.last > span{display:inline-flex;align-items:center;gap:4px}
+.last svg{width:14px;height:14px;flex:none;color:var(--accent-fg)}
+.pred{display:flex;align-items:center;gap:5px}
+.pred svg{width:14px;height:14px;flex:none;color:var(--accent-fg)}
+.pred.top svg{color:var(--pr)}
+.howto{display:flex;align-items:center;gap:10px;margin-top:10px;color:var(--muted)}
+.howto .chk{display:grid}
+.howto > svg{width:18px;height:18px;flex:none}
+.howto > svg:last-child:not(:nth-child(2)){width:24px;height:24px;color:var(--accent-fg)}
+.sughint{display:flex;align-items:center;gap:6px}
+.sughint svg{width:16px;height:16px;flex:none}
+.excats .chip,.sugcats .chip,.catchips .chip{display:inline-flex;align-items:center;gap:6px}
+.excats .chip svg,.sugcats .chip svg,.catchips .chip svg{width:19px;height:19px;flex:none}
+.sug-c{display:inline-flex;align-items:center;gap:6px}
+.sug-c svg{width:16px;height:16px;flex:none}
+.exg-h svg{width:17px;height:17px;flex:none;color:var(--accent-fg)}
+.feel button{gap:3px;min-height:56px}
+.feel button svg{width:26px;height:26px;flex:none;color:var(--accent-fg)}
+.feel button[aria-pressed="true"] svg{color:var(--accent-ink)}
+.tile .k svg{width:12px;height:12px;vertical-align:-1px}
+.asplan .ci-lt > svg{width:21px;height:21px}
+.sess .meta > span{display:inline-flex;align-items:center;gap:4px}
+.sess .meta svg{width:14px;height:14px;flex:none}
+.legend .lg-wk{background:color-mix(in srgb,var(--good) 30%,transparent)}
+.pmeta{display:flex;align-items:center;flex-wrap:wrap;gap:2px 0;margin-top:3px}
+.pmeta .catics svg{width:20px;height:20px}
+.emp-ic svg{width:40px;height:40px;color:var(--accent-fg);opacity:.75}
+.locknote{display:inline-flex;align-items:center;gap:5px}
+.locknote svg{width:14px;height:14px;flex:none}
+.setbtns .btn svg{width:15px;height:15px}
+.kw span svg{width:14px;height:14px;display:block}
+.eyic{display:flex;align-items:center;gap:6px}
+.eyic svg{width:16px;height:16px;flex:none;color:var(--accent-fg)}
+
+/* Ernährung */
+.ms-ic{flex:none;width:22px;height:22px;color:var(--accent-fg)}
+.noing svg{width:18px;height:18px;color:var(--accent-fg)}
+.pthumb.ph svg{width:20px;height:20px}
+.ms-ic svg{display:block;width:22px;height:22px}
+.ms-tog:disabled .ms-ic{opacity:.55}
+.meals .mdhint{display:flex;align-items:center;gap:6px}
+.mdhint svg{width:15px;height:15px;flex:none}
+.fchip svg{width:15px;height:15px;flex:none}
+.favnone{display:flex;align-items:center;gap:6px}
+.favnone svg{width:16px;height:16px;flex:none}
+.btn.favon{color:var(--accent-fg);border-color:var(--accent-fg)}
+.chips.slots .chip{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:54px;padding:5px 2px 4px;font-size:13px;line-height:1.1}
+.chips.slots .chip svg{width:21px;height:21px;flex:none}
+.seg button svg{width:16px;height:16px;flex:none;vertical-align:-3px;margin-right:6px}
+.favtog input{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
+.favtog{position:relative;cursor:pointer}
+.fav-ic{display:grid;width:26px;height:26px;color:var(--accent-fg)}
+.fav-ic svg{grid-area:1/1;width:26px;height:26px}
+.fav-ic svg:last-child,.favtog input:checked + .fav-ic svg:first-child{display:none}
+.favtog input:checked + .fav-ic svg:last-child{display:block}
+.favtog input:focus-visible + .fav-ic{outline:2px solid var(--accent-fg);outline-offset:2px}
+.emp-ic{display:flex;gap:10px;justify-content:center}
+.emp-ic svg{width:36px;height:36px;color:var(--accent-fg);opacity:.75}
+.offnote,.psrc{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:5px}
+.psrc{justify-content:flex-start}
+.offnote svg,.psrc svg{width:14px;height:14px;flex:none}
+.fdbpros{display:flex;flex-direction:column;gap:5px}
+.fdbpros span{display:flex;align-items:center;gap:7px}
+.fdbpros svg{width:17px;height:17px;flex:none;color:var(--accent-fg)}
+.steps3{display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;color:var(--ink)}
+.steps3 > span{display:flex;flex-direction:column;align-items:center;gap:4px;font-family:var(--f-display);font-size:13px;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
+.steps3 > span svg{width:30px;height:30px;color:var(--accent-fg)}
+.steps3 > svg{width:16px;height:16px;color:var(--muted)}
+
+/* Fortschritt */
+.kic svg{width:24px;height:24px;margin-left:7px;vertical-align:-3px;color:var(--accent-fg)}
+.tile .v .kic svg{width:26px;height:26px}
+.fa-kpi .dlt,.tile .dlt{display:flex;align-items:center;gap:3px;margin-top:3px;font-size:12px;font-weight:700;color:var(--muted)}
+.tile .dlt{margin-top:6px}
+.fa-n .fan{display:inline-flex;align-items:center;gap:4px}
+.fa-n .fan svg{width:14px;height:14px;flex:none}
+.fa-n .fan.pr svg{color:var(--pr)}
+.ins-l{display:inline-flex;align-items:center;gap:5px}
+.ins-l svg{width:15px;height:15px;flex:none;color:var(--accent-fg)}
+.ins-b > b{display:inline-flex;align-items:center;justify-content:flex-end;gap:5px}
+.ins-b > b svg{width:18px;height:18px;flex:none;color:var(--accent-fg)}
+.morebtn{align-self:flex-start}
+.morebtn svg{width:16px;height:16px;flex:none}
+.hbar.cmp{grid-template-columns:118px minmax(0,1fr) 42px}
+.mslbl{display:inline-flex;align-items:center;gap:6px;min-width:0;max-width:100%}
+.mslbl > span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mslbl svg{width:18px;height:18px;flex:none;color:var(--accent-fg)}
+.fhn{display:inline-flex;align-items:center;gap:7px;min-width:0}
+.fhn svg{width:20px;height:20px;flex:none;color:var(--accent-fg)}
+.legend .lg-ref{width:16px;height:0;border-top:2px dashed var(--ink);background:none;vertical-align:3px;opacity:.7}
+.chart .yic{color:var(--accent-fg)}
+.tdic{display:inline-flex;align-items:center;gap:5px}
+.tdic svg{width:16px;height:16px;flex:none;color:var(--accent-fg)}
+.lnk.inl svg{width:14px;height:14px;vertical-align:-2px}
+
+/* Ich */
+.edbtn{color:var(--accent-fg);border-color:var(--line)}
+.edbtn svg{width:18px;height:18px}
+.pitem .hic{align-self:center}
+.hkinds .ktile{min-height:92px}
+.hkinds .pv{display:flex;align-items:center;min-height:26px;width:100%;margin-bottom:4px;color:var(--accent-fg)}
+.hkinds .pv .hsq i{width:12px;height:12px}
+.hkinds .pv .pbar{width:80%;height:8px;margin:0}
+.pv-chk{display:grid;place-items:center;width:24px;height:24px;background:var(--good);color:var(--surface)}
+.pv-chk svg{width:16px;height:16px}
+.pv-q{display:inline-flex;align-items:baseline;gap:4px;font-family:var(--f-display);font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.pv-q b{font-size:24px;font-weight:800;line-height:1;color:var(--ink)}
+.ktile[aria-pressed="true"] .pv,.ktile[aria-pressed="true"] .pv-q,.ktile[aria-pressed="true"] .pv-q b{color:var(--accent-ink)}
+.ktile[aria-pressed="true"] .hsq i{border-color:var(--accent-ink)}
+.ktile[aria-pressed="true"] .hsq i.on,.ktile[aria-pressed="true"] .pbar i{background:var(--accent-ink)}
+.ktile[aria-pressed="true"] .pbar{background:color-mix(in srgb,var(--accent-ink) 30%,transparent)}
+.ktile[aria-pressed="true"] .pv-chk{background:var(--accent-ink);color:var(--accent)}
+.icpick{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:4px}
+.icpick button{display:grid;place-items:center;min-width:0;aspect-ratio:1;padding:0;border:1px solid var(--line-2);background:var(--surface);color:var(--accent-fg)}
+.icpick button svg{width:24px;height:24px}
+.icpick button:active{background:var(--press)}
+.icpick button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.ic-auto{display:flex;flex-direction:column;align-items:center;gap:1px;line-height:1}
+.ic-auto svg{width:19px;height:19px}
+.ic-auto small{font-family:var(--f-display);font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
+.gtypes{grid-template-columns:repeat(4,minmax(0,1fr))}
+.emp-ic svg + svg{margin-left:2px}
+.ph-r{display:flex;align-items:center;gap:10px}
+.mlbl{display:flex;align-items:center;gap:6px}
+.mlbl svg{width:20px;height:20px;flex:none;color:var(--accent-fg)}
+.filebtn svg{width:18px;height:18px;flex:none}
+.jmood{display:inline-flex;align-items:center;gap:5px}
+.jmood svg{width:18px;height:18px;flex:none;color:var(--accent-fg)}
+.brp{gap:8px}
+.brbar{display:flex;width:100%;gap:2px;height:22px}
+.brbar i{display:grid;place-items:center;min-width:0;font-style:normal;font-family:var(--f-display);font-size:13px;font-weight:800;color:var(--surface)}
+.brbar .b-in,.legend .b-in{background:var(--accent)}
+.brbar .b-hold,.brbar .b-rest,.legend .b-hold{background:color-mix(in srgb,var(--accent-fg) 45%,var(--soft))}
+.brbar .b-out,.legend .b-out{background:var(--m-fe)}
+.brbar .b-hold,.brbar .b-rest{color:var(--ink)}
+.brdone{display:flex;align-items:center;justify-content:center;gap:6px}
+.brdone svg{width:16px;height:16px;color:var(--good)}
+.swrow > svg:first-child{width:22px;height:22px;flex:none;color:var(--accent-fg)}
+.grp > .lbl-row{min-height:20px}
+.sn.muted{color:var(--muted)}
+
+/* ---------- 1.13.0: Symbole statt Erklärtext ---------- */
+.sr{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.pane-h .eyebrow > svg:first-child{width:17px;height:17px;flex:none;color:var(--accent-fg)}
+.bodyic{display:block}
+.catics{display:inline-flex;align-items:center;gap:2px;vertical-align:-3px;margin-right:6px}
+.catics svg{width:18px;height:18px;flex:none;color:var(--accent-fg)}
+.bn-t{display:flex;align-items:flex-start;gap:8px;min-width:0}
+.bn-t > svg{width:18px;height:18px;flex:none;color:var(--pr);margin-top:-1px}
+.syncnote{display:flex;justify-content:center;flex-wrap:wrap;gap:4px 14px}
+.sn{display:inline-flex;align-items:center;gap:5px}
+.sn svg{width:14px;height:14px;flex:none}
+#syncNote2{display:flex;flex-wrap:wrap;gap:4px 14px}
+.wdots{display:inline-flex;gap:3px}
+.wdots i{display:block;width:11px;height:11px;border:1.5px solid var(--line-2)}
+.wdots i.on{background:var(--accent);border-color:var(--accent)}
+.wdots.met i.on{background:var(--good);border-color:var(--good)}
+.dlt{display:inline-flex;align-items:center;gap:3px}
+.dlt svg{width:14px;height:14px;flex:none}
+@media (prefers-reduced-motion: no-preference){
+  .tapfx{animation:tapfx .32s cubic-bezier(.2,.8,.2,1)}
+  .tapfx svg{animation:tapfxi .38s cubic-bezier(.2,.8,.2,1)}
+}
+@keyframes tapfx{0%{transform:scale(.9)}55%{transform:scale(1.05)}100%{transform:none}}
+@keyframes tapfxi{0%{transform:scale(.4) rotate(-12deg);opacity:.2}70%{transform:scale(1.15)}100%{transform:none;opacity:1}}
 @media (prefers-reduced-motion: no-preference){
   .toast{animation:pop .2s ease-out}
   .tab .live{animation:blink 1.4s ease-in-out infinite}
@@ -1527,7 +1764,7 @@ if(!Array.isArray(S.plans))S.plans=S.demo&&S.exercises.some(e=>e.id==='e1')?demo
 /* ---------- Speicher auf dem Gerät ----------
    IndexedDB ist der Hauptspeicher (Daten und Fotos). Eine Kopie der Daten liegt zusätzlich im localStorage,
    damit die App sofort startet. Beim Start gewinnt der neuere Stand. Es gibt keinen Server und kein Konto. */
-const APPV='1.12.0',SCHEMA=3;
+const APPV='1.13.0',SCHEMA=3;
 const cloud={state:'local',deferred:false};
 const store={open:null,timer:null,ok:false,err:false,warned:false,persist:false};
 function idb(){if(store.open)return store.open;
@@ -1546,8 +1783,8 @@ async function storeFlush(){clearTimeout(store.timer);store.timer=null;
   catch(e){store.err=true;if(!store.warned){store.warned=true;toast('Speichern auf dem Gerät klappt gerade nicht. Mach am besten ein Backup.')}}
   setStoreNote()}
 function bkAge(){if(!S.lastBackup)return null;const d=dayN(today())-dayN(ymd(new Date(S.lastBackup)));return d<=0?'heute':d===1?'gestern':'vor '+d+' Tagen'}
-function syncText(){const a=bkAge();return (store.err?'Speichern auf dem Gerät klappt gerade nicht':'Gespeichert auf diesem Gerät')+' · '+(a?'letztes Backup '+a:'noch kein Backup')}
-function setStoreNote(){for(const id of ['syncNote','syncNote2']){const el=document.getElementById(id);if(el)el.textContent=syncText()}}
+function syncText(){const a=bkAge();return `<span class="sn">${store.err?WARN_IC:ICONS.phone}${store.err?'Speichern auf dem Gerät klappt gerade nicht':'Auf diesem Gerät gespeichert'}</span><span class="sn">${ICONS.shield}${a?'Backup '+a:'noch kein Backup'}</span>`}
+function setStoreNote(){for(const id of ['syncNote','syncNote2']){const el=document.getElementById(id);if(el)el.innerHTML=syncText()}}
 function typing(){const a=document.activeElement;return !!a&&(a.tagName==='TEXTAREA'||(a.tagName==='INPUT'&&!/^(file|checkbox|radio|button|submit)$/i.test(a.type||'')))}
 function softRender(){if(typing())cloud.deferred=true;else render()}
 /* Vor jeder Umstellung der Datenstruktur bleibt der alte Stand als Sicherheitskopie liegen */
@@ -1720,13 +1957,93 @@ const ICONS={
   atem:SV('<path d="M3 9h11.5a2.5 2.5 0 1 0-2.5-2.5"/><path d="M3 13h15.5a2.5 2.5 0 1 1-2.5 2.5"/><path d="M3 17h7"/>')
 };
 const CHR=SV('<path d="M9 5l7 7-7 7"/>',2.2),CHL=SV('<path d="M15 5l-7 7 7 7"/>',2.2);
+/* ---------- Symbole (1.13.0): zeigen statt beschreiben. Gleicher Stil: 24er Raster, harte Ecken, nie Zeichen, die iOS als Emoji zeigt ---------- */
+Object.assign(ICONS,{
+  sunrise:SV('<path d="M2.5 19.5h19"/><path d="M6.5 19.5a5.5 5.5 0 0 1 11 0"/><path d="M12 8.5V11M4.8 12.6l1.6 1.6M19.2 12.6l-1.6 1.6M9.5 4.5L12 2l2.5 2.5"/>'),
+  sun:SV('<path d="M12 16.5a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9z"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/>'),
+  moon:SV('<path d="M20 14.2A8.5 8.5 0 0 1 9.8 4a8.5 8.5 0 1 0 10.2 10.2z"/>'),
+  apple:SV('<path d="M12 8.2c-1.4-1-3.1-1.3-4.6-.8C5 8.2 4 10.6 4.6 13.6c.7 3.6 3 6.9 5.2 6.9.9 0 1.3-.5 2.2-.5s1.3.5 2.2.5c2.2 0 4.5-3.3 5.2-6.9.6-3-.4-5.4-2.8-6.2-1.5-.5-3.2-.2-4.6.8z"/><path d="M12 8V4.5M12.5 5c.8-1.6 2.2-2.4 4-2.4"/>'),
+  bed:SV('<path d="M2.5 19.5V5M2.5 15.5h19v4M21.5 15.5V12a2.5 2.5 0 0 0-2.5-2.5h-8v6"/><path d="M5 11h3.5v2H5z"/>'),
+  star:SV('<path d="M12 3l2.7 5.8 6.3.7-4.7 4.3 1.3 6.2L12 17l-5.6 3 1.3-6.2L3 9.5l6.3-.7z"/>'),
+  starOn:SV('<path fill="currentColor" d="M12 3l2.7 5.8 6.3.7-4.7 4.3 1.3 6.2L12 17l-5.6 3 1.3-6.2L3 9.5l6.3-.7z"/>'),
+  trophy:SV('<path d="M7 3.5h10v5.5a5 5 0 0 1-10 0z"/><path d="M7 5.5H3.5V8A3.5 3.5 0 0 0 7 11.5M17 5.5h3.5V8a3.5 3.5 0 0 1-3.5 3.5M12 14v4M8 20.5h8"/>'),
+  camera:SV('<path d="M3 7.5h4l1.5-2.5h7L17 7.5h4V19H3z"/><path d="M12 16.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>'),
+  search:SV('<path d="M10.5 17a6.5 6.5 0 1 0 0-13 6.5 6.5 0 0 0 0 13z"/><path d="M15.5 15.5l5 5"/>'),
+  pen:SV('<path d="M4 20h4L19.5 8.5l-4-4L4 16z"/><path d="M13 7l4 4"/>'),
+  shield:SV('<path d="M12 2.8l8 2.9V11c0 5-3.4 8.6-8 10.2C7.4 19.6 4 16 4 11V5.7z"/><path d="M8.3 12l2.7 2.7 4.8-5"/>'),
+  phone:SV('<path d="M6.5 2.5h11v19h-11z"/><path d="M10.5 18.5h3"/>'),
+  flag:SV('<path d="M5.5 21V4M5.5 4.5h12L15 9l2.5 4.5h-12"/>'),
+  db:SV('<path d="M4 5.5c0-1.7 3.6-3 8-3s8 1.3 8 3v13c0 1.7-3.6 3-8 3s-8-1.3-8-3z"/><path d="M4 5.5c0 1.7 3.6 3 8 3s8-1.3 8-3M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/>'),
+  drag:SV('<path d="M12 3v18M3 12h18M9 6l3-3 3 3M9 18l3 3 3-3M6 9l-3 3 3 3M18 9l3 3-3 3"/>',1.8),
+  rest:SV('<path d="M3 18.5h18M5 18.5v-4.5h14v4.5M5 14v-3.5h6.5V14M15 7.5h4l-4 4h4"/>')
+});
+const TR_UP=SV('<path d="M4 17.5l6-6 3.5 3.5L20 8.5"/><path d="M15 8.5h5v5"/>',2.2),TR_DN=SV('<path d="M4 6.5l6 6 3.5-3.5L20 15.5"/><path d="M15 15.5h5v-5"/>',2.2),TR_EQ=SV('<path d="M4 12h15M15 8l4 4-4 4"/>',2.2);
+/* Skalen von 1 bis 5: Gesichter für Stimmung und Trainingsgefühl, ein Akku für die Schlafqualität (voll = erholt) */
+const FACE=['<path d="M8 17c1-1.6 2.4-2.4 4-2.4s3 .8 4 2.4"/>','<path d="M8.5 16.2l7-1.4"/>','<path d="M8.5 15.5h7"/>','<path d="M8 14.2c1 1.6 2.4 2.4 4 2.4s3-.8 4-2.4"/>','<path d="M7.5 13.5h9c-.6 2.6-2.3 4-4.5 4s-3.9-1.4-4.5-4z" fill="currentColor"/>']
+  .map(m=>SV('<path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z"/><path d="M8.6 10v.6M15.4 10v.6"/>'+m,2));
+const BATT=[0,1,2,3,4].map(n=>SV('<path d="M2.5 7.5h17v9h-17zM19.5 10.5h2v3h-2"/>'+(n?'<path fill="currentColor" stroke="none" d="'+['M4.4 9.6h2.6v4.8H4.4z','M8.1 9.6h2.6v4.8H8.1z','M11.8 9.6h2.6v4.8h-2.6z','M15.5 9.6h2.6v4.8h-2.6z'].slice(0,n).join('')+'"/>':'')));
+const scIc=(L,v)=>{const i=Math.round(num(v));return i>=1&&i<=5?L[i-1]:''};
+/* Körperkarte: die Figur blass, der trainierte Bereich voll. Dieselbe Figur mit Messlinie zeigt, wo gemessen wird. */
+const BODY_D='M10 1.2h4v4h-4zM6.4 6.4h11.2l-1 8.2H7.4zM2.6 6.4h3v8.6h-3zM18.4 6.4h3v8.6h-3zM7.6 15.4h3.9l-.3 7.4H8zM12.5 15.4h3.9l-.4 7.4h-3.2z';
+function bodyIc(hl,extra){return `<svg class="bodyic" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" opacity=".3" d="${BODY_D}"/>${hl?`<path fill="currentColor" d="${hl}"/>`:''}${extra||''}</svg>`}
+const CAT_IC={'Beine':bodyIc('M7.6 15.4h3.9l-.3 7.4H8zM12.5 15.4h3.9l-.4 7.4h-3.2z'),'Brust':bodyIc('M6.4 6.4h11.2l-.5 4H6.9z'),'Rücken':bodyIc('M6.4 6.4h5v8.2h-4zM12.6 6.4h5l-1 8.2h-4z'),
+  'Schultern':bodyIc('M2.6 6.4h5v3h-5zM16.4 6.4h5v3h-5z'),'Arme':bodyIc('M2.6 6.4h3v8.6h-3zM18.4 6.4h3v8.6h-3z'),'Bauch & Core':bodyIc('M7 10.8h10l-.45 3.8H7.45z'),
+  'Ausdauer':SV('<path d="M12 20.5l-8.2-8.3A4.8 4.8 0 0 1 12 6.4a4.8 4.8 0 0 1 8.2 5.8z"/><path d="M3 12.5h4.5l1.5-2.5 2.5 5 2-3.5h7.5"/>')};
+function catIc(c){return CAT_IC[c]||ICONS.training}
+function catIcs(L){return L.length?`<span class="catics" aria-hidden="true">${L.map(catIc).join('')}</span>`:''}
+const mLine=d=>`<path d="${d}" fill="none" stroke="currentColor" stroke-width="2.2"/>`;
+const MEAS_IC={brust:bodyIc('',mLine('M1 8.6h22')),taille:bodyIc('',mLine('M4.5 12.2h15')),huefte:bodyIc('',mLine('M5 15h14')),arm:bodyIc('',mLine('M16.6 9.4h6.8')),bein:bodyIc('',mLine('M5.8 18.6h7.6'))};
+const SLOT_IC={fr:ICONS.sunrise,mi:ICONS.sun,ab:ICONS.moon,sn:ICONS.apple};
+/* Gewohnheiten: Symbol selbst gewählt, sonst passend zum Namen, sonst nach der Art. Abstinenz bekommt einen Schrägstrich. */
+const HAB_P={check:'<path d="M4 4h16v16H4z"/><path d="M8 12.5l3 3 5.5-6"/>',tally:'<path d="M5 5v14M9 5v14M13 5v14M17 5v14M3 15l18-6"/>',
+  gauge:'<path d="M3 9.5h18v5H3z"/><path fill="currentColor" stroke="none" d="M3 9.5h11v5H3z"/>',quit:'<path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM5.6 5.6l12.8 12.8"/>',
+  drop:'<path d="M12 3c3.2 4.4 6 7.6 6 11a6 6 0 0 1-12 0c0-3.4 2.8-6.6 6-11z"/>',
+  book:'<path d="M12 6.5C10 5 7 4.5 3.5 4.5V19c3.5 0 6.5.5 8.5 2 2-1.5 5-2 8.5-2V4.5C17 4.5 14 5 12 6.5zM12 6.5V21"/>',
+  cap:'<path d="M1.5 9L12 4l10.5 5L12 14z"/><path d="M6 11.3V17c3.5 2.4 8.5 2.4 12 0v-5.7M21 9.5v5.5"/>',
+  pill:'<path d="M4.4 14.1l9.7-9.7a3.5 3.5 0 0 1 4.9 0l.6.6a3.5 3.5 0 0 1 0 4.9l-9.7 9.7a3.5 3.5 0 0 1-4.9 0l-.6-.6a3.5 3.5 0 0 1 0-4.9zM9.3 9.2l5.5 5.5"/>',
+  stretch:'<path d="M13 5.5a1.8 1.8 0 1 0 0-3.6 1.8 1.8 0 0 0 0 3.6z" fill="currentColor"/><path d="M3 21l6-5 2-6 5 3 5-3M11 10l-6-2"/>',
+  walk:'<path d="M3 17.5V8h5.5l1.5 3 5 2c3 1 6 1.5 6 4.5v1H3z"/><path d="M3 15h18.5"/>',
+  dumbbell:'<path d="M2.5 9.5v5M5.5 6.5v11M18.5 6.5v11M21.5 9.5v5M5.5 12h13"/>',
+  lotus:'<path d="M12 4c2.4 2.4 3 5.5 3 8.5s-1.4 5.5-3 7c-1.6-1.5-3-4-3-7S9.6 6.4 12 4z"/><path d="M8.7 9.3C6.5 8.3 4.2 8 2.5 8.3c0 4.7 3 9.4 9.5 11.2M15.3 9.3c2.2-1 4.5-1.3 6.2-1 0 4.7-3 9.4-9.5 11.2"/>',
+  bed:'<path d="M2.5 19.5V5M2.5 15.5h19v4M21.5 15.5V12a2.5 2.5 0 0 0-2.5-2.5h-8v6"/><path d="M5 11h3.5v2H5z"/>',
+  sun:'<path d="M12 16.5a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9z"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/>',
+  tooth:'<path d="M7.5 3.5c1.6 0 2.8.8 4.5.8s2.9-.8 4.5-.8c2.4 0 3.8 2 3.8 4.6 0 4.4-2 6-2.5 9.4L17 21h-2.5L13 15.5h-2L9.5 21H7l-.8-3.5C5.7 14.1 3.7 12.5 3.7 8.1c0-2.6 1.4-4.6 3.8-4.6z"/>',
+  coffee:'<path d="M4 9.5h13V15a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5z"/><path d="M17 11.5h1.5a2.5 2.5 0 0 1 0 5H16.5M8 3v3.5M12 3v3.5"/>',
+  leaf:'<path d="M4 20c0-9 5-15.5 16-16-.5 11-7 16-16 16zM4 20l9-9"/>',
+  candy:'<path d="M8 8.5h8v7H8z"/><path d="M8 9.5L3.5 7v10L8 14.5M16 9.5L20.5 7v10L16 14.5"/>',
+  glass:'<path d="M5.5 3.5h13L17 11a5 5 0 0 1-10 0z"/><path d="M12 16v4.5M8 20.5h8M6.5 7.5h11"/>',
+  cig:'<path d="M2.5 14.5h15v4h-15zM17.5 14.5h4v4h-4M17 4c0 2 2 2 2 4s-2 2-2 4M20.5 4c0 2 1.5 2 1.5 4"/>',
+  phone:'<path d="M6.5 2.5h11v19h-11z"/><path d="M10.5 18.5h3"/>',
+  music:'<path d="M9 18.5V5l11-2v13.5"/><path d="M6 21a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM17 19a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>',
+  heart:'<path d="M12 20.5l-8.2-8.3A4.8 4.8 0 0 1 12 6.4a4.8 4.8 0 0 1 8.2 5.8z"/>'};
+const HAB_ORD=['drop','book','cap','pill','stretch','walk','dumbbell','lotus','bed','sun','tooth','coffee','leaf','candy','glass','cig','phone','music','heart','check','tally','gauge'];
+const HAB_GUESS=[[/wasser|trink/,'drop'],[/lese|buch/,'book'],[/lern|stud|sprach|vokabel|kurs/,'cap'],[/zucker|süß|suess|nasch|schoko|kuchen/,'candy'],[/alkohol|bier|wein|schnaps/,'glass'],
+  [/rauch|zigar|nikotin|vape|dampf/,'cig'],[/vitamin|tablette|kreatin|supplement|pille|medikament|omega|magnesium/,'pill'],[/dehn|stretch|yoga|mobil/,'stretch'],
+  [/spazier|gehen|schritt|wander|walk/,'walk'],[/medit|achtsam|atem/,'lotus'],[/schlaf|bett/,'bed'],[/aufsteh|früh|frueh|sonne|morgen/,'sun'],
+  [/zahn|zähne|zaehne|floss/,'tooth'],[/kaffee|koffein|espresso/,'coffee'],[/gemüse|gemuese|obst|salat|frucht|vegan|vegetar/,'leaf'],[/musik|gitarre|klavier|instrument/,'music'],
+  [/handy|bildschirm|social|insta|tiktok|screen|smartphone|youtube/,'phone'],[/dankbar|journal|tagebuch|liebe|familie/,'heart'],[/training|sport|liegest|klimmz|gym|workout|laufen|joggen/,'dumbbell']];
+function habIcKey(h){if(h&&HAB_P[h.ic])return h.ic;const n=String(h&&h.name||'').toLowerCase();for(const [r,k] of HAB_GUESS)if(r.test(n))return k;return ({count:'tally',amount:'gauge',quit:'quit'})[h&&h.kind]||'check'}
+function habIc(h,key){const k=key||habIcKey(h);return SV((HAB_P[k]||HAB_P.check)+(h&&h.kind==='quit'&&k!=='quit'?'<path d="M3 3l18 18" stroke-width="2.3"/>':''))}
+function goalIc(g){if(g.type==='weight')return ICONS.koerper;if(g.type==='lift'){const ex=exById(g.exId);return catIc(ex&&ex.cat)}
+  if(g.type==='habit'){const h=S.habits.find(x=>x.id===g.habitId);return h?habIc(h):ICONS.check}return ICONS.flag}
+/* Veränderung zum Zeitraum davor: Pfeil und Betrag statt „+5 ggü. davor“ */
+function dArrow(x,d){const z=Math.abs(x)<Math.pow(10,-(d||0))/2;return z?TR_EQ:x>0?TR_UP:TR_DN}
+/* Wochenziel als Kästchen */
+Object.assign(ICONS,{lock:SV('<path d="M5 10.5h14v10H5zM8 10.5V7a4 4 0 0 1 8 0v3.5"/>'),up:SV('<path d="M12 19V5M6 11l6-6 6 6"/>',2.2)});
+Object.assign(ICONS,{trash:SV('<path d="M4 6.5h16M9 6.5v-3h6v3M6.5 6.5l1 14h9l1-14M10 10.5v6M14 10.5v6"/>'),undo:SV('<path d="M9 14L4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/>'),wifi:SV('<path d="M12 20.5h.1M8.5 16.5a5 5 0 0 1 7 0M5 12.5a10 10 0 0 1 14 0M1.5 8.5a15 15 0 0 1 21 0"/>')});
+/* Arten einer Gewohnheit als kleine Vorschau, so wie sie unter Heute aussehen */
+const HKIND_PV={check:()=>`<span class="pv-chk">${CHECK_IC}</span>`,count:()=>'<span class="hsq"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span>',
+  amount:()=>'<span class="pbar"><i style="width:60%"></i></span>',quit:()=>'<span class="pv-q"><b>17</b>Tage</span>'};
+const HKIND_EX={check:'z. B. Vitamine',count:'z. B. 8 Gläser Wasser',amount:'z. B. 20 Seiten',quit:'z. B. kein Zucker'};
+function wDots(n,g){g=Math.max(1,Math.min(14,g||1));return `<span class="wdots${n>=g?' met':''}" aria-hidden="true">${Array.from({length:g},(_,i)=>`<i${i<n?' class="on"':''}></i>`).join('')}</span>`}
+
 const TABS=[['training','Training'],['plaene','Trainingspläne'],['verlauf','Verlauf'],['fortschritt','Fortschritt'],['uebungen','Übungen'],['ernaehrung','Ernährung']];
 
 function banner(){
   if(bannerOff||!S.demo)return '';
-  if(realBak)return `<div class="banner"><span><b>Demo-Modus.</b> Deine eigenen Daten sind sicher beiseitegelegt. Was du hier einträgst, verschwindet beim Beenden.</span>
+  if(realBak)return `<div class="banner"><span class="bn-t">${DEMO_IC}<span><b>Demo-Modus.</b> Deine Daten liegen sicher beiseite. Was du hier einträgst, verschwindet beim Beenden.</span></span>
   <button class="btn small" data-act="demoToggle">Beenden</button></div>`;
-  return `<div class="banner"><span>Du siehst <b>Beispieldaten</b>. Lade dein Backup oder fang neu an.</span>
+  return `<div class="banner"><span class="bn-t">${DEMO_IC}<span>Du siehst <b>Beispieldaten</b>.</span></span>
   <span class="bn-btns"><button class="btn small" data-act="tab" data-v="daten">Backup laden</button><button class="btn small" data-act="clearDemo">${confirmKey==='clearDemo'?'Beispieldaten wirklich löschen?':'Neu anfangen'}</button></span></div>`;
 }
 
@@ -1751,13 +2068,13 @@ function curRm(exId,d){
 function predHtml(rm,w){
   if(!rm||!(w>0))return '';
   const pct=w/rm.v;
-  if(pct>1.005)return '<span class="pred top"><b>Über deinem 1RM</b> – Rekordversuch</span>';
+  if(pct>1.005)return `<span class="pred top">${ICONS.trophy}<b>Über deinem 1RM</b> · Rekordversuch</span>`;
   const r=Math.max(1,30*(rm.v/w-1));
-  if(r<1.5)return '<span class="pred top">Prognose: <b>1 Wdh</b> · am Limit</span>';
-  if(r>30)return '<span class="pred">Prognose: <b>30+ Wdh</b> · sehr grob</span>';
+  if(r<1.5)return `<span class="pred top">${ICONS.ziel}<b>1 Wdh</b> · am Limit</span>`;
+  if(r>30)return `<span class="pred">${ICONS.ziel}<b>30+ Wdh</b> · sehr grob</span>`;
   const sp=pct>=.85?.1:pct>=.75?.15:pct>=.6?.22:.3;
   const lo=Math.max(1,Math.floor(r*(1-sp))),hi=Math.max(lo+1,Math.ceil(r*(1+sp)));
-  return `<span class="pred">Prognose: <b>${lo}–${hi} Wdh</b> · ${Math.round(pct*100)} % vom 1RM${pct<.6?' · grob':''}</span>`;
+  return `<span class="pred" title="Prognose">${ICONS.ziel}<b>${lo}–${hi} Wdh</b> · ${Math.round(pct*100)} % vom 1RM${pct<.6?' · grob':''}</span>`;
 }
 function perf(){return S.mode==='perf'}
 function mmss(t){t=Math.max(0,Math.round(t));return Math.floor(t/60)+':'+pad(t%60)}
@@ -1774,9 +2091,9 @@ function viewSetup(d){
   return `
   <section class="section">
    <div class="card section setup">
-    <label class="field"><span class="eyebrow">Datum</span><input class="in" type="date" id="f-date" data-f="date" value="${d.date}"></label>
+    <label class="field"><span class="eyebrow eyic">${ICONS.verlauf}Datum</span><input class="in" type="date" id="f-date" data-f="date" value="${d.date}"></label>
     ${!cont&&S.plans.length?setupPlanChips(d):''}
-    <label class="field"><span class="eyebrow">Körpergewicht (kg)</span>${bwInput(d)}${prev?`<span class="small muted">Zuletzt ${fmt(num(prev.bw))} kg</span>`:''}</label>
+    <label class="field"><span class="eyebrow eyic">${ICONS.koerper}Körpergewicht (kg)</span>${bwInput(d)}${prev?`<span class="small muted">Zuletzt ${fmt(num(prev.bw))} kg</span>`:''}</label>
    </div>
    ${flash?`<div class="err">${flash}</div>`:''}
    <button class="btn primary block big" data-act="startSession">${cont?'Weiter zum Training':'Training erstellen'}</button>
@@ -1833,7 +2150,7 @@ setInterval(()=>{if(!S.draft){restTick();return}
 function repc(i,j,key,val){
   return `<div class="kgc"><button class="nudge" data-act="nudge" data-e="${i}" data-s="${j}" data-k="${key}" data-d="-1" aria-label="1 Wiederholung weniger">−</button>${wheel(i,j,key,val,'wdh','Wiederholungen Satz '+(j+1))}<button class="nudge" data-act="nudge" data-e="${i}" data-s="${j}" data-k="${key}" data-d="1" aria-label="1 Wiederholung mehr">+</button></div>`;
 }
-function chk(i,j,s){return `<button class="chk${s.done?' on':''}" data-act="toggleDone" data-e="${i}" data-s="${j}" aria-pressed="${!!s.done}" aria-label="Satz ${j+1} ${s.done?'erledigt, tippen zum Zurücknehmen':'abhaken'}">${s.done?'✓':j+1}</button>`}
+function chk(i,j,s){return `<button class="chk${s.done?' on':''}" data-act="toggleDone" data-e="${i}" data-s="${j}" aria-pressed="${!!s.done}" aria-label="Satz ${j+1} ${s.done?'erledigt, tippen zum Zurücknehmen':'abhaken'}">${s.done?VCHK:j+1}</button>`}
 function setRow(ex,k,one,i,j,s){const h=setRowRaw(ex,k,one,i,j,s);
   return s.done?h.replace(/<(button|select|input)(?![^>]*class="chk)/g,'<$1 disabled'):h}
 function setRowRaw(ex,k,one,i,j,s){
@@ -1878,7 +2195,7 @@ function liveHdr(d){
 }
 function restSettings(){
   const on=S.restOn!==false;
-  return `<div class="card restset"><div class="rs-l"><b>Pausentimer</b><span class="small muted">${on?'Startet, sobald du einen Satz abhakst':'Ausgeschaltet'}</span></div>
+  return `<div class="card restset${on?'':' off'}"><div class="rs-l">${CLOCK_IC}<b>Pausentimer</b></div>
    ${on?`<div class="goalc"><button class="nudge" data-act="restSec" data-d="-15" aria-label="15 Sekunden kürzer">−</button><b class="num">${mmss(S.restSec||90)}</b><button class="nudge" data-act="restSec" data-d="15" aria-label="15 Sekunden länger">+</button></div>`:''}
    <button class="switch${on?' on':''}" data-act="restToggle" role="switch" aria-checked="${on}" aria-label="Pausentimer"><span></span></button></div>`;
 }
@@ -1888,12 +2205,12 @@ function exCard(d,i){
   const lt=lastFor(en.exId,d.id);const dn=en.sets.filter(s=>s.done).length;const len=d.entries.length;
   const rows=en.sets.map((s,j)=>setRow(ex,k,one,i,j,s)).join('');
   const next=i+1<len?exById(d.entries[i+1].exId):null;const ck='delEntry:'+i;
-  return `<div class="card ex${dn&&dn===en.sets.length?' alldone':''}" id="ex-${i}"><div class="ex-head"><div><span class="eyebrow">Übung ${i+1} von ${len}</span><h3>${esc(ex.name)} <span class="cnt num">${dn}/${en.sets.length}</span></h3>${entVarHtml(ex,i)}
-      <div class="last">${(()=>{if(ex.kind!=='kraft')return '';const rm=curRm(ex.id,d);return rm?'1RM ≈ '+fmt(Math.round(rm.v*2)/2)+' kg'+(rm.old?' (älter)':'')+' · ':''})()}${lt?'Letztes Mal ('+parseD(lt.s.date).getDate()+'.'+(parseD(lt.s.date).getMonth()+1)+'.): '+esc(formatSets(ex.kind,lt.e.sets)):'Erstes Mal – viel Erfolg!'}</div></div>
+  return `<div class="card ex${dn&&dn===en.sets.length?' alldone':''}" id="ex-${i}"><div class="ex-head"><div><span class="eyebrow exey">${ex.cat?catIc(ex.cat)+esc(ex.cat)+'<i>·</i>':''}<span class="num">${i+1}/${len}</span></span><h3>${esc(ex.name)} <span class="cnt num">${dn}/${en.sets.length}</span></h3>${entVarHtml(ex,i)}
+      <div class="last">${(()=>{if(ex.kind!=='kraft')return '';const rm=curRm(ex.id,d);return rm?`<span>${ICONS.trophy}1RM ≈ ${fmt(Math.round(rm.v*2)/2)} kg${rm.old?' (älter)':''}</span>`:''})()}${lt?`<span title="Letztes Mal">${HIST_IC}${parseD(lt.s.date).getDate()}.${parseD(lt.s.date).getMonth()+1}.: ${esc(formatSets(ex.kind,lt.e.sets))}</span>`:`<span>${ICONS.star}Erstes Mal</span>`}</div></div>
       ${confirmKey===ck?`<button class="btn small danger" data-act="delEntry" data-e="${i}">Entfernen?</button>`:`<button class="iconbtn" data-act="delEntry" data-e="${i}" aria-label="${esc(exFull(ex))} aus dem Training entfernen">✕</button>`}</div>
       ${setHead(ex)}
       <div class="sets">${rows}</div>
-      <div class="setbtns"><button class="btn small ghost" data-act="addSet" data-e="${i}">+ Satz</button>${en.sets.length>1?`<button class="btn small ghost" data-act="delLastSet" data-e="${i}">− Satz</button>`:''}</div>
+      <div class="setbtns"><button class="btn small ghost" data-act="addSet" data-e="${i}">${PLUS_IC}Satz</button>${en.sets.length>1?`<button class="btn small ghost" data-act="delLastSet" data-e="${i}">− Satz</button>`:''}</div>
       <div class="stepnav">${i>0?`<button class="btn ghost" data-act="goEx" data-i="${i-1}" aria-label="Vorherige Übung">‹</button>`:''}
        <button class="btn ${dn===en.sets.length?'primary':''} grow" data-act="goEx" data-i="${i+1}">${next?'Weiter: '+esc(exFull(next))+' ›':'Weiter ›'}</button></div></div>`;
 }
@@ -1901,7 +2218,7 @@ function endStep(d){
   const len=d.entries.length;
   return `<div class="card section endstep">
     <div><span class="eyebrow">${len?'Ende der Liste':'Start'}</span><h3>${len?'Alle Übungen durch':'Wähle deine erste Übung'}</h3>
-    <div class="small muted">${len?'Hänge noch eine Übung an oder schließe das Training ab.':'Tippe nach jedem Satz auf die Nummer, um ihn abzuhaken. Danach geht es automatisch weiter.'}</div></div>
+    ${len?'':`<div class="howto" role="img" aria-label="Nach jedem Satz die Nummer antippen, dann ist er abgehakt"><span class="chk">1</span>${CHR}<span class="chk on">${VCHK}</span>${S.restOn!==false?CHR+CLOCK_IC:''}</div>`}</div>
     ${S.exercises.length?exQuick(d):
      `<div class="empty">Du hast noch keine Übungen.<button class="btn" data-act="tab" data-v="uebungen">Übung anlegen</button></div>`}
     ${len?`<button class="btn primary block big" data-act="endSession">${d.id?'Weiter zum Speichern':'Training abschließen'}</button>
@@ -1913,7 +2230,7 @@ function viewLive(d){
   if(d.cur==null||d.cur>len||d.cur<0)d.cur=Math.min(len,Math.max(0,d.cur||0));
   const cur=d.cur;
   const strip=len?`<div class="steps" aria-label="Übungen in diesem Training">${d.entries.map((en,i)=>{const ex=exById(en.exId);const dn=entryDone(en);
-      return `<button class="step${i===cur?' cur':''}${dn?' done':''}" data-act="goEx" data-i="${i}"${i===cur?' aria-current="step"':''}>${dn?'✓ ':''}${esc(ex?exFull(ex):'?')}</button>`}).join('')}
+      return `<button class="step${i===cur?' cur':''}${dn?' done':''}" data-act="goEx" data-i="${i}"${i===cur?' aria-current="step"':''}>${dn?VCHK:''}${esc(ex?exFull(ex):'?')}</button>`}).join('')}
       <button class="step add${cur===len?' cur':''}" data-act="goEx" data-i="${len}">+ Übung</button></div>`:'';
   return `
   ${restSettings()}
@@ -1934,17 +2251,17 @@ function durEditor(cur){const h=Math.min(24,Math.floor(cur/60)),m=cur%60;
 function viewFinish(d){
   let all=0,done=0,open=0;for(const e of d.entries)for(const s of e.sets){all++;if(s.done)done++;else if(setFilled(s))open++}
   const dur=finDur(d);
-  const tiles=[`<button class="tile tbtn-tile${durOpen?' on':''}" data-act="durEdit" aria-expanded="${durOpen}" aria-label="Dauer ändern"><div class="v num">${dur>=60?Math.floor(dur/60)+':'+pad(dur%60)+'<small>h</small>':(dur||'–')+'<small>Min</small>'}</div><div class="k">Dauer ✎</div></button>`,
+  const tiles=[`<button class="tile tbtn-tile${durOpen?' on':''}" data-act="durEdit" aria-expanded="${durOpen}" aria-label="Dauer ändern"><div class="v num">${dur>=60?Math.floor(dur/60)+':'+pad(dur%60)+'<small>h</small>':(dur||'–')+'<small>Min</small>'}</div><div class="k">Dauer ${ICONS.pen}</div></button>`,
     `<div class="tile"><div class="v num">${done}<small>/ ${all}</small></div><div class="k">Sätze erledigt</div></div>`];
   if(perf()){const k=sessKcalDetail(d);tiles.push(`<div class="tile"><div class="v num">${k.noBw?'–':k.kcal}<small>kcal</small></div><div class="k">${k.noBw?'Körpergewicht fehlt':'geschätzt'}</div></div>`)}
   return `
   <section class="section"><h2 class="big">Geschafft!</h2>
    <div class="tiles" style="grid-template-columns:repeat(${tiles.length},minmax(0,1fr))">${tiles.join('')}</div>
    ${durOpen?durEditor(dur):''}
-   ${open?`<div class="banner"><span><b>${open} ${open===1?'Satz ist':'Sätze sind'} nicht abgehakt</b> und ${open===1?'wird':'werden'} nicht gespeichert.</span><button class="btn small" data-act="allDone">Alle abhaken</button></div>`:''}
+   ${open?`<div class="banner"><span class="bn-t">${WARN_IC}<span><b>${open} ${open===1?'Satz ist':'Sätze sind'} nicht abgehakt</b> und ${open===1?'wird':'werden'} nicht gespeichert.</span></span><button class="btn small" data-act="allDone">Alle abhaken</button></div>`:''}
    <div class="card section">
     <div class="field"><span class="eyebrow">Wie war dein Training?</span>
-     <div class="feel">${FEEL.map((f,i)=>`<button data-act="feel" data-v="${i+1}" aria-pressed="${d.feel===i+1}"><b>${i+1}</b><span>${f}</span></button>`).join('')}</div></div>
+     <div class="feel">${FEEL.map((f,i)=>`<button data-act="feel" data-v="${i+1}" aria-pressed="${d.feel===i+1}">${FACE[i]}<span>${f}</span></button>`).join('')}</div></div>
     <label class="field"><span class="eyebrow">Notiz (optional)</span><input class="in" id="f-note" data-f="note" value="${esc(d.note||'')}" placeholder="z. B. Knie leicht gezwickt"></label>
    </div>
    ${asPlanCard(d)}
@@ -1967,7 +2284,7 @@ function calendar(){
     for(let i=0;i<7;i++){const d=new Date(w);d.setDate(d.getDate()+i);const k=ymd(d);
       const out=d.getMonth()!==first.getMonth();
       cells+=`<div class="cd${out?' out':''}${days.has(k)?' tr':''}${k===tk?' today':''}"><span>${d.getDate()}</span></div>`}
-    rows+=`<div class="cw${met?' met':''}"><div class="kw"><b>KW ${isoWeek(w)}</b><span>${met?'✓':cnt+'/'+goal}</span></div>${cells}</div>`;
+    rows+=`<div class="cw${met?' met':''}"><div class="kw"><b>KW ${isoWeek(w)}</b><span>${met?VCHK:cnt+'/'+goal}</span></div>${cells}</div>`;
   }
   const cw=ymd(monday(now));const cc=wd[cw]?wd[cw].size:0;
   let streak=0;const m=monday(now);if(!((wd[cw]?wd[cw].size:0)>=goal))m.setDate(m.getDate()-7);
@@ -1981,7 +2298,7 @@ function calendar(){
     <div class="cal-nav"><button class="iconbtn" data-act="cal" data-d="-1" aria-label="Voriger Monat">‹</button><b>${MON[first.getMonth()]} ${first.getFullYear()}</b><button class="iconbtn" data-act="cal" data-d="1" aria-label="Nächster Monat"${calOff>=0?' disabled':''}>›</button></div>
     <div class="cw head"><div></div>${['Mo','Di','Mi','Do','Fr','Sa','So'].map(x=>`<div class="cd h">${x}</div>`).join('')}</div>
     ${rows}
-    <div class="small muted">${streak?`Ziel ${streak} ${streak===1?'Woche':'Wochen'} in Folge erreicht. `:''}Grüne Woche = Ziel geschafft. Ausgefüllter Kreis = Trainingstag.</div>
+    <div class="small muted">${streak?`Ziel ${streak} ${streak===1?'Woche':'Wochen'} in Folge erreicht. `:''}</div><div class="legend"><span><i class="lg-wk"></i>Woche mit Ziel</span><span><i class="lg-k"></i>Trainingstag</span></div>
   </div>`;
 }
 function sessCard(x){
@@ -1989,7 +2306,7 @@ function sessCard(x){
   const lines=x.entries.map(e=>{const ex=exById(e.exId);return ex?`<div class="line"><b>${exNameH(ex)}</b> <span class="muted">${esc(formatSets(ex.kind,e.sets))}</span></div>`:''}).join('');
   const vol=sessVolume(x);
   return `<div class="sess" role="button" tabindex="0" data-act="selSess" data-id="${x.id}" aria-label="Training vom ${d.getDate()}.${d.getMonth()+1}. auswählen"><div class="day"><b class="num">${d.getDate()}</b><span>${WD[d.getDay()]}</span></div>
-    <div class="body">${lines}<div class="meta">${sessIssues(x).length?'<span class="warnchip">'+WARN_IC+'Prüfen</span>':''}${x.feel?`<span>Gefühl: ${FEEL[x.feel-1]}</span>`:''}${x.dur?`<span class="num">${x.dur} Min</span>`:''}${perf()&&sessKcal(x)?`<span class="num">≈ ${sessKcal(x)} kcal</span>`:''}${perf()&&vol?`<span class="num">${fmt(vol,0)} kg bewegt</span>`:''}${x.bw?`<span class="num">${fmt(num(x.bw))} kg KG</span>`:''}${x.note?`<span>${esc(x.note)}</span>`:''}</div></div><button class="splan" data-act="sessPlan" data-id="${x.id}" tabindex="-1" aria-label="Als Trainingsplan speichern">${ICONS.plaene}</button><button class="spen" data-act="edit" data-id="${x.id}" tabindex="-1" aria-label="Training bearbeiten"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/></svg></button></div>`;
+    <div class="body">${lines}<div class="meta">${sessIssues(x).length?'<span class="warnchip">'+WARN_IC+'Prüfen</span>':''}${x.feel?`<span title="Gefühl: ${FEEL[x.feel-1]}">${scIc(FACE,x.feel)}${FEEL[x.feel-1]}</span>`:''}${x.dur?`<span class="num">${CLOCK_IC}${x.dur} Min</span>`:''}${perf()&&sessKcal(x)?`<span class="num">${ICONS.bedarf}≈ ${sessKcal(x)} kcal</span>`:''}${perf()&&vol?`<span class="num">${ICONS.training}${fmt(vol,0)} kg</span>`:''}${x.bw?`<span class="num" title="Körpergewicht">${ICONS.koerper}${fmt(num(x.bw))} kg</span>`:''}${x.note?`<span>${esc(x.note)}</span>`:''}</div></div><button class="splan" data-act="sessPlan" data-id="${x.id}" tabindex="-1" aria-label="Als Trainingsplan speichern">${ICONS.plaene}</button><button class="spen" data-act="edit" data-id="${x.id}" tabindex="-1" aria-label="Training bearbeiten"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/></svg></button></div>`;
 }
 function groupList(list){let h='',cur='';for(const x of list){const d=parseD(x.date);const mk=MON[d.getMonth()]+' '+d.getFullYear();if(mk!==cur){h+=`<div class="hist-month">${mk}</div>`;cur=mk}h+=sessCard(x)}return h}
 
@@ -2069,7 +2386,7 @@ function tChart(series,opt={}){
   const x=t=>t1===t0?L+(W-L-R)/2:L+(W-L-R)*(t-t0)/sp;
   const y=v=>{const f=(v-lo)/((hi-lo)||1);return T+(H-T-B)*(opt.invert?f:1-f)};
   const fy=opt.fy||(v=>fmt(v));const X=v=>x(v).toFixed(1),Y=v=>y(v).toFixed(1);
-  let g='';for(const v of tk)g+=`<line class="grid" x1="${L}" x2="${W-R}" y1="${Y(v)}" y2="${Y(v)}"/><text x="${L-6}" y="${(y(v)+3.5).toFixed(1)}" text-anchor="end">${fy(v)}</text>`;
+  let g='';for(const v of tk)g+=`<line class="grid" x1="${L}" x2="${W-R}" y1="${Y(v)}" y2="${Y(v)}"/>`+(opt.yIc?opt.yIc(v).replace('<svg ',`<svg class="yic" x="${L-25}" y="${(y(v)-9).toFixed(1)}" width="18" height="18" `):`<text x="${L-6}" y="${(y(v)+3.5).toFixed(1)}" text-anchor="end">${fy(v)}</text>`);
   const xs=t1===t0?[[t0,'middle']]:sp>=14?[[t0,'start'],[(t0+t1)/2,'middle'],[t1,'end']]:[[t0,'start'],[t1,'end']];
   const xl=xs.map(([t,a])=>`<text x="${X(t)}" y="${H-8}" text-anchor="${a}">${nDate(t)}</text>`).join('');
   let b='';
@@ -2143,7 +2460,7 @@ function feelCard(R){
     else if(d>=0.5){cls='up';msg=`Dein Gefühl ist in den letzten 3 Wochen gestiegen (Ø ${fmt(a,1)} statt ${fmt(b,1)}).`}
     else msg=`Dein Gefühl ist stabil (Ø ${fmt(a,1)} in den letzten 3 Wochen).`}
   else msg=rc.length+bf.length?'Noch zu wenige Bewertungen für einen Trend. Bewerte deine Trainings beim Abschließen.':'Bewerte deine Trainings beim Abschließen, dann siehst du hier, wie sich dein Gefühl entwickelt.';
-  const ch=pts.length>=2?tChart([{pts,dots:true}],{min:1,max:5,ticks:[1,2,3,4,5],fy:v=>FEEL[v-1],h:160,label:'Gefühl im Verlauf'}):'';
+  const ch=pts.length>=2?tChart([{pts,dots:true}],{min:1,max:5,ticks:[1,2,3,4,5],fy:v=>FEEL[v-1],yIc:v=>FACE[v-1],h:160,l:34,label:'Gefühl im Verlauf'}):'';
   return `<div class="card section"><div><b>Gefühl</b><div class="small muted">Ø Bewertung pro ${R.per}</div></div>${ch}<div class="small${cls?' trend '+cls:' muted'}">${msg}</div></div>`;
 }
 function planCard(R){
@@ -2317,14 +2634,14 @@ function viewPlaene(){
   }
   const cards=S.plans.map(pl=>{const names=pl.items.map(it=>{const ex=exById(it.exId);return ex?`<li><span>${exNameH(ex)}</span><span class="num muted">${it.sets} ${it.sets===1?'Satz':'Sätze'}</span></li>`:''}).join('');
     const used=S.sessions.filter(x=>x.planId===pl.id).length;
-    return `<div class="card section plan"><div class="ex-head"><div><h3>${esc(pl.name)}</h3><div class="small muted">${pl.items.length} ${pl.items.length===1?'Übung':'Übungen'}${used?' · '+used+'× trainiert':''}</div></div>
+    return `<div class="card section plan"><div class="ex-head"><div><h3>${esc(pl.name)}</h3><div class="small muted pmeta">${catIcs(entCats(pl.items))}<span>${pl.items.length} ${pl.items.length===1?'Übung':'Übungen'}${used?' · '+used+'× trainiert':''}</span></div></div>
      <button class="bmk${pl.pinned?' on':''}" data-act="pinPlan" data-id="${pl.id}" aria-pressed="${!!pl.pinned}" aria-label="${pl.pinned?'Nicht mehr anheften':'Unter Heute und Training anheften'}"><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M6 3h12v18l-6-4.5L6 21z"/></svg></button></div>
      <ul class="pl">${names}</ul>
      <button class="btn primary" data-act="startPlan" data-id="${pl.id}">${PLAY_IC}Training mit diesem Plan</button>
      <div class="row"><button class="btn small ghost" data-act="editPlan" data-id="${pl.id}">Bearbeiten</button>
       <button class="btn small ${confirmKey==='delPlan:'+pl.id?'danger':'ghost'}" data-act="delPlan" data-id="${pl.id}">${confirmKey==='delPlan:'+pl.id?'Wirklich löschen?':'Löschen'}</button></div></div>`}).join('');
   return `${banner()}<button class="btn primary block big" data-act="newPlan">+ Neuer Trainingsplan</button>
-   ${cards||'<div class="card empty"><b style="color:var(--ink)">Noch keine Trainingspläne</b>Lege einen Plan mit deinen Übungen und Sätzen an. Beim nächsten Training wählst du ihn aus und alles ist schon eingetragen.</div>'}`;
+   ${cards||`<div class="card empty"><span class="emp-ic">${ICONS.plaene}</span><b style="color:var(--ink)">Noch keine Trainingspläne</b>Einmal anlegen, dann mit einem Tipp starten.</div>`}`;
 }
 /* ---------- Ernährung ----------
    Grundumsatz: Mifflin-St-Jeor. Alltag: PAL-Faktor ohne Sport (angelehnt an die DGE-Werte).
@@ -2558,29 +2875,27 @@ function quitDays(h,k){return h.since?Math.max(0,dayN(k)-dayN(h.since)):0}
 function habSub(h){if(h.kind==='check')return 'einmal am Tag';if(h.kind==='quit')return h.since?'ohne seit '+dmy(h.since):'Abstinenz';return 'Ziel '+fmt(num(h.target)||1)+' '+(h.unit||(h.kind==='count'?'mal':''))}
 function habDaysTxt(h){if(h.kind==='quit'||!Array.isArray(h.days)||!h.days.length||h.days.length===7)return '';return ' · '+[1,2,3,4,5,6,0].filter(d=>h.days.includes(d)).map(d=>WD[d]).join(', ')}
 function habRow(h,k){
-  const v=habVal(h,k),done=habDone(h,k),id=h.id,name=esc(h.name);
-  if(h.kind==='check')return `<div class="hrow${done?' done':''}"><div class="hr-l"><b>${name}</b><span>${done?'Erledigt':'Offen'}</span></div><button class="hchk${done?' on':''}" data-act="habTog" data-id="${id}" aria-pressed="${done}" aria-label="${name} ${done?'zurücknehmen':'abhaken'}">${CHECK_IC}</button></div>`;
+  const v=habVal(h,k),done=habDone(h,k),id=h.id,name=esc(h.name),ic=`<span class="hic" aria-hidden="true">${habIc(h)}</span>`;
+  if(h.kind==='check')return `<div class="hrow${done?' done':''}">${ic}<div class="hr-l"><b>${name}</b></div><button class="hchk${done?' on':''}" data-act="habTog" data-id="${id}" aria-pressed="${done}" aria-label="${name} ${done?'zurücknehmen':'abhaken'}">${CHECK_IC}</button></div>`;
   if(h.kind==='quit'){const rel=v===-1,n=rel?0:quitDays(h,k),ck='habRelapse:'+id;
-    return `<div class="hrow${rel?'':' done'}"><div class="hr-l"><b>${name}</b><span>${rel?'Rückfall an diesem Tag':h.since?'ohne seit '+dmy(h.since):''}</span>
+    return `<div class="hrow${rel?' rel':' done'}">${ic}<div class="hr-l"><b>${name}</b><span>${rel?'Rückfall an diesem Tag':h.since?'seit '+dmy(h.since):''}</span>
       ${k===today()?(rel?`<button class="lnk" data-act="habUnrelapse" data-id="${id}">Zurücknehmen</button>`:`<button class="lnk lnk-bad" data-act="habRelapse" data-id="${id}">${confirmKey===ck?'Wirklich Rückfall eintragen?':'Rückfall eintragen'}</button>`):''}</div>
       <div class="qcount"><b class="num">${n}</b><span>${n===1?'Tag':'Tage'}</span></div></div>`}
   const t=Math.max(1,num(h.target)||1),u=esc(h.unit||(h.kind==='count'?'mal':'')),val=Math.max(0,num(v)),pct=Math.min(100,val/t*100).toFixed(1);
   if(h.kind==='count'){const vis=t<=12?`<div class="hsq" aria-hidden="true">${Array.from({length:t},(_,i)=>`<i class="${i<val?'on':''}"></i>`).join('')}</div>`:`<div class="pbar" aria-hidden="true"><i style="width:${pct}%"></i></div>`;
-    return `<div class="hrow${done?' done':''}"><div class="hr-l"><b>${name}</b><span class="num">${fmt(val)} von ${fmt(t)} ${u}</span>${vis}</div>
+    return `<div class="hrow${done?' done':''}">${ic}<div class="hr-l"><b>${name}</b><span class="num">${fmt(val)} / ${fmt(t)} ${u}</span>${vis}</div>
       <div class="hamt"><button class="nudge" data-act="habInc" data-id="${id}" data-d="-1" aria-label="${name}: eins weniger">−</button><button class="nudge plus" data-act="habInc" data-id="${id}" data-d="1" aria-label="${name}: eins mehr">+</button></div></div>`}
   const st=num(h.step)||Math.max(1,Math.round(t/4));
-  return `<div class="hrow${done?' done':''}"><div class="hr-l"><b>${name}</b><span class="num">${fmt(val)} von ${fmt(t)} ${u}</span><div class="pbar" aria-hidden="true"><i style="width:${pct}%"></i></div></div>
+  return `<div class="hrow${done?' done':''}">${ic}<div class="hr-l"><b>${name}</b><span class="num">${fmt(val)} / ${fmt(t)} ${u}</span><div class="pbar" aria-hidden="true"><i style="width:${pct}%"></i></div></div>
     <div class="hamt"><button class="nudge" data-act="habInc" data-id="${id}" data-d="${-st}" aria-label="${name}: ${fmt(st)} weniger">−</button><input class="hin num" type="text" inputmode="decimal" id="hv-${id}" data-hab="${id}" value="${val?fmt(val):''}" placeholder="0" aria-label="${name} in ${u}"><button class="nudge plus" data-act="habInc" data-id="${id}" data-d="${st}" aria-label="${name}: ${fmt(st)} mehr">+</button></div></div>`;
 }
 function habitsCard(k){
   const act=S.habits.filter(h=>!h.arch),due=act.filter(h=>habitDue(h,k));
-  if(!act.length)return `<div class="card pane"><div class="pane-h"><span class="eyebrow">Gewohnheiten</span></div>
-    <div class="small muted">Alles Kleine läuft hier: Wasser, Lesen, Lernen oder Tage ohne Zucker. Tippe eine Vorlage an oder leg eine eigene an.</div>
-    <div class="sugg">${H_SUGG.slice(0,6).map((s,i)=>`<button data-act="habAddSugg" data-i="${i}">+ ${esc(s.name)}</button>`).join('')}</div>
-    <button class="btn small" data-act="tab" data-v="gewohnheiten">Eigene Gewohnheit</button></div>`;
+  if(!act.length)return `<div class="card pane"><div class="pane-h"><span class="eyebrow">${ICONS.check}Gewohnheiten</span><button class="lnk" data-act="tab" data-v="gewohnheiten">Eigene</button></div>
+    <div class="sugg">${H_SUGG.slice(0,6).map((s,i)=>`<button data-act="habAddSugg" data-i="${i}">${habIc(s)}${esc(s.name)}</button>`).join('')}</div></div>`;
   const dn=due.filter(h=>habDone(h,k)).length;
-  return `<div class="card pane"><div class="pane-h"><span class="eyebrow">Gewohnheiten <span class="cnt num">${dn}/${due.length}</span></span><button class="lnk" data-act="tab" data-v="gewohnheiten">Verwalten</button></div>
-    ${due.length?`<div class="hlist">${due.map(h=>habRow(h,k)).join('')}</div>`:'<div class="small muted">An diesem Tag steht keine Gewohnheit an.</div>'}</div>`;
+  return `<div class="card pane"><div class="pane-h"><span class="eyebrow">${ICONS.check}Gewohnheiten <span class="cnt num">${dn}/${due.length}</span></span><button class="lnk" data-act="tab" data-v="gewohnheiten">Verwalten</button></div>
+    ${due.length?`<div class="hlist">${due.map(h=>habRow(h,k)).join('')}</div>`:'<div class="small muted">An diesem Tag steht nichts an.</div>'}</div>`;
 }
 let habEdit=null;
 function viewHabits(){
@@ -2588,16 +2903,17 @@ function viewHabits(){
   const act=S.habits.filter(h=>!h.arch),arch=S.habits.filter(h=>h.arch),names=new Set(S.habits.map(h=>h.name.toLowerCase()));
   const sug=H_SUGG.map((s,i)=>({s,i})).filter(o=>!names.has(o.s.name.toLowerCase()));
   return `<button class="btn primary block big" data-act="newHab">+ Neue Gewohnheit</button>
-   ${sug.length?`<div class="grp"><span class="eyebrow">Vorlagen</span><div class="sugg">${sug.map(o=>`<button data-act="habAddSugg" data-i="${o.i}">+ ${esc(o.s.name)}</button>`).join('')}</div></div>`:''}
+   ${sug.length?`<div class="grp"><span class="eyebrow">Vorlagen</span><div class="sugg">${sug.map(o=>`<button data-act="habAddSugg" data-i="${o.i}">${habIc(o.s)}${esc(o.s.name)}</button>`).join('')}</div></div>`:''}
    ${act.length?`<div class="card pane"><div class="pane-h"><span class="eyebrow">Deine Gewohnheiten <span class="cnt">${act.length}</span></span></div><div class="plist">${act.map((h,i)=>`<div class="pitem"><div class="pmove"><button class="iconbtn" data-act="habMove" data-id="${h.id}" data-d="-1" aria-label="Nach oben"${i===0?' disabled':''}>↑</button><button class="iconbtn" data-act="habMove" data-id="${h.id}" data-d="1" aria-label="Nach unten"${i===act.length-1?' disabled':''}>↓</button></div>
-     <div class="nm"><b>${esc(h.name)}</b><span class="small muted">${HKIND[h.kind][0]} · ${esc(habSub(h))}${habDaysTxt(h)}</span></div><button class="btn small ghost" data-act="editHab" data-id="${h.id}">Bearbeiten</button></div>`).join('')}</div></div>`
-     :'<div class="card empty"><b>Noch keine Gewohnheiten</b>Tippe oben eine Vorlage an oder leg eine eigene an. Sie erscheinen dann jeden Tag unter Heute.</div>'}
-   ${arch.length?`<div class="card pane"><div class="pane-h"><span class="eyebrow">Pausiert</span></div><div class="plist">${arch.map(h=>`<div class="pitem"><div class="nm"><b>${esc(h.name)}</b><span class="small muted">${HKIND[h.kind][0]}</span></div><button class="btn small ghost" data-act="unarchHab" data-id="${h.id}">Fortsetzen</button></div>`).join('')}</div></div>`:''}`;
+     <span class="hic" aria-hidden="true">${habIc(h)}</span><div class="nm"><b>${esc(h.name)}</b><span class="small muted">${HKIND[h.kind][0]} · ${esc(habSub(h))}${habDaysTxt(h)}</span></div><button class="iconbtn edbtn" data-act="editHab" data-id="${h.id}" aria-label="${esc(h.name)} bearbeiten">${ICONS.pen}</button></div>`).join('')}</div></div>`
+     :`<div class="card empty"><span class="emp-ic">${ICONS.check}</span><b>Noch keine Gewohnheiten</b></div>`}
+   ${arch.length?`<div class="card pane"><div class="pane-h"><span class="eyebrow">Pausiert</span></div><div class="plist">${arch.map(h=>`<div class="pitem"><span class="hic" aria-hidden="true">${habIc(h)}</span><div class="nm"><b>${esc(h.name)}</b><span class="small muted">${HKIND[h.kind][0]}</span></div><button class="btn small ghost" data-act="unarchHab" data-id="${h.id}">Fortsetzen</button></div>`).join('')}</div></div>`:''}`;
 }
 function habForm(){const h=habEdit,k=h.kind||'check',days=Array.isArray(h.days)&&h.days.length?h.days:[0,1,2,3,4,5,6];
   return `<section class="section"><div class="card section">
    <label class="field"><span class="eyebrow">Name</span><input class="in" id="hfName" data-hf="name" maxlength="40" value="${esc(h.name||'')}" placeholder="z. B. Wasser, Lesen, Kein Zucker"></label>
-   <div class="field"><span class="eyebrow">Art</span><div class="seg" role="group" aria-label="Art">${Object.entries(HKIND).map(([v,l])=>`<button data-act="habKind" data-v="${v}" aria-pressed="${k===v}">${l[0]}</button>`).join('')}</div><span class="small muted">${HKIND[k][1]}</span></div>
+   <div class="field"><span class="eyebrow">Art</span><div class="ktiles hkinds" role="group" aria-label="Art">${Object.entries(HKIND).map(([v,l])=>`<button class="ktile" data-act="habKind" data-v="${v}" aria-pressed="${k===v}" aria-label="${l[0]}: ${esc(l[1])}"><span class="pv" aria-hidden="true">${HKIND_PV[v]()}</span><b>${l[0]}</b><span>${HKIND_EX[v]}</span></button>`).join('')}</div></div>
+   <div class="field"><span class="eyebrow">Symbol</span><div class="icpick" role="group" aria-label="Symbol">${['',...HAB_ORD].map(ic=>`<button data-act="habIcon" data-v="${ic}" aria-pressed="${(h.ic||'')===ic}" aria-label="${ic?'Symbol '+ic:'Automatisch passend zum Namen'}">${ic?habIc({kind:k},ic):`<span class="ic-auto">${habIc({name:h.name,kind:k})}<small>Auto</small></span>`}</button>`).join('')}</div></div>
    ${k==='count'||k==='amount'?`<div class="row"><label class="field"><span class="eyebrow">Ziel pro Tag</span><input class="in num" id="hfTarget" data-hf="target" inputmode="decimal" value="${esc(h.target??'')}" placeholder="${k==='count'?'8':'20'}"></label>
      <label class="field"><span class="eyebrow">Einheit</span><input class="in" id="hfUnit" data-hf="unit" maxlength="12" value="${esc(h.unit||'')}" placeholder="${k==='count'?'Gläser':'Seiten'}"></label>
      ${k==='amount'?`<label class="field"><span class="eyebrow">Schritt für + und −</span><input class="in num" id="hfStep" data-hf="step" inputmode="decimal" value="${esc(h.step??'')}" placeholder="5"></label>`:''}</div>`:''}
@@ -2627,18 +2943,18 @@ function goalState(g){
   const done=span>=0?cur>=target:cur<=target,left=g.until?dayN(g.until)-dayN(today()):null;
   return {cur,start,target,unit,pct,done,left}}
 function goalRow(g,s,compact){const u=s.unit?' '+esc(s.unit):'';
-  return `<div class="gitem${s.done?' done':''}"><div class="goal-h"><b>${esc(goalName(g))}</b><span class="num">${Math.round(s.pct*100)} %</span></div>
+  return `<div class="gitem${s.done?' done':''}"><div class="goal-h"><b class="gname">${goalIc(g)}<span>${esc(goalName(g))}</span></b><span class="num">${Math.round(s.pct*100)} %</span></div>
    <div class="pbar" aria-hidden="true"><i style="width:${(s.pct*100).toFixed(1)}%"></i></div>
    <div class="goal-n num"><span>${g.type==='habit'?fmt(s.cur)+' von '+fmt(s.target)+u:'Jetzt '+fmt(s.cur,1)+u+' · Ziel '+fmt(s.target,1)+u}</span><span>${s.done?'Erreicht':s.left!=null?(s.left>=0?'noch '+s.left+(s.left===1?' Tag':' Tage'):'Frist vorbei'):''}</span></div>
    ${compact?'':`<div class="goal-up">${g.type==='custom'&&!s.done?`<label class="goal-cur"><span class="small muted">Stand</span><input class="hin num" type="text" inputmode="decimal" autocomplete="off" id="gv-${g.id}" data-goalv="${g.id}" value="${fmt(s.cur,2)}" aria-label="Aktueller Stand für ${esc(goalName(g))}"></label>`:'<span></span>'}<button class="lnk" data-act="editGoal" data-id="${g.id}" aria-label="${esc(goalName(g))} bearbeiten">Bearbeiten</button></div>`}</div>`}
 function goalsCardToday(){const gs=S.goals.map(g=>({g,s:goalState(g)})).filter(o=>!o.s.done).slice(0,3);if(!gs.length)return '';
-  return `<div class="card pane"><div class="pane-h"><span class="eyebrow">Ziele</span><button class="lnk" data-act="tab" data-v="ziele">Alle</button></div><div class="glist">${gs.map(o=>goalRow(o.g,o.s,true)).join('')}</div></div>`}
+  return `<div class="card pane"><div class="pane-h"><span class="eyebrow">${ICONS.ziel}Ziele</span><button class="lnk" data-act="tab" data-v="ziele">Alle</button></div><div class="glist">${gs.map(o=>goalRow(o.g,o.s,true)).join('')}</div></div>`}
 function viewGoals(){
   if(goalEdit)return goalForm();
   const all=S.goals.map(g=>({g,s:goalState(g)})),open=all.filter(o=>!o.s.done),done=all.filter(o=>o.s.done);
   return `<button class="btn primary block big" data-act="newGoal">+ Neues Ziel</button>
    ${open.length?`<div class="card pane"><div class="pane-h"><span class="eyebrow">Aktiv</span></div><div class="glist">${open.map(o=>goalRow(o.g,o.s)).join('')}</div></div>`:
-     '<div class="card empty"><b>Noch keine Ziele</b>Setz dir ein Ziel für dein Gewicht, eine Übung, eine Gewohnheit oder einen eigenen Wert. Den Fortschritt rechnet die App aus deinen Einträgen aus.</div>'}
+     `<div class="card empty"><span class="emp-ic">${ICONS.koerper}${ICONS.training}${ICONS.check}${ICONS.flag}</span><b>Noch keine Ziele</b>Den Fortschritt rechnet die App aus deinen Einträgen.</div>`}
    ${done.length?`<div class="card pane"><div class="pane-h"><span class="eyebrow">Erreicht</span></div><div class="glist">${done.map(o=>goalRow(o.g,o.s)).join('')}</div></div>`:''}`}
 function goalForm(){const g=goalEdit,ty=g.type||'weight',lw=lastWeight();
   const exs=ty==='lift'?goalExChoices(g.exId):[],hs=S.habits.filter(h=>!h.arch);let f='';
@@ -2654,7 +2970,7 @@ function goalForm(){const g=goalEdit,ty=g.type||'weight',lw=lastWeight();
     <label class="field"><span class="eyebrow">Start</span><input class="in num" id="gfStart" data-gf="start" inputmode="decimal" value="${esc(g.start??'')}"></label>
     <label class="field"><span class="eyebrow">Ziel</span><input class="in num" id="gfTarget" data-gf="target" inputmode="decimal" value="${esc(g.target??'')}"></label></div>`;
   return `<section class="section"><div class="card section">
-    <div class="field"><span class="eyebrow">Worauf bezieht sich das Ziel?</span><div class="seg" role="group" aria-label="Art des Ziels">${G_TYPES.map(([v,l])=>`<button data-act="goalType" data-v="${v}" aria-pressed="${ty===v}">${l}</button>`).join('')}</div></div>
+    <div class="field"><span class="eyebrow">Worauf bezieht sich das Ziel?</span><div class="scale sc-ic gtypes" role="group" aria-label="Art des Ziels">${G_TYPES.map(([v,l])=>`<button data-act="goalType" data-v="${v}" aria-pressed="${ty===v}">${{weight:ICONS.koerper,lift:ICONS.training,habit:ICONS.check,custom:ICONS.flag}[v]}<span>${l}</span></button>`).join('')}</div></div>
     ${f}
     <label class="field"><span class="eyebrow">Bis (optional)</span><input class="in" type="date" id="gfUntil" data-gf="until" value="${esc(g.until||'')}"></label></div>
     ${flash?`<div class="err">${flash}</div>`:''}
@@ -2665,28 +2981,35 @@ function goalForm(){const g=goalEdit,ty=g.type||'weight',lw=lastWeight();
 /* ---------- Heute ---------- */
 let dayOff=0,bannerOff=false;
 function hDate(){return offDate(dayOff)}
-function scaleHtml(act,cur,labels,lbl,k){return `<div class="scale" role="group" aria-label="${lbl}">${labels.map((l,i)=>`<button data-act="${act}" data-v="${i+1}"${k?` data-k="${k}"`:''} aria-pressed="${cur===i+1}"><b>${i+1}</b><span>${l}</span></button>`).join('')}</div>`}
+function scaleHtml(act,cur,labels,lbl,k,ics){return `<div class="scale${ics?' sc-ic':''}" role="group" aria-label="${lbl}">${labels.map((l,i)=>`<button data-act="${act}" data-v="${i+1}"${k?` data-k="${k}"`:''} aria-pressed="${cur===i+1}">${ics?ics[i]:`<b>${i+1}</b>`}<span>${l}</span></button>`).join('')}</div>`}
 /* Übrig = Ziel (gerundet wie angezeigt) minus Gegessenes; Training steckt schon im Ziel und zählt nicht noch einmal */
 function kcalRest(t,tg){return r10(tg.k)-Math.round(t.k)}
+function macCells(t,tg,mini){
+  const mac=(cls,lbl,v,tv)=>`<div class="mcell ${cls}"><span class="mac-n">${lbl}</span><b class="num">${fmt(Math.round(v),0)}<small>${tv?' / '+fmt(r5(tv),0)+' g':' g'}</small></b>${tv?`<div class="pbar" aria-hidden="true"><i style="width:${Math.min(100,v/tv*100).toFixed(1)}%"></i></div>`:''}</div>`;
+  return `<div class="mrow${mini?' mini':''}">${mac('m-ei','Eiweiß',t.p,tg&&tg.p)}${mac('m-kh',mini?'KH':'Kohlenhydr.',t.c,tg&&tg.c)}${mac('m-fe','Fett',t.f,tg&&tg.f)}</div>`}
 function foodCardToday(k){
   const items=dayGet(k).food||[],t=sumFood(items),r=nCalc(),tg=r.miss?null:foodTarget(r,k),rest=tg?kcalRest(t,tg):0;
-  return `<div class="card pane"><div class="pane-h"><span class="eyebrow">Ernährung</span><button class="lnk" data-act="goFood" data-date="${k}">Tagebuch</button></div>
+  return `<div class="card pane"><div class="pane-h"><span class="eyebrow">${ICONS.ernaehrung}Ernährung</span><button class="lnk" data-act="goFood" data-date="${k}">Tagebuch</button></div>
    ${tg?`<div class="kc-big"><b class="num">${fmt(Math.abs(rest),0)}</b><span>${rest<0?'kcal drüber':'kcal übrig'}</span></div>
-   <div class="pbar${t.k>tg.k*1.05?' over':''}" aria-hidden="true"><i style="width:${Math.min(100,t.k/tg.k*100).toFixed(1)}%"></i></div>
-   <div class="small muted num">${fmt(Math.round(t.k),0)} von ${fmt(r10(tg.k),0)} kcal gegessen · Eiweiß ${fmt(Math.round(t.p),0)} von ${fmt(r5(tg.p),0)} g</div>`
-   :`<div class="kc-big"><b class="num">${fmt(Math.round(t.k),0)}</b><span>kcal gegessen</span></div>
-   <div class="small muted num">${items.length} ${items.length===1?'Eintrag':'Einträge'} · Eiweiß ${fmt(Math.round(t.p),0)} g</div>`}
-   <div class="addrow"><button class="btn" data-act="addMeal" data-date="${k}">+ Mahlzeit eintragen</button><button class="btn scanq" data-act="scanOpen" data-date="${k}" aria-label="Barcode scannen">${SCAN_IC}</button></div></div>`;
+   <div class="kcbar"><div class="pbar${t.k>tg.k*1.05?' over':''}" aria-hidden="true"><i style="width:${Math.min(100,t.k/tg.k*100).toFixed(1)}%"></i></div>
+   <div class="kcb-l small muted num"><span>${fmt(Math.round(t.k),0)} gegessen</span><span>Ziel ${fmt(r10(tg.k),0)}</span></div></div>`
+   :`<div class="kc-big"><b class="num">${fmt(Math.round(t.k),0)}</b><span>kcal gegessen</span></div>`}
+   ${items.length||tg?macCells(t,tg,true):''}
+   <div class="addrow"><button class="btn" data-act="addMeal" data-date="${k}">${PLUS_IC}Mahlzeit eintragen</button><button class="btn scanq" data-act="scanOpen" data-date="${k}" aria-label="Barcode scannen">${SCAN_IC}</button></div></div>`;
 }
 function weightCtl(k,label){const w=num(dayGet(k).w),lw=weightAt(k)||lastWeight();
   return `<div class="ci-row"><div class="ci-l"><b>${label}</b><span class="small muted">${w?'eingetragen':lw?'zuletzt '+fmt(lw.v,1)+' kg am '+dmy(lw.date):'in kg'}</span></div>
     <div class="goalc"><button class="nudge" data-act="wNudge" data-d="-0.1" data-date="${k}" aria-label="0,1 kg weniger">−</button><input class="hin wv num" type="text" inputmode="decimal" autocomplete="off" id="wv-${k}" data-w="${k}" value="${w?fmt(w,1):''}" placeholder="${lw?fmt(lw.v,1):'kg'}" aria-label="Gewicht in kg"><button class="nudge" data-act="wNudge" data-d="0.1" data-date="${k}" aria-label="0,1 kg mehr">+</button></div></div>`}
-function bodyCardToday(k){const tr=trendTxt();
-  return `<div class="card pane"><div class="pane-h"><span class="eyebrow">Körper</span><button class="lnk" data-act="tab" data-v="koerper">Maße und Fotos</button></div>
-   ${weightCtl(k,'Gewicht')}${tr?`<div class="small muted num">${tr}</div>`:''}</div>`}
-function noteCard(k){const D=dayGet(k);return `<div class="card pane"><div class="pane-h"><span class="eyebrow">Notiz zum Tag</span><button class="lnk" data-act="tab" data-v="journal">Journal</button></div>
+function wTrend(){const L=weightLog();if(L.length<2)return '';const t=dayN(today());
+  const a=L.filter(p=>t-dayN(p.date)<7),b=L.filter(p=>t-dayN(p.date)>=7&&t-dayN(p.date)<21);if(!a.length||!b.length)return '';
+  const av=avgOf(a.map(p=>p.v)),d=av-avgOf(b.map(p=>p.v));
+  return `<span class="wtr num"><span class="wtr-d">${dArrow(d,1)}${Math.abs(d)<0.05?'±0':fmt(Math.abs(d),1)} kg</span><span>Ø ${fmt(av,1)} kg</span><span class="sr">letzte 7 Tage, verglichen mit den 2 Wochen davor</span></span>`}
+function bodyCardToday(k){const L=weightLog().filter(p=>p.date<=k&&dayN(k)-dayN(p.date)<=30),pts=L.map(p=>({t:dayN(p.date),v:p.v}));
+  return `<div class="card pane"><div class="pane-h"><span class="eyebrow">${ICONS.koerper}Körper</span><button class="lnk" data-act="tab" data-v="koerper">Maße und Fotos</button></div>
+   ${weightCtl(k,'Gewicht')}${pts.length>=2?`<button class="wtrend" data-act="goProg" data-v="koerper" aria-label="Gewichtsverlauf öffnen">${fSparkLine(fAvg7(pts))}${wTrend()}</button>`:''}</div>`}
+function noteCard(k){const D=dayGet(k);return `<div class="card pane"><div class="pane-h"><span class="eyebrow">${ICONS.journal}Notiz zum Tag</span><button class="lnk" data-act="tab" data-v="journal">Journal</button></div>
   <textarea class="in jnote" id="dayNote" data-note="${k}" maxlength="4000" rows="3" placeholder="Was lief gut? Was beschäftigt dich?">${esc(D.note||'')}</textarea></div>`}
-function breathRow(k){const m=num(dayGet(k).breath);return `<div class="navlist"><button class="navrow" data-act="tab" data-v="atem">${ICONS.atem}<span class="nr-t"><b>Atemübung</b><span>${m?'An diesem Tag '+m+' Min geübt':'Box-Atmung, 4-7-8 oder ruhig atmen'}</span></span>${CHR}</button></div>`}
+function breathRow(k){const m=num(dayGet(k).breath);return `<div class="navlist"><button class="navrow" data-act="tab" data-v="atem">${ICONS.atem}<span class="nr-t"><b>Atemübung</b><span>${m?m+' Min geübt':'Box · 4-7-8 · ruhig atmen'}</span></span>${CHR}</button></div>`}
 function viewHeute(){const k=hDate(),P=[banner(),wipeCard(),updCard(),installCard(),bkCard()];
   if(mod('mind'))P.push(checkinCard());
   P.push(trainCardToday(k),habitsCard(k));
@@ -2731,20 +3054,19 @@ function foodRow(x,k){
     ${e.per?`<label class="field"><span class="eyebrow">Menge in g/ml</span><input class="in num" id="fe-g" data-fe="g" inputmode="decimal" value="${esc(e.g??'')}"></label>`:''}
     ${e.pp&&!e.per?`<label class="field"><span class="eyebrow">Portionen</span><input class="in num" id="fe-por" data-fe="por" inputmode="decimal" value="${esc(String(e.por??'').replace('.',','))}"></label>`:''}
     <div class="f4">${[['k','kcal'],['p','Eiweiß'],['c','KH'],['f','Fett']].map(([f,l])=>`<label>${l}<input class="in num" id="fe-${f}" data-fe="${f}" inputmode="decimal" value="${esc(e[f]??'')}"></label>`).join('')}</div>
-    <div class="row"><button class="btn small danger" data-act="foodDel" data-id="${x.id}" data-date="${k}">${confirmKey==='foodDel:'+x.id?'Wirklich löschen?':'Löschen'}</button><button class="btn small ghost" data-act="foodFav" data-id="${x.id}" data-date="${k}">${favHas(x)?'★ Favorit':'☆ Favorit'}</button><button class="btn small primary" data-act="foodSave" data-id="${x.id}" data-date="${k}">Speichern</button></div></div>`}
+    <div class="row"><button class="btn small danger" data-act="foodDel" data-id="${x.id}" data-date="${k}">${confirmKey==='foodDel:'+x.id?'Wirklich löschen?':'Löschen'}</button><button class="btn small ghost${favHas(x)?' favon':''}" data-act="foodFav" data-id="${x.id}" data-date="${k}" aria-pressed="${favHas(x)}">${favHas(x)?ICONS.starOn:ICONS.star}Favorit</button><button class="btn small primary" data-act="foodSave" data-id="${x.id}" data-date="${k}">Speichern</button></div></div>`}
   return `<button class="frow" data-act="foodEdit" data-id="${x.id}" data-date="${k}"><span class="ft num">${esc(x.t||'')}</span><span class="fn"><b>${esc(x.n||'Eintrag')}</b><span class="num">${x.g?fmt(x.g,1)+' g/ml · ':x.por?porTxt(x.por)+' · ':''}${foodLine(x)}</span></span><span class="fk num">${fmt(Math.round(num(x.k)),0)}</span></button>`}
 function viewFood(){
   const k=offDate(foodDay),items=(dayGet(k).food||[]).slice().sort((a,b)=>(a.t||'')<(b.t||'')?-1:1),t=sumFood(items),r=nCalc(),tg=r.miss?null:foodTarget(r,k);
-  const mac=(cls,lbl,v,tv)=>`<div class="mcell ${cls}"><span class="mac-n">${lbl}</span><b class="num">${fmt(Math.round(v),0)}<small>${tv?' / '+fmt(r5(tv),0)+' g':' g'}</small></b>${tv?`<div class="pbar" aria-hidden="true"><i style="width:${Math.min(100,v/tv*100).toFixed(1)}%"></i></div>`:''}</div>`;
   const rest=tg?kcalRest(t,tg):0;
   return `<div class="daynav"><button class="iconbtn" data-act="foodDay" data-d="-1" aria-label="Vorheriger Tag">‹</button><b>${dayTitle(k)}</b><button class="iconbtn" data-act="foodDay" data-d="1" aria-label="Nächster Tag"${foodDay>=0?' disabled':''}>›</button></div>
    <div class="card pane">
     <div class="kc-big"><b class="num">${fmt(Math.round(t.k),0)}</b><span>${tg?'von '+fmt(r10(tg.k),0)+' kcal · '+(rest>=0?'noch '+fmt(rest,0):fmt(-rest,0)+' drüber'):'kcal gegessen'}</span></div>
     ${tg?`<div class="pbar${t.k>tg.k*1.05?' over':''}" aria-hidden="true"><i style="width:${Math.min(100,t.k/tg.k*100).toFixed(1)}%"></i></div>`:''}
-    <div class="mrow">${mac('m-ei','Eiweiß',t.p,tg&&tg.p)}${mac('m-kh','Kohlenhydr.',t.c,tg&&tg.c)}${mac('m-fe','Fett',t.f,tg&&tg.f)}</div>
+    ${macCells(t,tg)}
     ${tg?'':'<button class="lnk" data-act="tab" data-v="bedarf">Tagesbedarf berechnen</button>'}
    </div>
-   <div class="addrow"><button class="btn primary big" data-act="addMeal" data-date="${k}">+ Mahlzeit eintragen</button><button class="btn big scanq" data-act="scanOpen" data-date="${k}" aria-label="Barcode scannen">${SCAN_IC}</button></div>
+   <div class="addrow"><button class="btn primary big" data-act="addMeal" data-date="${k}">${PLUS_IC}Mahlzeit eintragen</button><button class="btn big scanq" data-act="scanOpen" data-date="${k}" aria-label="Barcode scannen">${SCAN_IC}</button></div>
    ${favChips(k)}
    ${mealSlotsHtml(items,k)}
    <div class="navlist"><button class="navrow" data-act="recList" data-date="${k}">${ICONS.rezepte}<span class="nr-t"><b>Rezepte</b><span>${esc(recCount())}</span></span>${CHR}</button><button class="navrow" data-act="tab" data-v="bedarf">${ICONS.bedarf}<span class="nr-t"><b>Tagesbedarf</b><span>${esc(nSum())}</span></span>${CHR}</button></div>`}
@@ -2967,18 +3289,18 @@ function fdbSize(){const r=FDB.remote&&FDB.remote.m;return r?fdbMB(r.bytes):'etw
 function fdbCard(){fdbPeek();const m=FDB.meta,rm=FDB.remote&&FDB.remote.m;let body;
   if(!FDB.ok)body='<div class="small muted">Dieses Gerät kann die Datei nicht entpacken. Nötig ist iOS 16.4 oder neuer.</div>';
   else if(FDB.dl)body=`<div class="small">${m?'Neue Fassung wird geladen …':'Wird geladen …'}</div>${fdbProgHtml()}`;
-  else if(!m)body=`<div class="small">Alle Produkte aus Deutschland mit Nährwerten aufs Handy laden. Dann findet die Suche sofort und ohne Internet, und Barcodes werden auch offline erkannt.</div>
-    <button class="btn primary block" data-act="fdbGet">Laden (${fdbSize()})</button><div class="small muted">Am besten im WLAN. Daten von Open Food Facts, Lizenz ODbL.</div>`;
+  else if(!m)body=`<div class="fdbpros small"><span>${ICONS.db}Alle Produkte aus Deutschland mit Nährwerten</span><span>${ICONS.search}Suche sofort, auch ohne Internet</span><span>${SCAN_IC}Barcodes auch offline</span></div>
+    <button class="btn primary block" data-act="fdbGet">${ICONS.daten}Laden (${fdbSize()})</button><div class="small muted bkst"><span class="sn">${ICONS.wifi}Am besten im WLAN</span><span class="sn">Open Food Facts · ODbL</span></div>`;
   else{const newer=rm&&rm.file!==m.file,on=S.fdbAuto!==false;
     body=`<div class="small num">${fmtN(m.n)} Produkte · Stand ${fdbDate(m.v)} · ${fdbMB(m.bytes)}</div>
     <div class="ci-row"><div class="ci-l"><b>Updates automatisch laden</b><span class="small muted">Jede Woche kommt eine neue Fassung (${fdbSize()})</span></div>
      <button class="switch${on?' on':''}" data-act="fdbAuto" role="switch" aria-checked="${on}" aria-label="Updates automatisch laden"><span></span></button></div>
     <div class="row"><button class="btn small" data-act="fdbGet">${newer?'Update laden ('+fdbSize()+')':'Nach Update suchen'}</button><button class="btn small ghost" data-act="fdbDel">${confirmKey==='fdbDel'?'Wirklich entfernen?':'Entfernen'}</button></div>`}
-  return `<div class="card pane" id="fdbCard"><div class="pane-h"><span class="eyebrow">Lebensmittel-Datenbank</span></div>${body}${FDB.err?`<div class="err">${esc(FDB.err)}</div>`:''}</div>`}
+  return `<div class="card pane" id="fdbCard"><div class="pane-h"><span class="eyebrow">${ICONS.db}Lebensmittel-Datenbank</span></div>${body}${FDB.err?`<div class="err">${esc(FDB.err)}</div>`:''}</div>`}
 /* Hinweis in der Suche, solange keine Daten auf dem Gerät sind (mit „Später“ für 14 Tage weg) */
 function fdbHint(){if(!FDB.ok||FDB.meta||(num(S.fdbHintT)&&Date.now()-num(S.fdbHintT)<14*fdbDays&&!FDB.dl))return '';
-  return `<div class="card pane fdbhint"><div class="pane-h"><span class="eyebrow">Schneller suchen</span></div>
-    ${FDB.dl?fdbProgHtml():`<div class="small">Lade die Produkte aus Deutschland aufs Handy (${fdbSize()}). Dann findet die Suche sofort und ohne Internet.</div>
+  return `<div class="card pane fdbhint"><div class="pane-h"><span class="eyebrow">${ICONS.daten}Schneller suchen</span></div>
+    ${FDB.dl?fdbProgHtml():`<div class="fdbpros small"><span>${ICONS.db}Produkte aus Deutschland aufs Handy · ${fdbSize()}</span><span>${ICONS.search}Sofort finden, auch ohne Internet</span></div>
     <div class="row"><button class="btn small primary" data-act="fdbGet">Laden</button><button class="btn small ghost" data-act="fdbLater">Später</button></div>`}
     ${FDB.err?`<div class="err">${esc(FDB.err)}</div>`:''}</div>`}
 function fdbAct(a,el,ck){switch(a){
@@ -3146,7 +3468,7 @@ function slotNow(){return slotByTime(hhmm())}
 function slotOf(x){return SLOT_N[x&&x.sl]?x.sl:slotByTime(x&&x.t)}
 /* Mahlzeit, wenn ein Produkt aufgeht: vom Scanner oder aus „Mahlzeit eintragen“, sonst nach Uhrzeit */
 function ctxSl(o){return SLOT_N[o&&o.sl]?o.sl:meal&&SLOT_N[meal.sl]?meal.sl:slotNow()}
-function slotRow(cur,act){return `<div class="slotrow"><span class="eyebrow">Mahlzeit</span><div class="chips slots" role="group" aria-label="Mahlzeit">${SLOTS.map(([k])=>`<button class="chip" data-act="${act||'slotSet'}" data-v="${k}" aria-pressed="${cur===k}">${SLOT_S[k]}</button>`).join('')}</div></div>`}
+function slotRow(cur,act){return `<div class="slotrow"><span class="eyebrow">Mahlzeit</span><div class="chips slots" role="group" aria-label="Mahlzeit">${SLOTS.map(([k])=>`<button class="chip" data-act="${act||'slotSet'}" data-v="${k}" aria-pressed="${cur===k}">${SLOT_IC[k]}${SLOT_S[k]}</button>`).join('')}</div></div>`}
 function eatLbl(date,sl){const z=SLOT_ZU[sl]||SLOT_ZU.sn;return z.charAt(0).toUpperCase()+z.slice(1)+' eintragen'+(date===today()?'':' · '+dayTitle(date))}
 function eatToast(x){return x.n+' '+(SLOT_ZU[x.sl]||'')+' eingetragen'}
 /* Tagebuch: vier Abschnitte, eingeklappt nur mit Kalorien und Plus. Ein Tipp auf den Namen klappt auf; was offen ist,
@@ -3155,25 +3477,25 @@ let mealOpen={k:'',s:new Set()};
 function mealSlotsHtml(items,k){if(mealOpen.k!==k)mealOpen={k,s:new Set()};const g={fr:[],mi:[],ab:[],sn:[]};for(const x of items)g[slotOf(x)].push(x);
   let any=false;
   const body=SLOTS.map(([s,l])=>{const L=g[s],kc=L.reduce((t,x)=>t+num(x.k),0),open=L.length>0&&(mealOpen.s.has(s)||L.some(x=>foodEdit&&foodEdit.id===x.id));if(open)any=true;
-    return `<div class="mslot${open?' open':''}" id="slot-${s}" data-sl="${s}"><div class="ms-h"><button class="ms-tog" data-act="mealTog" data-v="${s}" aria-expanded="${open}"${L.length?'':' disabled'} aria-label="${esc(l)}${L.length?', '+fmt(Math.round(kc),0)+' kcal, '+L.length+(L.length===1?' Eintrag':' Einträge'):', noch nichts eingetragen'}"><span class="eyebrow">${l}</span>${L.length?CHEV:''}<span class="ms-k num">${L.length?fmt(Math.round(kc),0)+'<small> kcal</small>':''}</span></button><button class="ms-add" data-act="addMeal" data-date="${k}" data-sl="${s}" aria-label="${esc(SLOT_ZU[s].charAt(0).toUpperCase()+SLOT_ZU[s].slice(1))} eintragen">${PLUS_IC}</button></div>
+    return `<div class="mslot${open?' open':''}" id="slot-${s}" data-sl="${s}"><div class="ms-h"><button class="ms-tog" data-act="mealTog" data-v="${s}" aria-expanded="${open}"${L.length?'':' disabled'} aria-label="${esc(l)}${L.length?', '+fmt(Math.round(kc),0)+' kcal, '+L.length+(L.length===1?' Eintrag':' Einträge'):', noch nichts eingetragen'}"><span class="ms-ic" aria-hidden="true">${SLOT_IC[s]}</span><span class="eyebrow">${l}</span>${L.length?CHEV:''}<span class="ms-k num">${L.length?fmt(Math.round(kc),0)+'<small> kcal</small>':''}</span></button><button class="ms-add" data-act="addMeal" data-date="${k}" data-sl="${s}" aria-label="${esc(SLOT_ZU[s].charAt(0).toUpperCase()+SLOT_ZU[s].slice(1))} eintragen">${PLUS_IC}</button></div>
      ${open?`<div class="flist">${L.map(x=>foodRow(x,k)).join('')}</div>`:''}</div>`}).join('');
-  return `<div class="card pane meals">${items.length?'':'<div class="small muted">Noch nichts eingetragen. Tippe bei einer Mahlzeit auf Plus, scanne einen Barcode oder nimm einen Favoriten.</div>'}${body}
-   ${any?'<div class="small muted mdhint">Zum Verschieben einen Eintrag lange drücken und auf eine andere Mahlzeit ziehen.</div>':''}</div>`}
+  return `<div class="card pane meals">${body}
+   ${any?`<div class="small muted mdhint">${ICONS.drag}Lange drücken und auf eine Mahlzeit ziehen</div>`:''}</div>`}
 /* Favoriten statt „Schnell nochmal“: Antippen trägt nach Uhrzeit ein, lange drücken und auf eine Mahlzeit ziehen trägt dort ein */
 function favChips(k){const F=Array.isArray(S.favs)?S.favs:[];
-  return `<div class="quick favq"><span class="eyebrow">Favoriten</span>${F.length?`<div class="qchips">${F.map((x,i)=>`<button class="qchip fchip" data-act="favQuick" data-i="${i}" data-date="${k}">★ ${esc(x.n)} · ${fmt(Math.round(num(x.k)),0)}</button>`).join('')}</div>`
-    :'<div class="small muted">Noch keine Favoriten. Beim Eintragen „Als Favorit merken“ ankreuzen oder im Tagebuch einen Eintrag öffnen und auf ☆ Favorit tippen.</div>'}</div>`}
+  return `<div class="quick favq"><span class="eyebrow">Favoriten</span>${F.length?`<div class="qchips">${F.map((x,i)=>`<button class="qchip fchip" data-act="favQuick" data-i="${i}" data-date="${k}">${ICONS.starOn}<span>${esc(x.n)} · ${fmt(Math.round(num(x.k)),0)}</span></button>`).join('')}</div>`
+    :`<div class="small muted favnone">${ICONS.star}Noch keine Favoriten</div>`}</div>`}
 function feSlots(e){return slotRow(SLOT_N[e.sl]?e.sl:slotOf(e),'feSlot')}
 function newMeal(k,sl){return {date:k||today(),sl:SLOT_N[sl]?sl:slotNow(),mode:'find',q:'',off:{q:'',status:'idle',items:[]},res:null,fav:false,added:[],err:''}}
 function mealReset(){meal=null}
 function prodRow(p,act,attr){const kc=p.k!=null?fmt(num(p.k),0)+' kcal/100 g/ml':'Nährwerte fehlen';
-  return `<button class="frow prow" data-act="${act}" ${attr}>${p.img?`<img class="pthumb" src="${esc(p.img)}" alt="" loading="lazy" referrerpolicy="no-referrer">`:`<span class="pthumb ph" aria-hidden="true">${p.src==='own'?'●':''}</span>`}<span class="fn"><b>${esc(p.n)}</b><span class="num">${esc([p.b,kc].filter(Boolean).join(' · '))}</span></span>${CHR}</button>`}
+  return `<button class="frow prow" data-act="${act}" ${attr}>${p.img?`<img class="pthumb" src="${esc(p.img)}" alt="" loading="lazy" referrerpolicy="no-referrer">`:`<span class="pthumb ph" aria-hidden="true">${p.src==='own'?ICONS.pen:ICONS.apple}</span>`}<span class="fn"><b>${esc(p.n)}</b><span class="num">${esc([p.b,kc].filter(Boolean).join(' · '))}</span></span>${CHR}</button>`}
 function favList(){if(!S.favs.length)return '';
-  return `<div class="card pane"><div class="pane-h"><span class="eyebrow">Favoriten</span><span class="small muted">Antippen trägt ein</span></div><div class="flist">${S.favs.map((x,i)=>`<div class="frow fav"><button class="fn" data-act="favAdd" data-i="${i}"><b>${esc(x.n)}</b><span class="num">${num(x.g)?fmt(num(x.g),1)+' g/ml · ':''}${fmt(Math.round(num(x.k)),0)} kcal · ${foodLine(x)}</span></button><button class="iconbtn" data-act="favDel" data-i="${i}" aria-label="${esc(x.n)} aus den Favoriten entfernen">✕</button></div>`).join('')}</div></div>`}
+  return `<div class="card pane"><div class="pane-h"><span class="eyebrow">${ICONS.starOn}Favoriten</span></div><div class="flist">${S.favs.map((x,i)=>`<div class="frow fav"><button class="fn" data-act="favAdd" data-i="${i}"><b>${esc(x.n)}</b><span class="num">${num(x.g)?fmt(num(x.g),1)+' g/ml · ':''}${fmt(Math.round(num(x.k)),0)} kcal · ${foodLine(x)}</span></button><button class="iconbtn" data-act="favDel" data-i="${i}" aria-label="${esc(x.n)} aus den Favoriten entfernen">✕</button></div>`).join('')}</div></div>`}
 function foodResHtml(){const m=fctx();if(!m)return '';const q=m.q.trim(),forRec=m===pick;
   if(!q){const rec=S.products.slice().sort((a,b)=>b.used-a.used).slice(0,15),fv=forRec?'':favList();
     return fdbHint()+fv+(rec.length?`<div class="card pane"><div class="pane-h"><span class="eyebrow">Zuletzt verwendet</span></div><div class="flist">${rec.map(p=>prodRow(p,'prodOpen',`data-id="${p.id}"`)).join('')}</div></div>`
-      :(fv?'':`<div class="card empty"><b>Scannen oder suchen</b>${forRec?'Such die Zutat oder scanne den Barcode auf der Verpackung. Was du einmal gefunden hast, findet die App danach auch ohne Internet.':'Scanne den Barcode auf der Verpackung oder such nach einem Lebensmittel. Was du einträgst, merkt sich die App und findet es danach auch ohne Internet.'}</div>`))}
+      :(fv?'':`<div class="card empty"><span class="emp-ic">${SCAN_IC}${ICONS.search}</span><b>Scannen oder suchen</b>Einmal gefunden, klappt es danach auch ohne Internet.</div>`))}
   const o=m.off,same=o.q===q,rl=forRec?[]:recMatches(q);let on='';
   /* Produkte aus früheren Suchen nicht doppelt zeigen, wenn sie ohnehin in der Trefferliste stehen */
   const shown=new Set(same&&o.status==='done'?o.items.map(p=>p.code):[]),loc=localMatches(q).filter(p=>p.id||!shown.has(p.code));
@@ -3199,9 +3521,9 @@ function resUpdate(){const el=document.getElementById('foodRes');if(el)el.innerH
 function searchBlock(m,to){return `<div class="fsearch"><input class="in" type="search" id="foodQ" enterkeyhint="search" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${to==='rec'?'Zutat suchen, z. B. Haferflocken':'Lebensmittel suchen, z. B. Skyr'}" value="${esc(m.q)}" aria-label="${to==='rec'?'Zutat suchen':'Lebensmittel suchen'}"><button class="btn primary" data-act="foodGo">Suchen</button></div>
    <button class="btn block scanbtn" data-act="scanOpen" data-date="${m.date}"${to==='rec'?' data-to="rec"':''}>${SCAN_IC}<span>Barcode scannen</span></button>
    <div id="foodRes" class="foodres">${foodResHtml()}</div>
-   <div class="small muted offnote">Suche und Barcode fragen Open Food Facts an, eine freie Lebensmittel-Datenbank. Daten unter der Lizenz ODbL.</div>`}
+   <div class="small muted offnote">${ICONS.db}Daten: Open Food Facts · Lizenz ODbL</div>`}
 function viewMeal(){if(!meal)meal=newMeal(today());const m=meal;offCacheLoad();
-  const seg=`<div class="seg" role="group" aria-label="Art des Eintrags">${[['find','Suchen'],['rec','Rezepte'],['manual','Manuell']].map(([v,l])=>`<button data-act="mealMode" data-v="${v}" aria-pressed="${(m.mode==='rec'||m.mode==='manual'?m.mode:'find')===v}">${l}</button>`).join('')}</div>`;
+  const seg=`<div class="seg" role="group" aria-label="Art des Eintrags">${[['find','Suchen',ICONS.search],['rec','Rezepte',ICONS.rezepte],['manual','Manuell',ICONS.pen]].map(([v,l,ic])=>`<button data-act="mealMode" data-v="${v}" aria-pressed="${(m.mode==='rec'||m.mode==='manual'?m.mode:'find')===v}">${ic}${l}</button>`).join('')}</div>`;
   const ak=m.added.reduce((t,a)=>t+num(a.k),0);
   const added=m.added.length?`<div class="banner ok"><span><b>Eingetragen:</b> ${esc(m.added.map(a=>a.n).join(', '))} · ${fmt(ak,0)} kcal</span><button class="btn small" data-act="mealDone">Fertig</button></div>`:'';
   const sr=slotRow(m.sl);
@@ -3211,7 +3533,7 @@ function viewMeal(){if(!meal)meal=newMeal(today());const m=meal;offCacheLoad();
      <label class="field"><span class="eyebrow">Name</span><input class="in" id="mf-n" data-mf="n" maxlength="60" value="${esc(res.n||'')}" placeholder="z. B. Skyr mit Beeren"></label>
      <div class="f4">${[['k','kcal'],['p','Eiweiß g'],['c','KH g'],['f','Fett g']].map(([f,l])=>`<label>${l}<input class="in num" id="mf-${f}" data-mf="${f}" inputmode="decimal" value="${esc(res[f]??'')}"></label>`).join('')}</div>
      ${m.err?`<div class="err">${esc(m.err)}</div>`:''}
-     <label class="chkrow"><input type="checkbox" id="mealFav"${m.fav?' checked':''}> Als Favorit merken</label>
+     <label class="chkrow favtog"><input type="checkbox" id="mealFav"${m.fav?' checked':''}><span class="fav-ic" aria-hidden="true">${ICONS.star}${ICONS.starOn}</span>Als Favorit merken</label>
      <button class="btn primary block big" data-act="mealAdd">${eatLbl(m.date,m.sl)}</button></div>`}
   return `${added}${sr}${seg}
    ${searchBlock(m,'day')}`}
@@ -3289,11 +3611,11 @@ function viewProduct(){if(!prod)return '<div class="card empty"><b>Kein Produkt 
     <div class="sugg amts">${opts.map(([v,l])=>`<button data-act="prodAmt" data-v="${v}" aria-pressed="${g===v}">${esc(l)}</button>`).join('')}</div>
     <div id="prodTot">${totHtml(prodTotals(p,g))}</div>
     ${rec?`<button class="btn primary block big" data-act="prodAdd">Zum Rezept hinzufügen</button>`
-      :`<label class="chkrow"><input type="checkbox" id="prodFav"${prod.fav?' checked':''}> Mit dieser Menge als Favorit merken</label>
+      :`<label class="chkrow favtog"><input type="checkbox" id="prodFav"${prod.fav?' checked':''}><span class="fav-ic" aria-hidden="true">${ICONS.star}${ICONS.starOn}</span>Mit dieser Menge als Favorit</label>
     ${slotRow(prod.sl)}
     <button class="btn primary block big" data-act="prodAdd">${eatLbl(prod.date,prod.sl)}</button>`}</div>
    <div class="row"><button class="btn small ghost" data-act="prodEditVals">Werte bearbeiten</button>${own?`<button class="btn small danger" data-act="prodDel" data-id="${p.id}">${confirmKey==='prodDel:'+p.id?'Wirklich löschen?':'Produkt löschen'}</button>`:''}</div>
-   <div class="small muted">${p.src==='own'?'Selbst angelegt'+(p.code?' · Barcode '+esc(p.code):''):'Nährwerte von Open Food Facts'+(p.code?' · Barcode '+esc(p.code):'')+'. Weicht etwas von der Packung ab, korrigier es über „Werte bearbeiten“.'}</div>`}
+   <div class="small muted psrc">${p.src==='own'?ICONS.pen+'Selbst angelegt':ICONS.db+'Open Food Facts'}${p.code?` · ${SCAN_IC}<span class="num">${esc(p.code)}</span>`:''}</div>`}
 function ownForm(){const f=prod.form,why=prod.why;
   return `<section class="section"><div class="card section">
    ${why==='notfound'?'<div class="infobox">Dieses Produkt kennt Open Food Facts noch nicht. Trag die Werte von der Packung ein, dann merkt sich die App das Produkt.</div>':why==='incomplete'?'<div class="infobox">Bei Open Food Facts fehlen Name oder Nährwerte. Ergänze sie von der Packung.</div>':''}
@@ -3410,7 +3732,7 @@ function viewScan(){const s=scan;if(!s)return '<div class="card empty"><b>Scanne
     ${s.typing?`<div class="fsearch"><input class="in num" id="scanCode" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="14" autocomplete="off" placeholder="Zahlen unter dem Strichcode" value="${esc(s.typed||'')}" aria-label="Barcode-Nummer"><button class="btn primary" data-act="scanLookup">Suchen</button></div>`:''}
     ${s.status==='err'?'<div class="row"><button class="btn small primary" data-act="scanRetry">Nochmal versuchen</button><button class="btn small" data-act="scanOwn">Selbst anlegen</button><button class="btn small" data-act="scanAgain">Neu scannen</button></div>':''}
     ${s.status==='stuck'?'<div class="row"><button class="btn small" data-act="scanAgain">Kamera neu starten</button></div>':''}
-    <div class="scanctl">${s.canTorch?`<button class="btn small" data-act="scanTorch" aria-pressed="${!!s.torch}">${s.torch?'Licht aus':'Licht an'}</button>`:''}<label class="btn small filebtn${s.status==='stuck'||s.status==='nocam'||s.status==='denied'?' primary':''}">Foto<input type="file" id="scanPhoto" accept="image/*" capture="environment" hidden></label><button class="btn small" data-act="scanType" aria-pressed="${!!s.typing}">Zahlen eintippen</button></div></div></div>`}
+    <div class="scanctl">${s.canTorch?`<button class="btn small" data-act="scanTorch" aria-pressed="${!!s.torch}">${s.torch?'Licht aus':'Licht an'}</button>`:''}<label class="btn small filebtn${s.status==='stuck'||s.status==='nocam'||s.status==='denied'?' primary':''}">${ICONS.camera}Foto<input type="file" id="scanPhoto" accept="image/*" capture="environment" hidden></label><button class="btn small" data-act="scanType" aria-pressed="${!!s.typing}">${SV('<path d="M3 6.5h18v11H3z"/><path d="M6.5 9.8h1M10 9.8h1M13.5 9.8h1M17 9.8h.5M7.5 14h9"/>')}Zahlen eintippen</button></div></div></div>`}
 
 /* ---------- Aktionen, Eingaben ---------- */
 function foodAct(a,el,ck){if(recAct(a,el,ck))return true;switch(a){
@@ -3584,7 +3906,7 @@ function recSum(r){const t={k:0,p:0,c:0,f:0};for(const x of (r&&r.items)||[]){co
 function rTot(t,s){s=Math.max(0,num(s));return {k:Math.round(num(t.k)*s),p:rnd1(num(t.p)*s),c:rnd1(num(t.c)*s),f:rnd1(num(t.f)*s)}}
 function kLine(v){return fmt(v.k,0)+' kcal · '+foodLine(v)}
 function recMatches(q){const W=words(q);if(!W.length)return [];return S.recipes.filter(r=>{const t=String(r.n||'').toLowerCase();return W.every(w=>t.includes(w))}).slice(0,8)}
-function recCount(){const n=S.recipes.length;return recDirty()?'Ein Entwurf ist noch nicht gespeichert':n?n+(n===1?' Rezept':' Rezepte'):'Eigene Gerichte anlegen und eintragen'}
+function recCount(){const n=S.recipes.length;return recDirty()?'Ein Entwurf ist noch nicht gespeichert':n?n+(n===1?' Rezept':' Rezepte'):'Noch keine'}
 /* Für welchen Tag eingetragen wird: Tag der offenen Mahlzeit oder der Rezeptliste */
 function recCtxDate(){const st=S.ui.stack;for(let i=st.length-1;i>=0;i--){if(st[i]==='mahlzeit'&&meal)return meal.date;if(st[i]==='rezepte')return recDate||today()}return today()}
 function recCtxSl(){const st=S.ui.stack;for(let i=st.length-1;i>=0;i--){if(st[i]==='mahlzeit'&&meal)return meal.sl;if(st[i]==='rezepte')return recSl||slotNow()}return slotNow()}
@@ -3615,8 +3937,8 @@ function recDraftCard(){const R=S.recDraft;if(!R||!recDirty())return '';const n=
 function recListHtml(){const L=S.recipes.slice().sort((a,b)=>(b.used||0)-(a.used||0)||String(a.n).localeCompare(String(b.n),'de'));
   return `<div class="foodres">${recDraftCard()}
    <button class="btn block scanbtn" data-act="recNew">${PLUS_IC}<span>${confirmKey==='recNew:'?'Entwurf verwerfen und neu anfangen?':'Neues Rezept'}</span></button>
-   ${L.length?`<div class="card pane"><div class="pane-h"><span class="eyebrow">Deine Rezepte <span class="cnt">${L.length}</span></span><span class="small muted">Antippen zum Eintragen</span></div><div class="flist">${L.map(recRow).join('')}</div></div>`
-    :`<div class="card empty"><b>Noch keine Rezepte</b>Leg dein erstes Rezept an: Zutaten suchen oder scannen, Mengen eintragen und festlegen, wie viele Portionen es ergibt. Danach ist eine Portion schnell eingetragen.</div>`}</div>`}
+   ${L.length?`<div class="card pane"><div class="pane-h"><span class="eyebrow">Deine Rezepte <span class="cnt">${L.length}</span></span></div><div class="flist">${L.map(recRow).join('')}</div></div>`
+    :`<div class="card empty"><b>Noch keine Rezepte</b><div class="steps3" role="img" aria-label="Zutaten suchen oder scannen, Portionen festlegen, dann portionsweise eintragen"><span>${SCAN_IC}Zutaten</span>${CHR}<span>${ICONS.rezepte}Portionen</span>${CHR}<span>${PLUS_IC}Eintragen</span></div></div>`}</div>`}
 function viewRecipes(){return recListHtml()}
 
 /* ---------- Rezept ansehen und eintragen ---------- */
@@ -3637,7 +3959,7 @@ function viewRecipe(){const r=rv&&recById(rv.id);if(!r)return '<div class="card 
     ${w>0?`<div class="seg sm" role="group" aria-label="Menge angeben in"><button data-act="rvMode" data-v="por" aria-pressed="${!byG}">Portionen</button><button data-act="rvMode" data-v="g" aria-pressed="${byG}">g/ml</button></div>`:''}
     <div class="amt"><button class="nudge" data-act="rvStep" data-d="-1" aria-label="Weniger">−</button><input class="hin num amt-in" type="text" inputmode="decimal" autocomplete="off" id="rvAmt" value="${vIn(v)}" aria-label="${byG?'Menge in g/ml':'Anzahl Portionen'}"><span class="amt-u" id="rvU">${byG?'g/ml':v===1?'Portion':'Portionen'}</span><button class="nudge plus" data-act="rvStep" data-d="1" aria-label="Mehr">+</button></div>
     <div class="sugg amts${byG?'':' pors'}">${opts.map(([x,l])=>`<button data-act="rvAmt" data-v="${x}" aria-pressed="${v===x}"${byG?'':` aria-label="${porTxt(x)}"`}>${esc(l)}</button>`).join('')}</div>
-    ${byG&&W.est?`<div class="small muted">Gerechnet mit der Menge der Zutaten, zusammen ${fmt(w,0)} g/ml. Wiegst du das fertige Essen und trägst es im Rezept ein, wird es genauer.</div>`:''}
+    ${byG&&W.est?`<div class="small muted sn">${ICONS.koerper}≈ ${fmt(w,0)} g/ml aus den Zutaten · fertig gewogen ist genauer</div>`:''}
     <div id="rvTot">${rvTotHtml(r)}</div>
     ${slotRow(rv.sl)}
     <button class="btn primary block big" data-act="recEat">${eatLbl(rv.date,rv.sl)}</button></div>
@@ -3662,11 +3984,11 @@ function viewRecipeEdit(){const R=S.recDraft;if(!R)return '<div class="card empt
    <div class="field"><span class="eyebrow">Ergibt</span>
     <div class="amt sm"><button class="nudge" data-act="recPorStep" data-d="-1" aria-label="Eine Portion weniger">−</button><input class="hin num amt-in" id="recPor" data-rf="por" type="text" inputmode="decimal" autocomplete="off" value="${vIn(R.por)}" aria-label="Anzahl Portionen"><span class="amt-u" id="recPorU">${P===1?'Portion':'Portionen'}</span><button class="nudge plus" data-act="recPorStep" data-d="1" aria-label="Eine Portion mehr">+</button></div></div></div>
   <div class="card pane"><div class="pane-h"><span class="eyebrow">Zutaten <span class="cnt">${n}</span></span></div>
-   ${n?`<div class="flist">${R.items.map(ingRow).join('')}</div>`:'<div class="small muted">Noch keine Zutaten. Such sie, scanne den Barcode oder trag feste Werte ein.</div>'}
+   ${n?`<div class="flist">${R.items.map(ingRow).join('')}</div>`:`<div class="small muted sn noing">${SCAN_IC}${ICONS.search}Noch keine Zutaten</div>`}
    <div class="addrow"><button class="btn" data-act="recIngAdd">+ Zutat hinzufügen</button><button class="btn scanq" data-act="scanOpen" data-to="rec" aria-label="Zutat per Barcode scannen">${SCAN_IC}</button></div></div>
   <div class="card pane"><div class="pane-h"><span class="eyebrow">Pro Portion</span></div><div id="recTot">${recTotHtml(R)}</div></div>
   <div class="card section">
-   <label class="field"><span class="eyebrow">Gewicht fertig gekocht in g (optional)</span><input class="in num" id="recW" data-rf="w" type="text" inputmode="decimal" autocomplete="off" value="${vIn(R.w)}" placeholder="z. B. 1400"><span class="small muted">Nach g/ml eintragen geht immer. Ohne diese Angabe rechnet die App mit dem Gewicht der Zutaten. Gewogen ist es genauer, etwa wenn Nudeln oder Reis beim Kochen Wasser aufnehmen.</span></label>
+   <label class="field"><span class="eyebrow">Gewicht fertig gekocht in g (optional)</span><input class="in num" id="recW" data-rf="w" type="text" inputmode="decimal" autocomplete="off" value="${vIn(R.w)}" placeholder="z. B. 1400"><span class="small muted">Ohne Angabe zählt die Summe der Zutaten. Gewogen ist genauer, etwa wenn Nudeln Wasser aufnehmen.</span></label>
    <label class="field"><span class="eyebrow">Zubereitung (optional)</span><textarea class="in jnote" id="recNote" data-rf="note" maxlength="4000" rows="4" placeholder="Schritte, Zeiten, Tipps">${esc(R.note||'')}</textarea></label></div>
   ${flash?`<div class="err">${flash}</div>`:''}
   <button class="btn primary block big" data-act="recSave">Rezept speichern</button>
@@ -3750,8 +4072,7 @@ function histBtn(){const L=sortedSessions(),n=L.length;if(!n)return '';const lk=
   return `<button class="histbtn" data-act="histOpen">${HIST_IC}<span class="hb-t"><b>Verlauf</b><span>${n} ${n===1?'Training':'Trainings'}${r?' · '+r+' in den letzten 30 Tagen':''}</span></span>${CHR}</button>`}
 function viewVerlauf(){const list=sortedSessions().reverse();
   if(!list.length)return '<div class="card empty"><b>Noch keine Trainings</b>Dein erstes gespeichertes Training erscheint hier.</div>';
-  return `<div class="small muted">Tippe ein Training an. Mit dem Stift bearbeitest du es, mit dem Plan-Symbol daneben speicherst du es als Trainingsplan.</div>
-   <div class="histwrap">${groupList(list.slice(0,histN))}</div>
+  return `<div class="histwrap">${groupList(list.slice(0,histN))}</div>
    ${list.length>histN?`<button class="btn block" data-act="histMore">Ältere anzeigen (${list.length-histN})</button>`:''}`}
 
 /* ---------- Übungen und Varianten ----------
@@ -3792,7 +4113,7 @@ function exGroups(list,c,s){const g=new Map(),add=(k,e)=>{if(!g.has(k))g.set(k,[
 function exFamRows(list){const m=new Map();for(const e of list){const k=exLc(e.name);if(!m.has(k))m.set(k,[]);m.get(k).push(e)}
   return [...m.values()].map(L=>L.sort((a,b)=>vOrd(a)-vOrd(b))).sort((a,b)=>a[0].name.localeCompare(b[0].name,'de'))}
 function catChips(cur,to){const cats=allCats().filter(c=>S.exercises.some(e=>!e.hid&&(e.cat===c||(e.also||[]).some(a=>a[0]===c))));if(S.exercises.some(e=>!e.cat&&!e.hid))cats.push('-');
-  return `<div class="chips excats" id="${to}Cats" role="group" aria-label="Nach Kategorie filtern">${[''].concat(cats).map(c=>`<button class="chip" data-act="exCatF" data-to="${to}" data-v="${esc(c)}" aria-pressed="${cur===c}">${esc(c===''?'Alle':c==='-'?'Ohne Kategorie':c)}</button>`).join('')}</div>`}
+  return `<div class="chips excats" id="${to}Cats" role="group" aria-label="Nach Kategorie filtern">${[''].concat(cats).map(c=>`<button class="chip" data-act="exCatF" data-to="${to}" data-v="${esc(c)}" aria-pressed="${cur===c}">${c&&c!=='-'?catIc(c):''}${esc(c===''?'Alle':c==='-'?'Ohne Kategorie':c)}</button>`).join('')}</div>`}
 function subChips(c,cur,to){const L=SUBS[c];if(!L)return '';const have=new Set();for(const e of S.exercises)if(!e.hid)for(const p of exPlaces(e,c))have.add(p);
   const sub=L.filter(x=>have.has(x));if(sub.length<2)return '';
   return `<div class="chips excats exsubs" id="${to}Subs" role="group" aria-label="Nach Muskelgruppe filtern">${[''].concat(sub).map(x=>`<button class="chip" data-act="exSubF" data-to="${to}" data-v="${esc(x)}" aria-pressed="${cur===x}">${esc(x||'Alle')}</button>`).join('')}</div>`}
@@ -3812,7 +4133,7 @@ function famRow(L,act,st,badge){const e0=L[0],F=famVis(e0),kd=famKind(F),last=fa
      return `<button class="vchip${b?' on':''}" data-act="${act}" data-id="${e.id}" aria-label="${esc(exFull(e))}${c?', '+c+'× trainiert':''}${b?', '+esc(b):''}">${b?VCHK:''}${esc(vLbl(e))}${c?`<small>${c}×</small>`:''}</button>`}).join('')}</span></span></div>`}
 function exListHtml(list,act,badge,c,s){const st=exStats(),pick=act!=='exOpen';
   return exGroups(list,c,s).map(G=>{const R=exFamRows(G.list);
-    return `<div class="exgrp"><span class="eyebrow exg-h">${esc(G.h)} <span class="cnt">${R.length}</span></span><div class="navlist exnav">${R.map(L=>!pick?exListRow(L[0],st):famVis(L[0]).length>1?famRow(L,act,st,badge):exRow(L[0],act,st,badge)).join('')}</div></div>`}).join('')}
+    return `<div class="exgrp"><span class="eyebrow exg-h">${CAT_IC[G.h]||''}${esc(G.h)} <span class="cnt">${R.length}</span></span><div class="navlist exnav">${R.map(L=>!pick?exListRow(L[0],st):famVis(L[0]).length>1?famRow(L,act,st,badge):exRow(L[0],act,st,badge)).join('')}</div></div>`}).join('')}
 /* Leere Suche: Hinweis, Suche ohne Filter, neue Übung */
 function exNone(q,cat,to,act){const all=cat&&exMatch(q).length;
   return `<div class="card empty"><b>Nichts gefunden${cat?' in '+esc(cat==='-'?'Ohne Kategorie':cat):''}</b>${all?`<button class="btn" data-act="exCatF" data-to="${to}" data-v="">In allen Kategorien suchen</button>`:''}${q.trim()?`<button class="btn" data-act="${act}">„${esc(q.trim())}“ als neue Übung anlegen</button>`:''}</div>`}
@@ -3865,7 +4186,7 @@ function rowKind(f,r){const e=r.id&&exById(r.id);return e&&exUsed(e.id)?e.kind:v
 function exVarField(f){const R=f.rows.map((r,i)=>({r,i})),vis=R.filter(o=>!o.r.hid),hid=R.filter(o=>o.r.hid),plain=!f.open&&vis.length<=1&&!(vis[0]&&vis[0].r.v);
   const have=new Set(vis.map(o=>exLc(o.r.v))),pre=VAR_PRE.filter(p=>!have.has(exLc(p)));
   const first=vis[0]&&vis[0].r,moved=first&&first.n&&!f.v0[vis[0].i]&&vis.length>1;
-  const rows=plain?`<span class="small muted">Keine Varianten. Füg welche hinzu, wenn es die Übung mit verschiedenen Geräten, Griffen oder Positionen gibt.</span>`
+  const rows=plain?''
     :`<div class="vrows">${vis.map(({r,i})=>`<div class="vrow"><input class="in" id="exV-${i}" data-vi="${i}" maxlength="30" autocomplete="off" value="${esc(r.v)}" placeholder="${r.n?'Variante deiner bisherigen Einträge':'z. B. Seil oder Sitzend'}" aria-label="Name der Variante"><span class="vr-n small muted num">${r.n?r.n+'×':r.id?'':'neu'}</span>${vis.length>1?`<button class="iconbtn" data-act="exVarDel" data-i="${i}" aria-label="${esc(r.v||'Variante')} ${r.n?'ausblenden':'entfernen'}">✕</button>`:''}</div>`).join('')}</div>`;
   return `<div class="field"><div class="lbl-row"><span class="eyebrow">Varianten</span>${infoBtn('exVarInfo','Varianten')}</div>${iBox('exVarInfo',VAR_INFO)}
     ${rows}
@@ -3884,12 +4205,12 @@ function viewExEdit(){const f=exEdit;if(!f)return '<div class="card empty"><b>Ke
     <div class="field"><div class="lbl-row"><span class="eyebrow">Was trägst du ein?</span>${infoBtn('exKindInfo','Werte')}</div>${iBox('exKindInfo',KIND_INFO)}
      <div class="ktiles" role="group" aria-label="Werte pro Satz">${K.map(([k,l,x])=>`<button class="ktile" data-act="exKind" data-v="${k}" aria-pressed="${f.kind===k}"${locked&&f.kind!==k?' disabled':''}>${KIND_IC[k]}<b>${l}</b><span>${x}</span></button>`).join('')}</div>
      ${kh?`<span class="small muted">${kh}</span>`:''}
-     ${locked?'<span class="small muted">Lässt sich nicht mehr ändern, weil es schon Einträge mit dieser Übung gibt.</span>':''}</div>
+     ${locked?`<span class="small muted locknote">${ICONS.lock}Fest, weil es schon Einträge gibt</span>`:''}</div>
     <div class="field"><span class="eyebrow">Kategorie</span>
-     <div class="chips wrap" role="group" aria-label="Kategorie">${allCats().map(c=>`<button class="chip" data-act="exCat" data-v="${esc(c)}" aria-pressed="${!f.catNew&&f.cat===c}">${esc(c)}</button>`).join('')}<button class="chip add" data-act="exCatNew" aria-pressed="${f.catNew}">+ Eigene</button></div>
-     ${f.catNew?`<input class="in" id="exCatN" data-xf="catName" maxlength="30" autocomplete="off" value="${esc(f.catName)}" placeholder="Name der Kategorie, z. B. Mobility">`:`<span class="small muted">${f.cat?'Nochmal antippen hebt die Auswahl auf.':'Ohne Kategorie'}</span>`}</div>
+     <div class="chips wrap catchips" role="group" aria-label="Kategorie">${allCats().map(c=>`<button class="chip" data-act="exCat" data-v="${esc(c)}" aria-pressed="${!f.catNew&&f.cat===c}">${catIc(c)}${esc(c)}</button>`).join('')}<button class="chip add" data-act="exCatNew" aria-pressed="${f.catNew}">+ Eigene</button></div>
+     ${f.catNew?`<input class="in" id="exCatN" data-xf="catName" maxlength="30" autocomplete="off" value="${esc(f.catName)}" placeholder="Name der Kategorie, z. B. Mobility">`:''}</div>
     ${cat&&SUBS[cat]?`<div class="field"><span class="eyebrow">Muskelgruppe</span><div class="chips wrap" role="group" aria-label="Muskelgruppe">${SUBS[cat].map(x=>`<button class="chip" data-act="exSub" data-v="${esc(x)}" aria-pressed="${f.sub===x}">${esc(x)}</button>`).join('')}</div></div>`:''}
-    ${alsoOn?`<div class="field"><span class="eyebrow">Auch zeigen unter</span><div class="chips wrap" role="group" aria-label="Auch zeigen unter">${allCats().filter(c=>c!==cat).map(c=>`<button class="chip" data-act="exAlso" data-v="${esc(c)}" aria-pressed="${f.also.some(a=>a[0]===c)}">${esc(c)}</button>`).join('')}</div><span class="small muted">Die Übung erscheint zusätzlich unter diesen Kategorien.</span></div>`
+    ${alsoOn?`<div class="field"><span class="eyebrow">Auch zeigen unter</span><div class="chips wrap catchips" role="group" aria-label="Auch zeigen unter">${allCats().filter(c=>c!==cat).map(c=>`<button class="chip" data-act="exAlso" data-v="${esc(c)}" aria-pressed="${f.also.some(a=>a[0]===c)}">${catIc(c)}${esc(c)}</button>`).join('')}</div></div>`
       :`<button class="lnk alsolnk" data-act="exAlsoOpen">Auch unter einer anderen Kategorie zeigen</button>`}
     ${perf()&&f.kind==='distanz'?`<div class="field"><div class="lbl-row"><span class="eyebrow">Sportart</span>${infoBtn('exSportInfo','Sportart')}</div>${iBox('exSportInfo',SPORT_INFO)}
      <div class="seg sm" role="group" aria-label="Sportart">${Object.entries(SPORTS).map(([k,v])=>`<button data-act="exSport" data-v="${k}" aria-pressed="${f.sport===k}">${esc(v.replace(' / Gehen','').replace(' Sportart',''))}</button>`).join('')}</div></div>`:''}
@@ -4010,13 +4331,13 @@ function exQuick(d){const inn=new Set(d.entries.map(e=>e.exId)),st=exStats(),cat
   const all=allCats().filter(c=>S.exercises.some(e=>!e.hid&&e.cat===c)),first=cats.length?['*','Passend']:Object.keys(st.l).length?['~','Zuletzt']:null;
   const sel=sug.cat||(first?first[0]:''),chips=(first?[first]:[]).concat(all.map(c=>[c,c]));let body;
   if(sel==='*'){const G=fitSug(cats,inn,st,6);
-    body=G.length?G.map(g=>`<div class="sugrow"><span class="sug-c">${esc(g.c)}</span><div class="chips wrap">${g.L.map(exChip).join('')}</div></div>`).join('')
+    body=G.length?G.map(g=>`<div class="sugrow"><span class="sug-c">${catIc(g.c)}${esc(g.c)}</span><div class="chips wrap">${g.L.map(exChip).join('')}</div></div>`).join('')
       :'<div class="small muted">Aus diesen Kategorien ist schon alles im Training. Wähl oben eine andere.</div>'}
   else if(sel==='~'){const L=recentSug(inn,st,8);body=L.length?`<div class="chips wrap">${L.map(exChip).join('')}</div>`:''}
   else if(sel){const L=catSug(sel,inn,10,st);body=L.length?`<div class="chips wrap">${L.map(exChip).join('')}</div>`:'<div class="small muted">Alle Übungen dieser Kategorie sind schon im Training.</div>'}
-  else body='<div class="small muted">Wähl eine Kategorie, dann erscheinen die passenden Übungen.</div>';
+  else body=`<div class="small muted sughint">${ICONS.up}Kategorie wählen</div>`;
   return `<div class="field sugbox" id="sugBox"><span class="eyebrow">${d.entries.length?'Weitere Übung':'Übung wählen'}</span>
-   <div class="chips excats sugcats" role="group" aria-label="Vorschläge nach Kategorie">${chips.map(([v,l])=>`<button class="chip" data-act="sugCat" data-v="${esc(v)}" aria-pressed="${sel===v}">${esc(l)}</button>`).join('')}</div>
+   <div class="chips excats sugcats" role="group" aria-label="Vorschläge nach Kategorie">${chips.map(([v,l])=>`<button class="chip" data-act="sugCat" data-v="${esc(v)}" aria-pressed="${sel===v}">${v==='*'?ICONS.ziel:v==='~'?HIST_IC:catIc(v)}${esc(l)}</button>`).join('')}</div>
    <div class="sugbody">${body}</div>
    <button class="btn block" data-act="exPick" data-to="session">Alle Übungen …</button></div>`}
 
@@ -4035,7 +4356,7 @@ function doneEntries(d){return d.entries.map(e=>({exId:e.exId,sets:e.sets.filter
 function asPlanCard(d){if(d.id)return '';const done=doneEntries(d);if(!done.length)return '';
   const from=d.planId&&S.plans.find(p=>p.id===d.planId);if(from&&planSameItems(from.items||[],planItemsFrom(done)))return '';
   const on=!!d.asPlan;
-  return `<div class="card pane asplan"><div class="ci-row"><div class="ci-l"><b>Als Trainingsplan speichern</b><span class="small muted">${on?'Mit diesen Übungen und Sätzen, angeheftet unter „Mit Plan starten“':'Übungen und Sätze fürs nächste Mal merken'}</span></div>
+  return `<div class="card pane asplan"><div class="ci-row"><div class="ci-l ci-lt">${ICONS.plaene}<b>Als Plan speichern</b></div>
     <button class="switch${on?' on':''}" data-act="asPlan" role="switch" aria-checked="${on}" aria-label="Als Trainingsplan speichern"><span></span></button></div>
    ${on?`<label class="field"><span class="eyebrow">Name des Plans</span><input class="in" id="apName" data-ap="1" maxlength="50" autocomplete="off" value="${esc(d.asPlanName!=null?d.asPlanName:planNameSuggest(done))}"></label>`:''}</div>`}
 function toastAct(msg,label,act,id){const h=document.getElementById('toastHost');if(!h)return;
@@ -4049,7 +4370,7 @@ function goalExChoices(selId){const {l}=exStats(),sel=selId?S.exercises.find(e=>
   return L}
 
 /* ---------- Training starten: Plan als Chips, Körpergewicht als Zahl ---------- */
-function setupPlanChips(d){return `<div class="field"><span class="eyebrow">Trainingsplan</span><div class="chips wrap" role="group" aria-label="Trainingsplan">${[['','Ohne Plan']].concat(S.plans.map(p=>[p.id,p.name])).map(([id,n])=>`<button class="chip" data-act="setupPlan" data-id="${id}" aria-pressed="${(d.planId||'')===id}">${esc(n)}</button>`).join('')}</div></div>`}
+function setupPlanChips(d){return `<div class="field"><span class="eyebrow eyic">${ICONS.plaene}Trainingsplan</span><div class="chips wrap" role="group" aria-label="Trainingsplan">${[['','Ohne Plan']].concat(S.plans.map(p=>[p.id,p.name])).map(([id,n])=>`<button class="chip" data-act="setupPlan" data-id="${id}" aria-pressed="${(d.planId||'')===id}">${esc(n)}</button>`).join('')}</div></div>`}
 function bwInput(d){
   return `<div class="kgc bwc"><button class="nudge" data-act="bwNudge" data-d="-0.1" aria-label="0,1 kg weniger">−</button><input class="in num bwin" type="text" inputmode="decimal" autocomplete="off" id="f-bw" data-f="bw" value="${vIn(d.bw)}" placeholder="nicht gewogen" aria-label="Körpergewicht in kg"><button class="nudge plus" data-act="bwNudge" data-d="0.1" aria-label="0,1 kg mehr">+</button></div>`}
 
@@ -4141,7 +4462,8 @@ function trainChange(T){const id=T.id;
    Die Einschlafzeit gehört zur Nacht, die am nächsten Morgen endet: Sie steht im Schlaf-Eintrag des Folgetags (sleep.bed),
    dort auch die Aufstehzeit (sleep.wake). Die Dauer sleep.h rechnet die App daraus (über Mitternacht, auf 5 Minuten gerundet);
    alle Auswertungen nutzen weiter sleep.h. Fehlt die Einschlafzeit (kein Check-out am Vorabend), fragt der Check-in sie mit ab.
-   Erledigt bleibt nur eine Zeile: „Check-in erledigt“ mit „Verlauf“ (Fortschritt → Schlaf & Stimmung) und „Ändern“.
+   Erledigt bleibt nur eine Zeile mit den Werten selbst (Schlafdauer, Akku für die Schlafqualität, Gesicht für die Stimmung,
+   Einschlafzeit), dazu „Verlauf“ (Fortschritt → Schlaf & Stimmung) und „Ändern“ als Symbole (1.13.0).
    Alte Einträge mit Dauer ohne Uhrzeiten gelten weiter als erledigt. */
 const CI_FROM=3,CO_FROM=17,CI_STEP=15,SLEEP_MIN=60,SLEEP_MAX=960;
 let ciEdit=null,ciKeyLast='';
@@ -4166,25 +4488,33 @@ function usualT(f){const v=[],bed=f==='bed';for(const k of Object.keys(S.days).s
 function ciSug(f,live){const u=usualT(f);if(!live)return u;const d=new Date(),n=d.getHours()*60+d.getMinutes();
   if(f==='wake')return n<tMin(u)?tStr(Math.floor(n/5)*5):u;
   return (n+720)%1440>(tMin(u)+720)%1440?tStr(Math.ceil(n/5)*5):u}
-function ciTime(rk,f,lbl,when,sug){const v=(dayGet(rk).sleep||{})[f]||'',a=`data-k="${rk}" data-f="${f}" data-sug="${sug}"`;
-  return `<div class="ci-row"><div class="ci-l"><b>${lbl}</b><span class="small muted">${v?when:when+' · Vorschlag antippen'}</span></div>
-   <div class="goalc"><button class="nudge" data-act="ciT" ${a} data-d="-1" aria-label="${lbl}: eine Viertelstunde früher">−</button>${v
-    ?`<input class="tval num" type="time" step="300" data-ct="${f}" data-k="${rk}" value="${esc(v)}" aria-label="${lbl}, Uhrzeit">`
-    :`<button class="val num ph" data-act="ciTSet" ${a} aria-label="${lbl} ${sug} übernehmen">${sug}</button>`}<button class="nudge" data-act="ciT" ${a} data-d="1" aria-label="${lbl}: eine Viertelstunde später">+</button></div></div>`}
+function ciTime(rk,f,lbl,when,sug){const v=(dayGet(rk).sleep||{})[f]||'',a=`data-k="${rk}" data-f="${f}" data-sug="${sug}"`,al=esc(lbl+' ('+when+')');
+  return `<div class="ci-row"><div class="ci-l ci-lt">${f==='wake'?ICONS.sunrise:ICONS.moon}<b>${lbl}</b></div>
+   <div class="goalc"><button class="nudge" data-act="ciT" ${a} data-d="-1" aria-label="${al}: eine Viertelstunde früher">−</button>${v
+    ?`<input class="tval num" type="time" step="300" data-ct="${f}" data-k="${rk}" value="${esc(v)}" aria-label="${al}, Uhrzeit">`
+    :`<button class="val num ph" data-act="ciTSet" ${a} aria-label="${al}: Vorschlag ${sug} übernehmen">${sug}</button>`}<button class="nudge" data-act="ciT" ${a} data-d="1" aria-label="${al}: eine Viertelstunde später">+</button></div></div>`}
+/* Schlafdauer als Balken bis 10 Stunden, Strich bei 7 Stunden */
+function slBar(h){return `<span class="slb" role="img" aria-label="Schlaf ${fmtH(h)} Stunden">${ICONS.bed}<b class="num">${fmtH(h)} h</b><span class="slb-t" aria-hidden="true"><i style="width:${Math.max(0,Math.min(100,h*10)).toFixed(1)}%"></i><em></em></span></span>`}
 function ciResHtml(k){const s=dayGet(k).sleep||{},m=sleepMin(s);
-  if(m==null)return num(s.h)>0?`Schlaf <b class="num">${fmtH(s.h)} h</b>`:'';
-  return sleepOk(m)?`Schlaf <b class="num">${fmtH(Math.round(m/5)*5/60)} h</b> · eingeschlafen ${esc(s.bed)}`:`<span class="lnk-bad">${fmtH(m/60)} h Schlaf? Prüf die Uhrzeiten.</span>`}
+  if(m==null)return num(s.h)>0?slBar(num(s.h)):'';
+  return sleepOk(m)?slBar(Math.round(m/5)*5/60):`<span class="lnk-bad ci-warn">${WARN_IC}<span><b class="num">${fmtH(m/60)} h</b> Schlaf? Prüf die Uhrzeiten.</span></span>`}
 function ciResUpd(k){const el=document.getElementById('cires-'+k);if(el)el.innerHTML=ciResHtml(k)}
-function ciHead(t,right){return `<div class="pane-h"><span class="eyebrow">${t}</span>${right||''}</div>`}
+function ciHead(t,right){return `<div class="pane-h"><span class="eyebrow">${/^Check-in/.test(t)?ICONS.sunrise:ICONS.moon}${t}</span>${right||''}</div>`}
 function ciInBody(k,c,ed){const s=dayGet(k).sleep||{},live=c.ph==='day'||c.ph==='eve';
   const rows=[ciTime(k,'wake','Aufgestanden',live?'heute früh':'am Morgen',ciSug('wake',live))];
   if(ed||!s.bed)rows.push(ciTime(k,'bed','Eingeschlafen',s.bed?'in der Nacht davor':'kein Check-out am Abend davor',ciSug('bed',false)));
   return `${rows.join('')}<div class="ci-res small muted" id="cires-${k}">${ciResHtml(k)}</div>
-   <div class="field"><span class="eyebrow">Schlafqualität</span>${scaleHtml('sleepQ',num(s.q),SLQ,'Schlafqualität',k)}</div>`}
+   <div class="field"><span class="eyebrow">Schlafqualität</span>${scaleHtml('sleepQ',num(s.q),SLQ,'Schlafqualität',k,BATT)}</div>`}
 function coBody(k,c){const live=c.ph==='eve'||c.ph==='night';
-  return `<div class="field"><span class="eyebrow">Stimmung</span>${scaleHtml('mood',num(dayGet(k).mood),MOOD,'Stimmung',k)}</div>
+  return `<div class="field"><span class="eyebrow">Stimmung</span>${scaleHtml('mood',num(dayGet(k).mood),MOOD,'Stimmung',k,FACE)}</div>
    ${ciTime(offFrom(k,1),'bed','Einschlafen',live?'heute Nacht':'in der Nacht danach',ciSug('bed',live))}`}
-function ciDoneRow(k,both){return `<div class="pane-h"><span class="eyebrow cis-ok">${ICONS.check}${both?'Check-in und -out erledigt':'Check-in erledigt'}</span><span class="ci-acts"><button class="lnk" data-act="goProg" data-v="mind">Verlauf</button><button class="lnk" data-act="ciEdit" data-date="${k}">Ändern</button></span></div>`}
+/* Erledigt: eine Zeile mit den Werten selbst (Schlaf, Akku, Stimmung, Einschlafzeit) statt „erledigt“ */
+function ciDoneRow(k,both){const D=dayGet(k),s=D.sleep||{},mo=num(D.mood),nb=(dayGet(offFrom(k,1)).sleep||{}).bed,P=[];
+  if(num(s.h)>0)P.push(`<span class="cdv">${ICONS.bed}<b class="num">${fmtH(s.h)}<small> h</small></b></span>`);
+  if(num(s.q)>0)P.push(`<span class="cdv" title="Schlafqualität: ${SLQ[num(s.q)-1]}">${scIc(BATT,s.q)}</span>`);
+  if(both&&mo)P.push(`<span class="cdv" title="Stimmung: ${MOOD[mo-1]}">${scIc(FACE,mo)}</span>`);
+  if(both&&nb)P.push(`<span class="cdv">${ICONS.moon}<b class="num">${esc(nb)}</b></span>`);
+  return `<div class="pane-h"><span class="cdr">${CHECK_IC}<span class="sr">${both?'Check-in und Check-out erledigt':'Check-in erledigt'}</span>${P.join('')}</span><span class="ci-acts"><button class="iconbtn" data-act="goProg" data-v="mind" aria-label="Verlauf: Schlaf und Stimmung">${ICONS.fortschritt}</button><button class="iconbtn" data-act="ciEdit" data-date="${k}" aria-label="Check-in ändern">${ICONS.pen}</button></span></div>`}
 function checkinCard(){const c=ciCtx(),k=c.k,ci=ciDone(k),co=coDone(k),ed=ciEdit===k,coOn=c.ph!=='day',coT=c.ph==='night'?'Check-out · gestern':'Check-out';
   ciKeyLast=c.ph+k;
   /* Nachts nur der offene Check-out von gestern; erledigt verschwindet die Karte bis 3 Uhr */
@@ -4206,11 +4536,11 @@ function trainCardToday(k){
   const goal=S.goal||3,wd=weekDays(),wk=ymd(monday(parseD(k))),cnt=wd[wk]?wd[wk].size:0,nEx=n=>n+' '+(n===1?'Übung':'Übungen');
   let body;
   if(live&&isT){const pl=d.planId&&S.plans.find(p=>p.id===d.planId),info=[pl?esc(pl.name):'',esc(catsTxt(d.entries,' · ')),d.entries.length?nEx(d.entries.length):'noch keine Übung'].filter(Boolean);
-    body=`<button class="btn primary block" data-act="goSession">Training fortsetzen</button><div class="small muted">${info.join(' · ')}</div>`}
-  else if(ss.length)body=ss.map(x=>`<div class="tdone"><b>${esc(catsTxt(x.entries,' · ')||x.planName||'Training')}</b><span class="small muted num">${x.planName?esc(x.planName)+' · ':''}${x.dur?x.dur+' Min · ':''}${nEx(x.entries.length)}${x.feel?' · Gefühl: '+FEEL[x.feel-1]:''}</span></div>`).join('');
+    body=`<button class="btn primary block" data-act="goSession">${PLAY_IC}Training fortsetzen</button><div class="small muted">${catIcs(entCats(d.entries))}${info.join(' · ')}</div>`}
+  else if(ss.length)body=ss.map(x=>`<div class="tdone"><b>${catIcs(entCats(x.entries))}${esc(catsTxt(x.entries,' · ')||x.planName||'Training')}</b><span class="tmeta small muted num">${x.planName?`<span>${esc(x.planName)}</span>`:''}${x.dur?`<span>${CLOCK_IC}${x.dur} Min</span>`:''}<span>${nEx(x.entries.length)}</span>${x.feel?`<span title="Gefühl: ${FEEL[x.feel-1]}">${scIc(FACE,x.feel)}${FEEL[x.feel-1]}</span>`:''}</span></div>`).join('');
   else if(isT){const pinned=S.plans.filter(p=>p.pinned);body=`<button class="btn primary block" data-act="goTrain">Training starten</button>${pinned.length?`<div class="qchips">${pinned.map(p=>`<button class="qchip" data-act="startPlan" data-id="${p.id}">${PLAY_IC}<span>${esc(p.name)}</span></button>`).join('')}</div>`:''}`}
-  else body=`<div class="small muted">An diesem Tag ist kein Training eingetragen.</div><button class="btn small" data-act="goTrain" data-date="${k}">Training nachtragen</button>`;
-  return `<div class="card pane"><div class="pane-h"><span class="eyebrow">Training</span><button class="lnk" data-act="tab" data-v="training"><span class="num">${cnt}/${goal}</span> in dieser Woche</button></div>${body}</div>`;
+  else body=`<div class="small muted">Kein Training an diesem Tag.</div><button class="btn small" data-act="goTrain" data-date="${k}">${PLUS_IC}Training nachtragen</button>`;
+  return `<div class="card pane"><div class="pane-h"><span class="eyebrow">${ICONS.training}Training</span><button class="lnk wkl" data-act="tab" data-v="training" aria-label="${cnt} von ${goal} Trainings in dieser Woche">${wDots(cnt,goal)}<span class="num">${cnt}/${goal}</span></button></div>${body}</div>`;
 }
 
 function heuteAct(a,el){const ds=el&&el.dataset||{};switch(a){
@@ -4243,7 +4573,7 @@ function muscleCard(R,canFine){const fine=!!(canFine&&S.ui.msFine),cnt=msCount(R
   const head=`<div class="sec-h"><div class="lbl-row"><b>Muskelgruppen im Vergleich</b>${infoBtn('aiMs','Muskelgruppen im Vergleich')}</div>${canFine?`<div class="seg mini" role="group" aria-label="Aufteilung"><button data-act="msFine" data-v="0" aria-pressed="${!fine}">Grob</button><button data-act="msFine" data-v="1" aria-pressed="${fine}">Fein</button></div>`:''}</div>${iBox('aiMs',MS_INFO2)}`;
   if(!tot)return `<div class="card section">${head}<div class="small muted">Im Zeitraum gibt es noch keine abgehakten Sätze mit Kraft- oder Körpergewichtsübungen.</div></div>`;
   const keys=msOrder(cnt,fine),sh=k=>(cnt.get(k)||0)/tot,mx=Math.max(...keys.map(sh))||1;
-  const rows=keys.map(k=>{const v=sh(k);return `<div class="hbar cmp"><span>${esc(msLabel(k))}</span><div class="tr"><i class="fill cmp" style="width:${(v/mx*100).toFixed(1)}%"></i></div><span class="v num">${v?Math.max(1,Math.round(v*100))+' %':'–'}</span></div>`}).join('');
+  const rows=keys.map(k=>{const v=sh(k);return `<div class="hbar cmp"><span class="mslbl">${catIc(k.split('|')[0])}<span>${esc(msLabel(k))}</span></span><div class="tr"><i class="fill cmp" style="width:${(v/mx*100).toFixed(1)}%"></i></div><span class="v num">${v?Math.max(1,Math.round(v*100))+' %':'–'}</span></div>`}).join('');
   /* Hinweise bewusst grob, ohne Zahlen */
   const g=k=>{let n=0;for(const [key,v] of cnt)if(key===k||key.startsWith(k+'|'))n+=v;return n/tot},hints=[],b=g('Brust'),r=g('Rücken'),up=b+r+g('Schultern')+g('Arme'),lg=g('Beine'),none=MS_BASE.filter(c=>!g(c));
   if(tot>=12&&Math.max(b,r)>=0.08&&Math.max(b,r)>1.5*Math.min(b,r))hints.push(b>r?'Brust kommt deutlich öfter vor als Rücken. Ein ähnliches Verhältnis von Druck- und Zugübungen gilt als ausgewogen.':'Rücken kommt deutlich öfter vor als Brust.');
@@ -4331,18 +4661,18 @@ function fTargetW(){const t=num((S.nutri||{}).target);if(t>0)return t;const g=(S
 function fPlanW(){const r=nCalc();if(r.miss||!r.ri||!r.delta)return null;return (r.goal==='ab'?-1:1)*nRateKg(r)}
 
 /* ---------- Karten der Startseite ---------- */
-function faTraining(R,P){if(!fFirst('training'))return fBody([],'',['Noch keine Trainings. Trag dein erstes Training ein, dann siehst du hier deine Entwicklung.']);
+function faTraining(R,P){if(!fFirst('training'))return fBody([],'',['Noch keine Trainings']);
   const L=R.list,pl=R.plist,h=L.reduce((t,x)=>t+sessMin(x),0)/60;
   const K=[fKpi(L.length,L.length===1?'Training':'Trainings',pl?dlt(L.length,pl.length,0):''),fKpi(fmt(h,1)+'<small>Std</small>','Trainingszeit',P&&pl?dlt(h,pl.reduce((t,x)=>t+sessMin(x),0)/60,1,' Std'):'')];
   if(P)K.push(fKpi(fmt(L.length/R.weeks,1),'Ø pro Woche'));
   const no=[],pr=fPrCount(R),is=fIssN();
   if(!L.length)no.push('Keine Trainings im Zeitraum');
-  if(pr)no.push(pr===1?'1 neuer Bestwert':pr+' neue Bestwerte');
-  if(is)no.push(`<span class="warn">${is===1?'1 Training':is+' Trainings'} prüfen</span>`);
+  if(pr)no.push(`<span class="fan pr">${ICONS.trophy}${pr===1?'1 neuer Bestwert':pr+' neue Bestwerte'}</span>`);
+  if(is)no.push(`<span class="fan warn">${WARN_IC}${is===1?'1 Training':is+' Trainings'} prüfen</span>`);
   /* Verlauf: bis 31 Tage die Trainingszeit pro Tag (ohne Dauer zählt ein Training wie 20 Minuten), sonst Trainings pro Woche oder Monat */
   const day=R.per==='Tag';
   return fBody(K,fSpark(R.bk.map(b=>{const B=L.filter(x=>fIn(b,x.date));return day?B.reduce((t,x)=>t+Math.max(sessMin(x),20),0):B.length}),{min:day?60:R.per==='Woche'?4:12}),no)}
-function faGew(R,P){const hs=S.habits.filter(h=>!h.arch);if(!hs.length)return fBody([],'',['Noch keine Gewohnheiten. Leg welche an, dann siehst du hier, wie oft du sie schaffst.']);
+function faGew(R,P){const hs=S.habits.filter(h=>!h.arch);if(!hs.length)return fBody([],'',['Noch keine Gewohnheiten']);
   const r1=habRate(R.dl),r0=R.prev?habRate(R.prev):null,fd=fFullDays(hs,R.dl);
   const K=[fKpi(r1==null?'–':Math.round(r1*100)+'<small>%</small>','erledigt',r1!=null&&r0!=null?dlt(Math.round(r1*100),Math.round(r0*100),0,' Pkt.'):''),fKpi(fd.n+'<small>/ '+fd.due+'</small>','Tage, alles erledigt')];
   const no=[];
@@ -4357,26 +4687,26 @@ function faErn(R,P){if(!fFirst('ern'))return fBody([],'',['Noch keine Mahlzeiten
   if(!lg.length)no.push('Keine Einträge im Zeitraum');
   else if(P&&tg){const n=T.filter(t=>Math.abs(t.k-tg)<=tg*.1).length;no.push('Im Zielbereich (±10&nbsp;%): '+n+' von '+lg.length+(lg.length===1?' Tag':' Tagen'))}
   return fBody(K,fSpark(R.bk.map(b=>{const L=fBkDays(R,b).filter(k=>(dayGet(k).food||[]).length);return L.length?avgOf(L.map(k=>sumFood(dayGet(k).food).k)):0}),{ref:tg||0}),no)}
-function faKoerper(R,P){const all=weightLog();if(!all.length)return fBody([],'',['Trag dein Gewicht unter Heute oder beim Training ein, dann siehst du hier deinen Verlauf.']);
+function faKoerper(R,P){const all=weightLog();if(!all.length)return fBody([],'',['Noch kein Gewicht eingetragen']);
   const pts=all.filter(p=>p.date>=R.start&&p.date<=R.end).map(p=>({t:dayN(p.date),v:p.v})),av=fAvg7(pts),cur=av.length?av[av.length-1].v:all[all.length-1].v;
   const ch=av.length>=2?av[av.length-1].v-av[0].v:null,wk=av.length>=2?(av[av.length-1].t-av[0].t)/7:0;
   const K=[fKpi(fmt(cur,1)+'<small>kg</small>',av.length?'aktuell, Ø 7 Tage':'zuletzt gewogen'),fKpi(ch==null?'–':sgnF(ch)+'<small>kg</small>','im Zeitraum')];
   if(P)K.push(fKpi(wk>=1?sgnF(ch/wk,2)+'<small>kg</small>':'–','Ø pro Woche'));
   const no=[],tg=fTargetW();if(!pts.length)no.push('Kein Gewicht im Zeitraum');
-  if(tg)no.push(Math.abs(cur-tg)<0.05?'Zielgewicht erreicht':'Ziel '+fmt(tg,1)+' kg · noch '+fmt(Math.abs(cur-tg),1)+' kg');
+  if(tg)no.push(`<span class="fan">${ICONS.flag}${Math.abs(cur-tg)<0.05?'Zielgewicht erreicht':'Ziel '+fmt(tg,1)+' kg · noch '+fmt(Math.abs(cur-tg),1)+' kg'}</span>`);
   return fBody(K,fSparkLine(av.length>=2?av:pts),no)}
-function faMind(R,P){if(!fFirst('mind'))return fBody([],'',['Noch keine Check-ins. Trag unter Heute Schlaf und Stimmung ein.']);
+function faMind(R,P){if(!fFirst('mind'))return fBody([],'',['Noch keine Check-ins']);
   const s1=avgSleep(R.dl),s0=R.prev?avgSleep(R.prev):null,m1=avgMood(R.dl),m0=R.prev?avgMood(R.prev):null;
-  const K=[fKpi(s1?fmtH(s1)+'<small>h</small>':'–','Ø Schlaf',s1&&s0?dlt(Math.round(s1*60),Math.round(s0*60),0,' Min'):''),fKpi(m1?fmt(m1,1):'–','Ø Stimmung, 1 bis 5',P&&m1&&m0?dlt(m1,m0,1):'')];
-  if(P){const q=R.dl.map(k=>num((dayGet(k).sleep||{}).q)).filter(v=>v>0);K.push(fKpi(q.length?fmt(avgOf(q),1):'–','Ø Schlafqualität'))}
+  const K=[fKpi(s1?fmtH(s1)+'<small>h</small>':'–','Ø Schlaf',s1&&s0?dlt(Math.round(s1*60),Math.round(s0*60),0,' Min'):''),fKpi(m1?fmt(m1,1)+`<span class="kic">${scIc(FACE,m1)}</span>`:'–','Ø Stimmung',P&&m1&&m0?dlt(m1,m0,1):'')];
+  if(P){const q=R.dl.map(k=>num((dayGet(k).sleep||{}).q)).filter(v=>v>0),aq=q.length?avgOf(q):0;K.push(fKpi(q.length?fmt(aq,1)+`<span class="kic">${scIc(BATT,aq)}</span>`:'–','Ø Schlafqualität'))}
   const no=[];if(!s1&&!m1)no.push('Keine Check-ins im Zeitraum');
   if(P){const b=R.dl.reduce((t,k)=>t+num(dayGet(k).breath),0);if(b)no.push('Atemübungen: '+fmt(b,0)+' Min')}
   return fBody(K,fSpark(R.bk.map(b=>avgSleep(fBkDays(R,b))||0),{lo:4,max:10,ref:7}),no)}
 const FA_CARD={training:faTraining,gew:faGew,ern:faErn,koerper:faKoerper,mind:faMind};
 function fInsCard(R,max){const ins=insights(R.dl),L=max?ins.slice(0,max):ins,more=ins.length-L.length;
-  return `<div class="card section"><div><b>Zusammenhänge</b><div class="small muted">Was im Zeitraum oft zusammen auftrat</div></div>
-    ${L.length?`<div class="inss">${L.map(insRow).join('')}</div>${more?`<div class="small muted">${more===1?'Ein weiterer Zusammenhang':more+' weitere Zusammenhänge'} in der Ansicht Analyse.</div>`:''}<div class="small muted">Das zeigt Zusammenhänge, keine Ursachen. Je mehr Tage du einträgst, desto verlässlicher wird es.</div>`
-      :`<div class="small muted">${mod('mind')?'Sobald du ein paar Tage Schlaf und Stimmung einträgst, erscheinen hier Vergleiche, zum Beispiel deine Stimmung an Trainings- und Ruhetagen.':'Mit dem Modul Schlaf & Mindset siehst du hier, wie Schlaf, Stimmung und Training zusammenhängen.'}</div>`}</div>`}
+  return `<div class="card section"><div class="lbl-row"><b>Zusammenhänge</b>${infoBtn('aiIns','Zusammenhänge')}</div>${iBox('aiIns','<p>Was im Zeitraum oft zusammen auftrat. Das zeigt Zusammenhänge, keine Ursachen.</p><p>Je mehr Tage du einträgst, desto verlässlicher wird es.</p>')}
+    ${L.length?`<div class="inss">${L.map(insRow).join('')}</div>${more?`<button class="btn small ghost morebtn" data-act="mode" data-v="perf">${ICONS.fortschritt}${more===1?'1 weiterer':more+' weitere'} in Analyse</button>`:''}`
+      :`<div class="small muted">${mod('mind')?'Erscheint nach ein paar Tagen mit Schlaf und Stimmung.':'Mit dem Modul Schlaf & Mindset siehst du hier, wie Schlaf, Stimmung und Training zusammenhängen.'}</div>`}</div>`}
 function viewFort(){kcC=new WeakMap();try{const P=perf();
   const cards=fAreas().map(([k,v,t,ic])=>`<button class="card farea" data-act="tab" data-v="${v}"><span class="fa-h">${ICONS[ic]}<span class="fa-t">${t}</span>${CHR}</span>${FA_CARD[k](fR(k),P)}</button>`).join('');
   return `${banner()}${fCtl()}<div class="fareas">${cards}</div>${fInsCard(fR('ueb'),P?0:2)}`}finally{kcC=null}}
@@ -4397,11 +4727,11 @@ function fCal(R){const TD=trainDates(),td=today(),L=R.dl;let h;
   return `<div class="card section"><div><b>Trainingstage</b><div class="small muted num">${dn} von ${R.n} Tagen${dn>=3?' · am häufigsten '+F_WDL[top]:''}</div></div>
     <div role="img" aria-label="Trainingstage: an ${dn} von ${R.n} Tagen trainiert">${h}</div></div>`}
 function fFreqCard(R){const it=R.bk.map(b=>({label:b.label,parts:[R.list.filter(x=>fIn(b,x.date)).length]}));
-  return `<div class="card section"><div><b>Trainings pro ${R.per}</b><div class="small muted">${R.per==='Woche'?'Die aktuelle Woche ist gelb':'Der aktuelle Monat ist gelb'}</div></div>${sBars(it,{cur:true,label:'Trainings pro '+R.per,fy:v=>fmt(v,0),minMax:4})}</div>`}
+  return `<div class="card section"><div><b>Trainings pro ${R.per}</b></div>${sBars(it,{cur:true,label:'Trainings pro '+R.per,fy:v=>fmt(v,0),minMax:4})}<div class="legend"><span><i class="lg-a"></i>${R.per==='Woche'?'diese Woche':'dieser Monat'}</span></div></div>`}
 function fExCard(R){const m=new Map(),EX=new Map(S.exercises.map(e=>[e.id,e]));
   for(const x of R.list)for(const e of x.entries||[]){const ex=EX.get(e.exId);if(!ex)continue;const v=metric(cleanEntry(ex,e),ex.kind);if(!(v>0))continue;
     let o=m.get(ex.id);if(!o)m.set(ex.id,o={ex,pts:[]});o.pts.push({date:x.date,v,entry:e})}
-  const head='<div><b>Deine Übungen</b><div class="small muted">Erster und letzter Wert im Zeitraum. Antippen zeigt den Verlauf.</div></div>';
+  const head='<div><b>Deine Übungen</b></div>';
   if(!m.size)return `<div class="card section">${head}<div class="small muted">Im Zeitraum gibt es keine Einträge mit Werten.</div></div>`;
   const rows=[...m.values()].map(o=>{const f=o.pts[0].v,l=o.pts[o.pts.length-1].v;return {...o,first:f,last:l,best:Math.max(...o.pts.map(p=>p.v)),pct:o.pts.length>=2&&f>0?(l-f)/f*100:null,ld:o.pts[o.pts.length-1].date}})
     .sort((a,b)=>(b.pct!=null)-(a.pct!=null)||(b.pct||0)-(a.pct||0)||(a.ld<b.ld?1:a.ld>b.ld?-1:0));
@@ -4429,14 +4759,14 @@ function fpTraining(R,P){
 
 /* Gewohnheiten */
 function fHabRow(s){const p=s.rate==null?null:Math.round(s.rate*100);
-  return `<div class="fhab"><div class="sec-h"><b>${esc(s.h.name)}</b><span class="num"><b>${p==null?'–':p+' %'}</b> <span class="small muted">${s.dn} von ${s.due} ${s.due===1?'Tag':'Tagen'}</span></span></div>
+  return `<div class="fhab"><div class="sec-h"><b class="fhn">${habIc(s.h)}${esc(s.h.name)}</b><span class="num"><b>${p==null?'–':p+' %'}</b> <span class="small muted">${s.dn} von ${s.due} ${s.due===1?'Tag':'Tagen'}</span></span></div>
     <div class="fbar" aria-hidden="true"><i style="width:${p||0}%"></i></div>${s.ex?`<span class="small muted num">${s.ex}</span>`:''}</div>`}
 function fHabGrid(s,R){const h=s.h,td=today();let cells,cols;
   if(R.n<=92){cols=R.n<=7?7:R.n<=31?Math.ceil(R.n/2):Math.ceil(R.n/5);
     cells=R.dl.map(k=>{const d=habitDue(h,k),ok=d&&habDone(h,k),part=d&&!ok&&(h.kind==='count'||h.kind==='amount')&&num(habVal(h,k))>0;return `<i class="${!d?'na':ok?'on':part?'part':''}${k===td?' td':''}"></i>`}).join('')}
   else{const W=[];for(let i=0;i<R.dl.length;i+=7)W.push(R.dl.slice(i,i+7));cols=Math.min(26,W.length);
     cells=W.map(w=>{const due=w.filter(k=>habitDue(h,k)),dn=due.filter(k=>habDone(h,k)).length;return `<i class="${!due.length?'na':dn===due.length?'on':dn?'part':''}"></i>`}).join('')}
-  return `<div class="card section"><div class="sec-h"><b>${esc(h.name)}</b><span class="num"><b>${s.rate==null?'–':Math.round(s.rate*100)+' %'}</b> <span class="small muted">${s.dn} von ${s.due} ${s.due===1?'Tag':'Tagen'}</span></span></div>
+  return `<div class="card section"><div class="sec-h"><b class="fhn">${habIc(h)}${esc(h.name)}</b><span class="num"><b>${s.rate==null?'–':Math.round(s.rate*100)+' %'}</b> <span class="small muted">${s.dn} von ${s.due} ${s.due===1?'Tag':'Tagen'}</span></span></div>
     <div class="hgrid2" style="grid-template-columns:repeat(${cols},minmax(0,1fr))" role="img" aria-label="${esc(h.name)}: an ${s.dn} von ${s.due} Tagen erledigt">${cells}</div>
     ${R.n>92?'<div class="small muted">Ein Kästchen pro Woche</div>':''}${s.ex?`<div class="small muted num">${s.ex}</div>`:''}</div>`}
 function fHabWd(hs,R){const due=[0,0,0,0,0,0,0],dn=[0,0,0,0,0,0,0];
@@ -4450,7 +4780,7 @@ function fpGew(R,P){const hs=S.habits.filter(h=>!h.arch);
   if(!hs.length)return '<div class="card empty"><b>Noch keine Gewohnheiten</b>Leg welche an, dann siehst du hier, wie oft du sie schaffst.<button class="btn primary" data-act="tab" data-v="gewohnheiten">Gewohnheiten</button></div>';
   const r1=habRate(R.dl),r0=R.prev?habRate(R.prev):null,fd=fFullDays(hs,R.dl),st=hs.map(h=>fHabStat(h,R.dl));
   const T=`<div class="tiles">${tile(r1==null?'–':Math.round(r1*100)+'<small>%</small>','erledigt',r1!=null&&r0!=null?dlt(Math.round(r1*100),Math.round(r0*100),0,' Pkt.'):'')}${tile(fd.n+'<small>/ '+fd.due+'</small>','Tage, an denen alles erledigt war')}</div>`;
-  if(!P)return `${T}<div class="card section"><div><b>Deine Gewohnheiten</b><div class="small muted">Anteil der geplanten Tage, an denen du sie geschafft hast</div></div><div class="fhabs">${st.map(fHabRow).join('')}</div></div>`;
+  if(!P)return `${T}<div class="card section"><div class="lbl-row"><b>Deine Gewohnheiten</b>${infoBtn('aiHab','Deine Gewohnheiten')}</div>${iBox('aiHab','<p>Anteil der geplanten Tage, an denen du die Gewohnheit geschafft hast.</p>')}<div class="fhabs">${st.map(fHabRow).join('')}</div></div>`;
   return `${T}${st.map(s=>fHabGrid(s,R)).join('')}<div class="legend"><span><i class="lg-on"></i>erledigt</span><span><i class="lg-part"></i>teilweise</span><span><i class="lg-na"></i>nicht geplant</span></div>${fHabWd(hs,R)}`}
 
 /* Ernährung */
@@ -4461,8 +4791,9 @@ function fpErn(R,P){const r=nCalc(),tg=r.miss?null:r.avg.k,ptg=r.miss?null:r.avg
   const T=[tile(fmt(Math.round(ak),0),'Ø kcal pro Tag mit Einträgen'+(tg?', Ziel '+fmt(r10(tg),0):''),pk?dlt(Math.round(ak),Math.round(pk),0):''),tile(lg.length+'<small>/ '+R.n+'</small>','Tage mit Einträgen')];
   if(P){T.push(tile(tg?lg.filter(p=>Math.abs(p.t.k-tg)<=tg*.1).length+'<small>/ '+lg.length+'</small>':'–','Tage im Zielbereich (±10&nbsp;%)'));T.push(tile(fmt(Math.round(ap),0)+'<small>g</small>','Ø Eiweiß'+(ptg?', Ziel '+fmt(r5(ptg),0)+' g':'')))}
   const bAvg=(b,f)=>{const L=lg.filter(p=>fIn(b,p.k));return L.length?avgOf(L.map(f)):0};
-  const kc=`<div class="card section"><div><b>Kalorien pro ${R.per}</b><div class="small muted">${day?'':'Ø der Tage mit Einträgen. '}${tg?'Gestrichelt: dein Zielbedarf':'Berechne deinen Tagesbedarf, dann erscheint hier die Ziellinie'}</div></div>
-    ${sBars(R.bk.map((b,i)=>({label:b.label,parts:[day?per[i].t.k:bAvg(b,p=>p.t.k)]})),{label:'Kalorien pro '+R.per,ref:tg||null,fy:v=>fmt(v,0),cur:!day})}</div>`;
+  const kc=`<div class="card section"><div><b>Kalorien pro ${R.per}</b>${day?'':'<div class="small muted">Ø der Tage mit Einträgen</div>'}</div>
+    ${sBars(R.bk.map((b,i)=>({label:b.label,parts:[day?per[i].t.k:bAvg(b,p=>p.t.k)]})),{label:'Kalorien pro '+R.per,ref:tg||null,fy:v=>fmt(v,0),cur:!day})}
+    ${tg?`<div class="legend"><span><i class="lg-ref"></i>Ziel ${fmt(r10(tg),0)} kcal</span></div>`:`<button class="lnk inl" data-act="tab" data-v="bedarf">${ICONS.bedarf} Tagesbedarf berechnen</button>`}</div>`;
   const mac=`<div class="card section"><div><b>Ø Makros an Tagen mit Einträgen</b></div>
     <div class="mrow">${[['p','m-ei','Eiweiß',ap,4],['c','m-kh','Kohlenhydr.',ac,4],['f','m-fe','Fett',af,9]].map(([f,c,l,v,kc])=>`<div class="mcell ${c}"><span class="mac-n">${l}</span><b class="num">${fmt(Math.round(v),0)}<small> g</small></b><span class="small muted num">${Math.round(v*kc/tot*100)} % der kcal</span></div>`).join('')}</div></div>`;
   if(!P)return `<div class="tiles">${T.join('')}</div>${kc}${mac}`;
@@ -4471,10 +4802,10 @@ function fpErn(R,P){const r=nCalc(),tg=r.miss?null:r.avg.k,ptg=r.miss?null:r.avg
     ${sBars(mv,{cls:['m-ei','m-kh','m-fe'],label:'Makros im Verlauf',fy:v=>fmt(v,0),ref:tg||null})}<div class="legend"><span><i class="lg-ei"></i>Eiweiß</span><span><i class="lg-kh"></i>Kohlenhydrate</span><span><i class="lg-fe"></i>Fett</span></div></div>`;
   const sl={fr:0,mi:0,ab:0,sn:0};for(const p of lg)for(const x of p.f)sl[slotOf(x)]+=num(x.k);const smx=Math.max(...Object.values(sl))||1;
   const slC=`<div class="card section"><div><b>Mahlzeiten</b><div class="small muted">Ø kcal pro Tag mit Einträgen</div></div>
-    <div class="hbars">${SLOTS.map(([s,l])=>`<div class="hbar cmp"><span>${l}</span><div class="tr"><i class="fill cmp" style="width:${(sl[s]/smx*100).toFixed(1)}%"></i></div><span class="v num">${fmt(Math.round(sl[s]/lg.length),0)}</span></div>`).join('')}</div></div>`;
+    <div class="hbars">${SLOTS.map(([s,l])=>`<div class="hbar cmp"><span class="mslbl">${SLOT_IC[s]}<span>${l}</span></span><div class="tr"><i class="fill cmp" style="width:${(sl[s]/smx*100).toFixed(1)}%"></i></div><span class="v num">${fmt(Math.round(sl[s]/lg.length),0)}</span></div>`).join('')}</div></div>`;
   const wd=[[],[],[],[],[],[],[]];for(const p of lg)wd[fWdi(p.k)].push(p.t.k);
-  const wdC=lg.length>=7&&wd.filter(a=>a.length).length>=3?`<div class="card section"><div><b>Nach Wochentag</b><div class="small muted">Ø kcal an Tagen mit Einträgen${tg?', gestrichelt: Zielbedarf':''}</div></div>
-    ${sBars(F_WD.map((l,i)=>({label:l,parts:[wd[i].length?avgOf(wd[i]):0]})),{label:'Kalorien nach Wochentag',ref:tg||null,fy:v=>fmt(v,0)})}</div>`:'';
+  const wdC=lg.length>=7&&wd.filter(a=>a.length).length>=3?`<div class="card section"><div><b>Nach Wochentag</b><div class="small muted">Ø kcal an Tagen mit Einträgen</div></div>
+    ${sBars(F_WD.map((l,i)=>({label:l,parts:[wd[i].length?avgOf(wd[i]):0]})),{label:'Kalorien nach Wochentag',ref:tg||null,fy:v=>fmt(v,0)})}${tg?`<div class="legend"><span><i class="lg-ref"></i>Ziel</span></div>`:''}</div>`:'';
   const TD=trainDates(),A=lg.filter(p=>TD[p.k]),B=lg.filter(p=>!TD[p.k]);
   const trC=A.length&&B.length?`<div class="card section"><div><b>Trainings- und Ruhetage</b><div class="small muted">Ø an Tagen mit Einträgen</div></div>
     <div class="inss">${insRow({label:'Kalorien',aL:'Training',bL:'Ruhetag',a:avgOf(A.map(p=>p.t.k)),b:avgOf(B.map(p=>p.t.k)),na:A.length,nb:B.length,fv:v=>fmt(Math.round(v),0)+' kcal'})}${insRow({label:'Eiweiß',aL:'Training',bL:'Ruhetag',a:avgOf(A.map(p=>p.t.p)),b:avgOf(B.map(p=>p.t.p)),na:A.length,nb:B.length,fv:v=>fmt(Math.round(v),0)+' g'})}</div></div>`:'';
@@ -4489,34 +4820,34 @@ function fpKoerper(R,P){const all=weightLog(),W=all.filter(p=>p.date>=R.start&&p
     else if(tg)T.push(tile(fmt(Math.abs(a1.v-tg),1)+'<small>kg</small>',Math.abs(a1.v-tg)<0.05?'Ziel erreicht':'bis zum Ziel ('+fmt(tg,1)+' kg)'))}
   if(pts.length>=2)wH=`${tChart([{pts,line:false,dots:true,dcls:'dt',r:3.2},{pts:av,cls:'ln'}],{fy:v=>fmt(v,1),label:'Körpergewicht'})}<div class="legend"><span><i class="lg-dt"></i>gewogen</span><span><i class="lg-ln"></i>Ø 7 Tage</span></div>`;
   else wH=`<div class="small muted">${pts.length?'Ab zwei Messungen im Zeitraum siehst du hier deinen Verlauf.':all.length?'Im Zeitraum ist kein Gewicht eingetragen. Trag es unter Heute oder beim Training ein.':'Trag dein Gewicht unter Heute oder beim Training ein, dann siehst du hier deinen Verlauf.'}</div>`;
-  const wC=`<div class="card section"><div><b>Körpergewicht</b><div class="small muted">Einzelne Messungen und Ø über 7 Tage${tg?', Ziel '+fmt(tg,1)+' kg':''}</div></div>${wH}</div>`;
+  const wC=`<div class="card section"><div><b>Körpergewicht</b></div>${wH}</div>`;
   const P2=(S.photos||[]).filter(p=>p.date>=R.start&&p.date<=R.end).sort((a,b)=>a.date<b.date?-1:a.date>b.date?1:0);
-  const ph=P2.length>=2?`<div class="card section"><div><b>Fotos</b><div class="small muted">Erstes und neuestes Foto im Zeitraum</div></div><div class="pcomp">${[P2[0],P2[P2.length-1]].map(p=>`<figure><img src="${photoSrc(p)}" alt="Fortschrittsfoto vom ${dmy(p.date)}" loading="lazy"><figcaption>${dmy(p.date)}</figcaption></figure>`).join('')}</div></div>`:'';
+  const ph=P2.length>=2?`<div class="card section"><div><b>Fotos</b></div><div class="pcomp">${[P2[0],P2[P2.length-1]].map(p=>`<figure><img src="${photoSrc(p)}" alt="Fortschrittsfoto vom ${dmy(p.date)}" loading="lazy"><figcaption>${dmy(p.date)}</figcaption></figure>`).join('')}</div></div>`:'';
   const tiles=T.length?`<div class="tiles${T.length===3?' t3':''}">${T.join('')}</div>`:'';
   if(!P)return `${tiles}${wC}${ph}`;
   const M=measList().filter(m=>m.date>=R.start&&m.date<=R.end);let mH='<div class="small muted">Im Zeitraum sind keine Maße eingetragen.</div>';
   if(M.length){const a=M[0],b=M[M.length-1],two=M.length>1;mH=`<div class="tbl-wrap"><table class="tbl"><thead><tr><th>Maß</th><th class="r">${dmy(a.date)}</th>${two?`<th class="r">${dmy(b.date)}</th><th class="r">Δ</th>`:''}</tr></thead><tbody>
-    ${MEAS.filter(([f])=>a.m[f]||b.m[f]).map(([f,l])=>`<tr><td>${l}</td><td class="r num">${a.m[f]?fmt(a.m[f],1):'–'}</td>${two?`<td class="r num">${b.m[f]?fmt(b.m[f],1):'–'}</td><td class="r num">${a.m[f]&&b.m[f]?sgnF(b.m[f]-a.m[f]):'–'}</td>`:''}</tr>`).join('')}</tbody></table></div>`}
-  return `${tiles}${wC}<div class="card section"><div><b>Maße</b><div class="small muted">In cm, erste und letzte Messung im Zeitraum</div></div>${mH}</div>${ph}`}
+    ${MEAS.filter(([f])=>a.m[f]||b.m[f]).map(([f,l])=>`<tr><td><span class="mslbl">${MEAS_IC[f]||''}${l}</span></td><td class="r num">${a.m[f]?fmt(a.m[f],1):'–'}</td>${two?`<td class="r num">${b.m[f]?fmt(b.m[f],1):'–'}</td><td class="r num">${a.m[f]&&b.m[f]?sgnF(b.m[f]-a.m[f]):'–'}</td>`:''}</tr>`).join('')}</tbody></table></div>`}
+  return `${tiles}${wC}<div class="card section"><div><b>Maße</b> <span class="small muted">in cm</span></div>${mH}</div>${ph}`}
 
 /* Schlaf & Stimmung */
 function fpMind(R,P){const L=R.dl.map(k=>{const D=dayGet(k);return {k,h:num((D.sleep||{}).h),q:num((D.sleep||{}).q),mo:num(D.mood)}}),hs=L.filter(x=>x.h),qs=L.filter(x=>x.q),ms=L.filter(x=>x.mo),day=R.per==='Tag';
   if(!hs.length&&!qs.length&&!ms.length)return `<div class="card empty"><b>Noch keine Check-ins im Zeitraum</b>Trag unter Heute Schlaf und Stimmung ein, dann siehst du hier deinen Verlauf.<button class="btn primary" data-act="tab" data-v="heute">Zu Heute</button></div>`;
   const s1=avgSleep(R.dl),s0=R.prev?avgSleep(R.prev):null,m1=avgMood(R.dl),m0=R.prev?avgMood(R.prev):null;
-  const T=[tile(s1?fmtH(s1)+'<small>h</small>':'–','Ø Schlaf',s1&&s0?dlt(Math.round(s1*60),Math.round(s0*60),0,' Min'):''),tile(m1?fmt(m1,1):'–','Ø Stimmung, 1 bis 5',m1&&m0?dlt(m1,m0,1):'')];
-  if(P)T.push(tile(qs.length?fmt(avgOf(qs.map(x=>x.q)),1):'–','Ø Schlafqualität, 1 bis 5'),tile(fmt(R.dl.reduce((t,k)=>t+num(dayGet(k).breath),0),0)+'<small>Min</small>','Atemübungen'));
+  const T=[tile(s1?fmtH(s1)+'<small>h</small>':'–','Ø Schlaf',s1&&s0?dlt(Math.round(s1*60),Math.round(s0*60),0,' Min'):''),tile(m1?fmt(m1,1)+`<span class="kic">${scIc(FACE,m1)}</span>`:'–','Ø Stimmung',m1&&m0?dlt(m1,m0,1):'')];
+  if(P)T.push(tile(qs.length?fmt(avgOf(qs.map(x=>x.q)),1)+`<span class="kic">${scIc(BATT,avgOf(qs.map(x=>x.q)))}</span>`:'–','Ø Schlafqualität'),tile(fmt(R.dl.reduce((t,k)=>t+num(dayGet(k).breath),0),0)+'<small>Min</small>','Atemübungen'));
   const bars=hs.length?sBars(R.bk.map((b,i)=>({label:b.label,parts:[day?L[i].h:(avgSleep(fBkDays(R,b))||0)]})),{label:'Schlaf in Stunden',ref:7,fy:v=>fmt(v,0),cur:!day}):'<div class="small muted">Noch keine Schlafdaten im Zeitraum.</div>';
   const mp=day?ms.map(x=>({t:dayN(x.k),v:x.mo})):fBkPts(R,k=>num(dayGet(k).mood));
-  const mc=mp.length>=2?tChart([{pts:mp,dots:true}],{min:1,max:5,ticks:[1,2,3,4,5],fy:v=>MOOD[v-1],h:170,l:46,label:'Stimmung im Verlauf'}):'<div class="small muted">Ab zwei Einträgen erscheint hier dein Stimmungsverlauf.</div>';
+  const mc=mp.length>=2?tChart([{pts:mp,dots:true}],{min:1,max:5,ticks:[1,2,3,4,5],fy:v=>MOOD[v-1],yIc:v=>FACE[v-1],h:170,l:34,label:'Stimmung im Verlauf'}):'<div class="small muted">Ab zwei Einträgen erscheint hier dein Stimmungsverlauf.</div>';
   const base=`<div class="tiles">${T.join('')}</div>
-    <div class="card section"><div><b>Schlaf</b><div class="small muted">${day?'Stunden pro Nacht':'Ø Stunden pro Nacht, je '+R.per}, gestrichelt: 7 Stunden</div></div>${bars}</div>
+    <div class="card section"><div><b>Schlaf</b><div class="small muted">${day?'Stunden pro Nacht':'Ø Stunden pro Nacht, je '+R.per}</div></div>${bars}${hs.length?'<div class="legend"><span><i class="lg-ref"></i>7 Stunden</span></div>':''}</div>
     <div class="card section"><div><b>Stimmung</b><div class="small muted">${day?'pro Tag':'Ø pro '+R.per}</div></div>${mc}</div>`;
   if(!P)return base;
   const qp=day?qs.map(x=>({t:dayN(x.k),v:x.q})):fBkPts(R,k=>num((dayGet(k).sleep||{}).q));
-  const qc=`<div class="card section"><div><b>Schlafqualität</b><div class="small muted">${day?'pro Nacht':'Ø pro '+R.per}</div></div>${qp.length>=2?tChart([{pts:qp,dots:true}],{min:1,max:5,ticks:[1,2,3,4,5],fy:v=>SLQ[v-1],h:170,l:54,label:'Schlafqualität im Verlauf'}):'<div class="small muted">Ab zwei Einträgen erscheint hier der Verlauf.</div>'}</div>`;
+  const qc=`<div class="card section"><div><b>Schlafqualität</b><div class="small muted">${day?'pro Nacht':'Ø pro '+R.per}</div></div>${qp.length>=2?tChart([{pts:qp,dots:true}],{min:1,max:5,ticks:[1,2,3,4,5],fy:v=>SLQ[v-1],yIc:v=>BATT[v-1],h:170,l:34,label:'Schlafqualität im Verlauf'}):'<div class="small muted">Ab zwei Einträgen erscheint hier der Verlauf.</div>'}</div>`;
   const W=F_WD.map(()=>({h:[],m:[]}));for(const x of L){const w=fWdi(x.k);if(x.h)W[w].h.push(x.h);if(x.mo)W[w].m.push(x.mo)}
   const wC=hs.length+ms.length>=7?`<div class="card section"><div><b>Nach Wochentag</b><div class="small muted">Ø im Zeitraum</div></div><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Tag</th><th class="r">Schlaf</th><th class="r">Stimmung</th></tr></thead><tbody>
-    ${F_WDL.map((l,i)=>`<tr><td>${l}</td><td class="r num">${W[i].h.length?fmtH(avgOf(W[i].h))+' h':'–'}</td><td class="r num">${W[i].m.length?fmt(avgOf(W[i].m),1):'–'}</td></tr>`).join('')}</tbody></table></div></div>`:'';
+    ${F_WDL.map((l,i)=>`<tr><td>${l}</td><td class="r num">${W[i].h.length?fmtH(avgOf(W[i].h))+' h':'–'}</td><td class="r num">${W[i].m.length?`<span class="tdic">${scIc(FACE,avgOf(W[i].m))}${fmt(avgOf(W[i].m),1)}</span>`:'–'}</td></tr>`).join('')}</tbody></table></div></div>`:'';
   const nn=R.dl.filter(k=>String(dayGet(k).note||'').trim()).length;
   const nC=`<div class="card section"><div class="sec-h"><div><b>Journal</b><div class="small muted num">${nn} ${nn===1?'Notiz':'Notizen'} im Zeitraum</div></div><button class="btn small" data-act="tab" data-v="journal">Öffnen</button></div></div>`;
   return `${base}${qc}${wC}${nC}`}
@@ -4536,17 +4867,17 @@ function measList(){return Object.keys(S.days).sort().filter(k=>S.days[k].meas&&
 function photoSrc(p,full){const e=PH.get(p.id);return e?(full?e.full:e.thumb):''}
 function viewBody(){const k=today(),tm=dayGet(k).meas||{},M=measList(),last=M.filter(x=>x.date!==k).pop(),L=weightLog().slice(-6).reverse();
   const P=S.photos.slice().sort((a,b)=>a.date<b.date?1:-1);
-  return `<div class="card pane"><div class="pane-h"><span class="eyebrow">Gewicht</span><button class="lnk" data-act="goProg" data-v="koerper">Verlauf</button></div>
+  return `<div class="card pane"><div class="pane-h"><span class="eyebrow">${ICONS.koerper}Gewicht</span><button class="lnk" data-act="goProg" data-v="koerper">Verlauf</button></div>
     ${weightCtl(k,'Heute')}
     ${L.length?`<ul class="pl">${L.map(p=>`<li><span>${dLong(p.date)}</span><span class="num">${fmt(p.v,1)} kg</span></li>`).join('')}</ul>`:''}</div>
-   <div class="card pane"><div class="pane-h"><span class="eyebrow">Maße heute in cm</span>${last?`<span class="small muted">zuletzt ${dmy(last.date)}</span>`:''}</div>
-    <div class="meas">${MEAS.map(([f,l])=>`<label class="field"><span class="eyebrow">${l}</span><input class="in num" id="ms-${f}" data-meas="${f}" inputmode="decimal" value="${tm[f]?fmt(tm[f],1):''}" placeholder="${last&&last.m[f]?fmt(last.m[f],1):'–'}"></label>`).join('')}</div>
-    <div class="small muted">Wird beim Tippen gespeichert. Miss am besten morgens und immer an derselben Stelle.</div></div>
-   <div class="card pane"><div class="pane-h"><span class="eyebrow">Fortschrittsfotos <span class="cnt">${P.length}</span></span></div>
-    ${AST&&!demoSafe()?`<label class="btn block filebtn${photoBusy?' busy-btn':''}">${photoBusy?'Wird gespeichert …':'+ Foto aufnehmen oder wählen'}<input type="file" id="photoUp" accept="image/*" capture="environment" hidden${photoBusy?' disabled':''}></label>`
+   <div class="card pane"><div class="pane-h"><span class="eyebrow">${MEAS_IC.taille}Maße heute in cm</span><span class="ph-r">${last?`<span class="small muted">zuletzt ${dmy(last.date)}</span>`:''}${infoBtn('aiMeas','Maße')}</span></div>${iBox('aiMeas','<p>Wird beim Tippen gespeichert. Miss am besten morgens und immer an derselben Stelle.</p>')}
+    <div class="meas">${MEAS.map(([f,l])=>`<label class="field"><span class="eyebrow mlbl">${MEAS_IC[f]}${l}</span><input class="in num" id="ms-${f}" data-meas="${f}" inputmode="decimal" value="${tm[f]?fmt(tm[f],1):''}" placeholder="${last&&last.m[f]?fmt(last.m[f],1):'–'}"></label>`).join('')}</div>
+    </div>
+   <div class="card pane"><div class="pane-h"><span class="eyebrow">${ICONS.camera}Fortschrittsfotos <span class="cnt">${P.length}</span></span></div>
+    ${AST&&!demoSafe()?`<label class="btn block filebtn${photoBusy?' busy-btn':''}">${photoBusy?'Wird gespeichert …':ICONS.camera+'Foto aufnehmen oder wählen'}<input type="file" id="photoUp" accept="image/*" capture="environment" hidden${photoBusy?' disabled':''}></label>`
       :`<div class="small muted">${demoSafe()?'Im Demo-Modus werden keine Fotos gespeichert.':'Fotos lassen sich hier gerade nicht speichern.'}</div>`}
     ${P.length?`<div class="pgrid">${P.map(p=>`<button data-act="photoOpen" data-id="${p.id}" aria-label="Foto vom ${dmy(p.date)} öffnen"><img src="${photoSrc(p)}" alt="" loading="lazy"><span>${dmy(p.date)}</span></button>`).join('')}</div>`:''}
-    <div class="small muted">Fotos bleiben auf diesem Gerät. Im Backup sind sie enthalten.</div></div>`}
+    <div class="bkst small muted"><span class="sn">${ICONS.phone}Nur auf diesem Gerät</span><span class="sn">${ICONS.shield}Im Backup enthalten</span></div></div>`}
 function lightHtml(){const p=S.photos.find(x=>x.id===photoOpen);if(!p)return '';
   return `<div class="light" role="dialog" aria-modal="true" aria-label="Foto vom ${dmy(p.date)}"><div class="light-h"><b>${dLong(p.date)}</b><button class="iconbtn" data-act="photoClose" aria-label="Schließen">✕</button></div>
    <img src="${photoSrc(p,true)}" alt="Fortschrittsfoto vom ${dmy(p.date)}"><div class="light-f">${AST?`<button class="btn small danger" data-act="photoDel" data-id="${p.id}">${confirmKey==='photoDel:'+p.id?'Wirklich löschen?':'Foto löschen'}</button>`:''}</div></div>`}
@@ -4557,10 +4888,10 @@ async function photoUpload(file){if(!AST||!file||photoBusy)return;photoBusy=true
 
 /* ---------- Journal ---------- */
 function viewJournal(){const k=today(),D=dayGet(k),ks=Object.keys(S.days).filter(x=>x!==k&&(S.days[x].note||'').trim()).sort().reverse().slice(0,60);
-  return `<div class="card pane"><div class="pane-h"><span class="eyebrow">Heute</span>${num(D.mood)?`<span class="small muted">Stimmung: ${MOOD[num(D.mood)-1]}</span>`:''}</div>
+  return `<div class="card pane"><div class="pane-h"><span class="eyebrow">${ICONS.journal}Heute</span>${num(D.mood)?`<span class="jmood small muted" title="Stimmung">${scIc(FACE,D.mood)}${MOOD[num(D.mood)-1]}</span>`:''}</div>
    <textarea class="in jnote" id="dayNote" data-note="${k}" maxlength="4000" rows="5" placeholder="Was lief gut? Was beschäftigt dich? Wofür bist du dankbar?">${esc(D.note||'')}</textarea></div>
-   ${ks.length?`<div class="card pane"><div class="pane-h"><span class="eyebrow">Frühere Notizen</span></div><div class="jlist">${ks.map(x=>{const d=S.days[x];return `<div class="jitem"><div class="jh"><b>${dLong(x)}</b>${num(d.mood)?`<span class="small muted">${MOOD[num(d.mood)-1]}</span>`:''}</div><p>${esc(d.note)}</p></div>`}).join('')}</div></div>`
-     :'<div class="small muted" style="text-align:center">Deine früheren Notizen erscheinen hier.</div>'}`}
+   ${ks.length?`<div class="card pane"><div class="pane-h"><span class="eyebrow">Frühere Notizen</span></div><div class="jlist">${ks.map(x=>{const d=S.days[x];return `<div class="jitem"><div class="jh"><b>${dLong(x)}</b>${num(d.mood)?`<span class="jmood small muted" title="Stimmung">${scIc(FACE,d.mood)}${MOOD[num(d.mood)-1]}</span>`:''}</div><p>${esc(d.note)}</p></div>`}).join('')}</div></div>`
+     :''}`}
 
 /* ---------- Atemübung ---------- */
 const br={pat:'box',min:4,run:false,done:0,t0:0,raf:0,ph:-1};
@@ -4571,10 +4902,11 @@ function viewBreath(){const P=BREATH[br.pat]||BREATH.box;
     <button class="btn block" data-act="brStop">Beenden</button></div>`;
   const tm=num(dayGet(today()).breath);
   return `${br.done?`<div class="banner ok"><span><b>Geschafft.</b> ${br.done} ${br.done===1?'Minute':'Minuten'} eingetragen.</span></div>`:''}
-   <div class="grp"><span class="eyebrow">Technik</span><div class="brpick">${Object.entries(BREATH).map(([v,o])=>`<button class="brp${br.pat===v?' on':''}" data-act="brPat" data-v="${v}" aria-pressed="${br.pat===v}"><b>${o.name}</b><span>${o.sub}</span></button>`).join('')}</div></div>
+   <div class="grp"><span class="eyebrow">Technik</span><div class="brpick">${Object.entries(BREATH).map(([v,o])=>`<button class="brp${br.pat===v?' on':''}" data-act="brPat" data-v="${v}" aria-pressed="${br.pat===v}" aria-label="${esc(o.name)}: ${esc(o.sub)}"><b>${o.name}</b><span class="brbar" aria-hidden="true">${o.ph.map(([k,s])=>`<i class="b-${k}" style="flex:${s}">${s}</i>`).join('')}</span></button>`).join('')}</div>
+   <div class="legend"><span><i class="b-in"></i>ein</span><span><i class="b-hold"></i>halten</span><span><i class="b-out"></i>aus</span></div></div>
    <div class="grp"><span class="eyebrow">Dauer</span><div class="seg" role="group" aria-label="Dauer">${[2,4,6,10].map(m=>`<button data-act="brMin" data-v="${m}" aria-pressed="${br.min===m}">${m} Min</button>`).join('')}</div></div>
    <button class="btn primary block big" data-act="brStart">Starten</button>
-   <div class="small muted" style="text-align:center">${tm?'Heute schon '+tm+' Min geübt.':'Folge dem Quadrat: Es wächst beim Einatmen und schrumpft beim Ausatmen.'}</div>`}
+   ${tm?`<div class="small muted brdone">${CHECK_IC}Heute ${tm} Min</div>`:''}`}
 function brLoop(){if(!br.run)return;const el=document.getElementById('brSq');if(!el){brFinish(true);return}
   const P=(BREATH[br.pat]||BREATH.box).ph,L=P.reduce((t,p)=>t+p[1],0),tot=br.min*60,sec=(performance.now()-br.t0)/1000;
   if(sec>=tot){brFinish(false);return}
@@ -4592,7 +4924,7 @@ function brFinish(away){cancelAnimationFrame(br.raf);if(!br.run)return;br.run=fa
 
 /* ---------- Fortschritt ---------- */
 function tile(v,k,d){return `<div class="tile"><div class="v num">${v}</div><div class="k">${k}</div>${d||''}</div>`}
-function dlt(a,b,d,unit){if(b==null||!isFinite(b)||a==null||!isFinite(a))return '';const x=a-b;return `<span class="dlt num">${Math.abs(x)<Math.pow(10,-d)/2?'±0':(x>0?'+':'−')+fmt(Math.abs(x),d)}${unit||''} ggü. davor</span>`}
+function dlt(a,b,d,unit){if(b==null||!isFinite(b)||a==null||!isFinite(a))return '';const x=a-b,z=Math.abs(x)<Math.pow(10,-d)/2;return `<span class="dlt num">${dArrow(x,d)}${z?'±0':fmt(Math.abs(x),d)}${unit||''}<span class="sr"> im Vergleich zum Zeitraum davor</span></span>`}
 function habRate(days){let due=0,dn=0;for(const h of S.habits){if(h.arch)continue;for(const k of days){if(!habitDue(h,k))continue;due++;if(habDone(h,k))dn++}}return due?dn/due:null}
 function avgSleep(days){const a=days.map(k=>num((dayGet(k).sleep||{}).h)).filter(v=>v>0);return a.length?avgOf(a):null}
 function avgMood(days){const a=days.map(k=>num(dayGet(k).mood)).filter(v=>v>0);return a.length?avgOf(a):null}
@@ -4612,17 +4944,18 @@ function insights(days){const TD=trainDates(),o=[];
   if(mod('food')){const kT=[],kR=[];for(const k of days){const f=dayGet(k).food;if(f&&f.length)(TD[k]?kT:kR).push(sumFood(f).k)}
     pair('Gegessen an Trainings- und Ruhetagen','Training','Ruhetag',kT,kR,v=>fmt(Math.round(v),0)+' kcal',0)}
   return o}
-function insRow(o){const mx=o.mx||Math.max(o.a,o.b)||1;
+const INS_IC={'Training':()=>ICONS.training,'Ruhetag':()=>ICONS.rest,'ab 7 Std.':()=>ICONS.bed,'unter 7 Std.':()=>ICONS.bed,'erledigt':()=>CHECK_IC};
+function insRow(o){const mx=o.mx||Math.max(o.a,o.b)||1,ic=l=>INS_IC[l]?INS_IC[l]():'',fc=v=>o.mx===5?scIc(FACE,v):'';
   return `<div class="ins"><b>${esc(o.label)}</b><div class="ins-b">
-   <span>${esc(o.aL)}</span><span class="ins-t"><i style="width:${Math.min(100,o.a/mx*100).toFixed(1)}%"></i></span><b class="num">${o.fv(o.a)}</b>
-   <span>${esc(o.bL)}</span><span class="ins-t b"><i style="width:${Math.min(100,o.b/mx*100).toFixed(1)}%"></i></span><b class="num">${o.fv(o.b)}</b></div>
-   <span class="small muted num">${o.na} gegen ${o.nb} Tage${o.mx===5?' · Skala 1 bis 5':''}</span></div>`}
+   <span class="ins-l">${ic(o.aL)}${esc(o.aL)}</span><span class="ins-t"><i style="width:${Math.min(100,o.a/mx*100).toFixed(1)}%"></i></span><b class="num">${fc(o.a)}${o.fv(o.a)}</b>
+   <span class="ins-l">${ic(o.bL)}${esc(o.bL)}</span><span class="ins-t b"><i style="width:${Math.min(100,o.b/mx*100).toFixed(1)}%"></i></span><b class="num">${fc(o.b)}${o.fv(o.b)}</b></div>
+   <span class="small muted num">${o.na} gegen ${o.nb} Tage</span></div>`}
 
 /* ---------- Ich ---------- */
 
 function viewIch(){const lw=lastWeight(),na=S.goals.filter(g=>!goalState(g).done).length,nh=S.habits.filter(h=>!h.arch).length,nn=Object.keys(S.days).filter(k=>(S.days[k].note||'').trim()).length;
   const row=(v,ic,t,s)=>`<button class="navrow" data-act="tab" data-v="${v}">${ic}<span class="nr-t"><b>${t}</b><span>${s}</span></span>${CHR}</button>`;
-  const sw=(k,t,s)=>`<div class="swrow"><span class="nr-t"><b>${t}</b><span>${s}</span></span><button class="switch${mod(k)?' on':''}" data-act="modTog" data-v="${k}" role="switch" aria-checked="${mod(k)}" aria-label="${t}"><span></span></button></div>`;
+  const sw=(k,t,s)=>`<div class="swrow">${{food:ICONS.ernaehrung,mind:ICONS.moon,body:ICONS.koerper}[k]}<span class="nr-t"><b>${t}</b><span>${s}</span></span><button class="switch${mod(k)?' on':''}" data-act="modTog" data-v="${k}" role="switch" aria-checked="${mod(k)}" aria-label="${t}"><span></span></button></div>`;
   return `${banner()}
    <div class="grp"><span class="eyebrow">Ziele und Gewohnheiten</span><div class="navlist">${row('ziele',ICONS.ziel,'Ziele',na?na+' aktiv':'Noch keine Ziele')}${row('gewohnheiten',ICONS.check,'Gewohnheiten',nh?nh+' aktiv':'Noch keine Gewohnheiten')}</div></div>
    ${mod('body')||mod('mind')||mod('food')?`<div class="grp"><span class="eyebrow">Module</span><div class="navlist">
@@ -4630,11 +4963,9 @@ function viewIch(){const lw=lastWeight(),na=S.goals.filter(g=>!goalState(g).done
      ${mod('mind')?row('journal',ICONS.journal,'Journal',nn?nn+(nn===1?' Notiz':' Notizen'):'Noch keine Notizen'):''}
      ${mod('mind')?row('atem',ICONS.atem,'Atemübung','Box-Atmung, 4-7-8, ruhig atmen'):''}
      ${mod('food')?row('bedarf',ICONS.bedarf,'Tagesbedarf',esc(nSum())):''}</div></div>`:''}
-   <div class="grp"><span class="eyebrow">Module ein- und ausschalten</span><div class="card pane">
-     ${sw('food','Ernährungstagebuch','Mahlzeiten, Kalorien, Makros')}${sw('mind','Schlaf & Mindset','Check-in, Journal, Atemübung')}${sw('body','Körper & Fotos','Gewicht, Maße, Fortschrittsfotos')}
-     <div class="small muted">Training und Gewohnheiten sind immer dabei. Ausgeschaltete Module behalten ihre Daten.</div></div></div>
-   <div class="grp"><span class="eyebrow">Ansicht in Training und Fortschritt</span><div class="seg modesw" role="group" aria-label="Ansicht"><button data-act="mode" data-v="basic" aria-pressed="${!perf()}">Essential</button><button data-act="mode" data-v="perf" aria-pressed="${perf()}">Analyse</button></div>
-     <div class="small muted">Analyse zeigt mehr Werte: im Training 1RM, Volumen und Kalorien, unter Fortschritt die ausführliche Auswertung aller Bereiche. Umschalten geht auch direkt unter Fortschritt.</div></div>
+   <div class="grp"><div class="lbl-row"><span class="eyebrow">Module ein- und ausschalten</span>${infoBtn('aiMods','Module')}</div>${iBox('aiMods','<p>Training und Gewohnheiten sind immer dabei. Ausgeschaltete Module behalten ihre Daten.</p>')}<div class="card pane">
+     ${sw('food','Ernährungstagebuch','Mahlzeiten, Kalorien, Makros')}${sw('mind','Schlaf & Mindset','Check-in, Journal, Atemübung')}${sw('body','Körper & Fotos','Gewicht, Maße, Fortschrittsfotos')}</div></div>
+   <div class="grp"><div class="lbl-row"><span class="eyebrow">Ansicht in Training und Fortschritt</span>${infoBtn('aiMode','Ansicht')}</div>${iBox('aiMode','<p>Analyse zeigt mehr Werte: im Training 1RM, Volumen und Kalorien, unter Fortschritt die ausführliche Auswertung aller Bereiche. Umschalten geht auch direkt unter Fortschritt.</p>')}<div class="seg modesw" role="group" aria-label="Ansicht"><button data-act="mode" data-v="basic" aria-pressed="${!perf()}">Essential</button><button data-act="mode" data-v="perf" aria-pressed="${perf()}">Analyse</button></div></div>
    <div class="grp"><span class="eyebrow">Daten</span><div class="navlist">${row('daten',ICONS.daten,'Daten & Backup',S.lastBackup?'Letztes Backup '+bkAge():'Noch kein Backup')}</div></div>`}
 
 /* Beispieldaten für Gewohnheiten, Check-ins, Ernährung und Körper.
@@ -4740,8 +5071,8 @@ function bkApply(p){applyBackup(p).then(n=>{bk.pending=null;showImport=false;toa
 function bkDue(){if(!num(S.bkEvery)||S.demo)return false;if(!S.sessions.length&&!Object.keys(S.days).length)return false;
   const now=Date.now();if(num(S.bkSnooze)>now)return false;return now-(num(S.lastBackup)||num(S.since)||now)>num(S.bkEvery)*864e5}
 function bkCard(){if(!bkDue())return '';const n=S.lastBackup?Math.max(1,dayN(today())-dayN(ymd(new Date(S.lastBackup)))):0;
-  return `<div class="card pane bkcard"><div class="pane-h"><span class="eyebrow">Backup</span><button class="lnk" data-act="bkLater">Später</button></div>
-   <div class="small">${n?'Dein letztes Backup ist '+n+(n===1?' Tag':' Tage')+' alt.':'Du hast noch kein Backup gemacht.'} Deine Daten liegen nur auf diesem Gerät. Ein Backup in iCloud Drive schützt sie, falls es verloren geht.</div>
+  return `<div class="card pane bkcard"><div class="pane-h"><span class="eyebrow">${ICONS.shield}Backup</span><button class="lnk" data-act="bkLater">Später</button></div>
+   <div class="bkst small"><span class="sn">${ICONS.phone}Nur auf diesem Gerät</span><span class="sn warn">${WARN_IC}${n?'Backup vor '+n+(n===1?' Tag':' Tagen'):'Noch kein Backup'}</span></div>
    <button class="btn primary block" data-act="tab" data-v="daten">Jetzt sichern</button></div>`}
 
 /* ---------- Installieren und Updates ---------- */
@@ -4753,14 +5084,14 @@ const I_SHARE='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke
 const I_MORE='<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="4" y="10.5" width="3" height="3"/><rect x="10.5" y="10.5" width="3" height="3"/><rect x="17" y="10.5" width="3" height="3"/></svg>';
 const I_ADD='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="square" aria-hidden="true"><path d="M4 4h16v16H4z"/><path d="M12 8v8M8 12h8"/></svg>';
 function installCard(){if(STANDALONE)return '';let off=false;try{off=localStorage.getItem(KEY+'.noinstall')==='1'}catch(e){}if(off)return '';
-  const head=`<div class="pane-h"><span class="eyebrow">Als App installieren</span><button class="lnk" data-act="instHide">Ausblenden</button></div>`;
-  const note='<div class="small muted">Wichtig: Die installierte App hat ihren eigenen Speicher. Trag deine Daten erst dort ein oder lade dort dein Backup.</div>';
+  const head=`<div class="pane-h"><span class="eyebrow">${ICONS.phone}Als App installieren</span><button class="lnk" data-act="instHide">Ausblenden</button></div>`;
+  const note='<div class="small muted">Die installierte App hat ihren eigenen Speicher: Trag deine Daten dort ein oder lade dort dein Backup.</div>';
   if(IOS)return `<div class="card pane inst">${head}<ol class="isteps">
      <li><b class="num">1</b><span>Tippe in Safari unten rechts auf ${I_MORE} und dann auf ${I_SHARE} <b>Teilen</b>. In älteren iOS-Versionen ist Teilen direkt in der Leiste.</span></li>
      <li><b class="num">2</b><span>Wähle ${I_ADD} <b>Zum Home-Bildschirm</b>. Falls der Schalter „Als Web-App öffnen“ erscheint, lass ihn an.</span></li>
      <li><b class="num">3</b><span>Tippe auf <b>Hinzufügen</b> und öffne die App über das neue Symbol.</span></li></ol>${note}</div>`;
-  return `<div class="card pane inst">${head}${installEvt?'<button class="btn primary block" data-act="install">App installieren</button>':'<div class="small">Öffne das Menü deines Browsers und wähle „App installieren“ oder „Zum Startbildschirm hinzufügen“.</div>'}${note}</div>`}
-function updCard(){if(!updWaiting)return '';return `<div class="card pane updcard"><div class="pane-h"><span class="eyebrow">Neue Version</span></div><div class="small">Eine neue Version der App ist bereit. Deine Daten bleiben erhalten.</div><button class="btn primary block" data-act="appUpdate">Jetzt aktualisieren</button></div>`}
+  return `<div class="card pane inst">${head}${installEvt?'<button class="btn primary block" data-act="install">App installieren</button>':`<div class="isteps2 small"><span>${I_MORE}Menü</span>${CHR}<span>${I_ADD}App installieren</span></div>`}${note}</div>`}
+function updCard(){if(!updWaiting)return '';return `<div class="card pane updcard"><div class="pane-h"><span class="eyebrow">${ICONS.daten}Neue Version</span></div><div class="small">Bereit zum Aktualisieren. Deine Daten bleiben erhalten.</div><button class="btn primary block" data-act="appUpdate">Jetzt aktualisieren</button></div>`}
 if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol)){
   const hadCtl=!!navigator.serviceWorker.controller;let reloading=false;
   navigator.serviceWorker.addEventListener('controllerchange',()=>{if(!hadCtl||reloading)return;reloading=true;storeFlush().finally(()=>location.reload())});
@@ -4777,21 +5108,20 @@ function viewDaten(){const p=bk.pending;
     <div class="small muted">Deine jetzigen Daten auf diesem Gerät werden ersetzt. Vorher legt die App eine Sicherheitskopie an.</div>
     <button class="btn primary block big" data-act="bkApply">Wiederherstellen</button><button class="btn ghost block" data-act="bkCancel">Abbrechen</button></div>`;
   const np=S.photos.length;
-  return `${banner()}${wipeCard(true)}<div class="card pane"><div class="pane-h"><span class="eyebrow">Backup</span><span class="small muted">${S.lastBackup?'zuletzt '+bkAge():'noch keins'}</span></div>
-   <div class="small">Deine Daten liegen nur auf diesem Gerät. Sichere sie regelmäßig als Datei, am besten in iCloud Drive.${np===1?' Dein Foto ist mit drin.':np?' Deine '+np+' Fotos sind mit drin.':''}</div>
-   ${bk.file?`<button class="btn primary block big" data-act="bkShare">Backup sichern</button><div class="small muted num">${esc(bk.file.name)} · ${bk.info}. Wähl im nächsten Schritt „In Dateien sichern“ und dann iCloud Drive.</div>`
+  return `${banner()}${wipeCard(true)}<div class="card pane"><div class="pane-h"><span class="eyebrow">${ICONS.shield}Backup</span><span class="small muted">${S.lastBackup?'zuletzt '+bkAge():'noch keins'}</span></div>
+   <div class="bkst small"><span class="sn">${ICONS.phone}Nur auf diesem Gerät</span><span class="sn">${ICONS.shield}Backup als Datei, am besten in iCloud Drive</span>${np?`<span class="sn">${ICONS.camera}${np===1?'1 Foto':np+' Fotos'} inklusive</span>`:''}</div>
+   ${bk.file?`<button class="btn primary block big" data-act="bkShare">${I_SHARE}Backup sichern</button><div class="small muted num">${esc(bk.file.name)} · ${bk.info}</div><div class="isteps2 small">${I_SHARE}<span>In Dateien sichern</span>${CHR}<span>iCloud Drive</span></div>`
      :`<button class="btn primary block big" data-act="bkMake"${bk.busy?' disabled':''}>${bk.busy?'Backup wird erstellt …':'Backup erstellen'}</button>`}
    ${bk.err?`<div class="err">${esc(bk.err)}</div>`:''}
    <div class="field"><span class="eyebrow">Erinnern alle</span><div class="seg sm" role="group" aria-label="Backup-Erinnerung">${[[7,'7 Tage'],[14,'14 Tage'],[30,'30 Tage'],[0,'Nie']].map(([v,l])=>`<button data-act="bkEvery" data-v="${v}" aria-pressed="${num(S.bkEvery)===v}">${l}</button>`).join('')}</div></div></div>
-  <div class="card pane"><div class="pane-h"><span class="eyebrow">Wiederherstellen</span></div>
-   <div class="small muted">Lade ein Backup aus dieser App oder aus der Claude-Version des Trainingsbuchs. Fotos aus der Claude-Version kommen dabei nicht mit.</div>
+  <div class="card pane"><div class="pane-h"><span class="eyebrow">${ICONS.undo}Wiederherstellen</span>${infoBtn('aiRest','Wiederherstellen')}</div>${iBox('aiRest','<p>Geht mit Backups aus dieser App und aus der Claude-Version des Trainingsbuchs. Fotos aus der Claude-Version kommen dabei nicht mit.</p>')}
    <label class="btn block filebtn">Backup-Datei laden<input type="file" id="bkFile" hidden></label>
    <button class="btn ghost block" data-act="toggleImport">Backup-Text einfügen</button>
    ${showImport?`<textarea class="in" id="importBox" placeholder="Backup-Text hier einfügen">${esc(importText)}</textarea><button class="btn danger" data-act="import">${confirmKey==='import'?'Aktuelle Daten wirklich ersetzen?':'Wiederherstellen'}</button>`:''}</div>
   ${fdbCard()}
-  <div class="card pane"><div class="pane-h"><span class="eyebrow">Speicher</span></div>
+  <div class="card pane"><div class="pane-h"><span class="eyebrow">${ICONS.phone}Speicher</span>${store.persist?'':infoBtn('aiStore','Speicher')}</div>${store.persist?'':iBox('aiStore','<p>Bei Platzmangel darf das System den Speicher leeren. Ein regelmäßiges Backup schützt dich davor.</p>')}
    <div class="small" id="syncNote2">${syncText()}</div>
-   <div class="small muted">${store.persist?'Das System hat den Speicher der App als dauerhaft markiert.':'Bei Platzmangel darf das System den Speicher leeren. Ein regelmäßiges Backup schützt dich davor.'}</div>
+   ${store.persist?`<div class="small muted sn">${ICONS.lock}Speicher dauerhaft</div>`:''}
    <button class="btn ghost block" data-act="export">Daten als Text kopieren</button>
    ${exportText?`<textarea class="in" id="exportBox" readonly>${esc(exportText)}</textarea>`:''}
    <button class="btn ghost block" data-act="demoToggle">${S.demo?'Beispieldaten beenden':'Beispieldaten ansehen'}</button></div>
@@ -4814,8 +5144,8 @@ function wipeCard(onData){const W=S.wiped;if(!W||S.demo||(!onData&&W.hide))retur
    <button class="btn primary block" data-act="wipeUndo"${wipeBusy?' disabled':''}>Rückgängig machen</button>
    ${onData?`<button class="btn small danger" data-act="wipeFinal" data-id="x">${confirmKey==='wipeFinal:x'?'Wirklich endgültig löschen?':'Jetzt endgültig löschen'}</button>`:''}</div>`}
 /* Abschnitt ganz unten in „Daten & Backup“ */
-function wipeSection(){return `<div class="card pane"><div class="pane-h"><span class="eyebrow">Daten löschen</span></div>
-   <div class="small muted">Löscht deine Einträge oder alle Daten auf diesem Gerät. ${WIPE_DAYS} Tage lang kannst du das rückgängig machen.</div>
+function wipeSection(){return `<div class="card pane"><div class="pane-h"><span class="eyebrow">${ICONS.trash}Daten löschen</span></div>
+   <div class="small muted sn">${ICONS.undo}${WIPE_DAYS} Tage lang rückgängig zu machen</div>
    <button class="btn danger block" data-act="wipeOpen">Daten löschen …</button></div>`}
 function wipeList(scope){const n=(v,one,many)=>v?[v,v===1?one:many]:null,L=[],dr=S.draft&&!S.draft.id&&(S.draft.started||(S.draft.entries||[]).length);
   L.push(n(S.sessions.length,'Training','Trainings'));if(dr)L.push(['','laufendes Training']);
@@ -5137,7 +5467,7 @@ function render(){
   const tb=document.getElementById('tabbar');tb.style.gridTemplateColumns=`repeat(${roots().length},minmax(0,1fr))`;tb.innerHTML=tabbarHtml(sc);fitTabs();
   const oh=document.getElementById('overlayHost');if(oh)oh.innerHTML=photoOpen?lightHtml():'';
   syncHistory(sc.depth);
-  save();
+  save();tapShow();
 }
 let lastDel=null;
 const DEMO_IC='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true"><path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 1.7 3h10.6a2 2 0 0 0 1.7-3l-5-9V3"/><path d="M7.5 15h9"/></svg>';
@@ -5146,8 +5476,12 @@ function toast(msg){const h=document.getElementById('toastHost');h.innerHTML=`<d
 
 /* ---------- Aktionen ---------- */
 const NEEDS_CONFIRM=new Set(['loadDemo','clearDemo','delSession','resetDraft','import','fdbDel']);
+let tapMark=null;
+function tapRemember(a,el){try{const d=el&&el.dataset||{};tapMark=['toggleDone','habTog','mood','sleepQ','feel','habInc','pinPlan','slotSet','favQuick','prodFav','mealTog'].includes(a)?{a,d:{...d}}:null}catch(e){tapMark=null}}
+function tapShow(){const m=tapMark;tapMark=null;if(!m||RM())return;try{for(const b of document.querySelectorAll('#main [data-act="'+m.a+'"]')){
+  if(['id','e','s','v','k','i'].every(f=>(b.dataset[f]||'')===(m.d[f]||''))){b.classList.remove('tapfx');void b.offsetWidth;b.classList.add('tapfx');break}}}catch(e){}}
 function act(a,el){
-  userActed=true;
+  userActed=true;tapRemember(a,el);
   if(a==='back'){navBack();return}
   if(a==='navTab'){navTab(el.dataset.v);return}
   if(a==='selSess'){const on=!el.classList.contains('sel');document.querySelectorAll('.sess.sel').forEach(x=>{x.classList.remove('sel');x.querySelectorAll('.spen,.splan').forEach(b=>b.tabIndex=-1)});
@@ -5193,6 +5527,7 @@ function act(a,el){
     case 'newHab':habEdit={kind:'check',name:'',days:[0,1,2,3,4,5,6]};flash='';toTop();break;
     case 'editHab':{const h=S.habits.find(x=>x.id===el.dataset.id);if(h){habEdit=JSON.parse(JSON.stringify(h));flash='';toTop()}break}
     case 'habKind':if(habEdit)habEdit.kind=el.dataset.v;break;
+    case 'habIcon':if(habEdit){if(HAB_P[el.dataset.v])habEdit.ic=el.dataset.v;else delete habEdit.ic}break;
     case 'habDay':{if(!habEdit)break;const v=+el.dataset.v;let ds=Array.isArray(habEdit.days)&&habEdit.days.length?habEdit.days.slice():[0,1,2,3,4,5,6];
       ds=ds.includes(v)?ds.filter(x=>x!==v):ds.concat(v);if(!ds.length){toast('Mindestens ein Tag');break}habEdit.days=ds;break}
     case 'saveHab':{const e=habEdit;if(!e)break;const n=String(e.name||'').trim().slice(0,40);
@@ -5203,7 +5538,7 @@ function act(a,el){
         h.target=Math.min(100000,t);h.unit=String(e.unit||'').trim().slice(0,12)||(h.kind==='count'?'mal':'');if(h.kind==='amount'&&num(e.step)>0)h.step=num(e.step)}
       if(h.kind==='quit'){const sn=/^\d{4}-\d{2}-\d{2}$/.test(e.since||'')&&e.since<=today()?e.since:today();h.since=sn;h.start=e.start&&e.start<=sn?e.start:sn;if(h.created>h.start)h.created=h.start}
       else{const ds=Array.isArray(e.days)?e.days.filter(d=>d>=0&&d<=6):[];if(ds.length&&ds.length<7)h.days=ds}
-      if(e.arch)h.arch=true;
+      if(e.arch)h.arch=true;if(HAB_P[e.ic])h.ic=e.ic;
       const i=S.habits.findIndex(x=>x.id===h.id);if(i>=0)S.habits[i]=h;else S.habits.push(h);
       habEdit=null;flash='';toast('Gespeichert');break}
     case 'delHab':{const id=el.dataset.id;S.habits=S.habits.filter(h=>h.id!==id);
